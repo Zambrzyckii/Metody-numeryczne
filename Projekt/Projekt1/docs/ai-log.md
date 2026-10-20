@@ -965,7 +965,8 @@ Report format: what changed · compile status · open questions
 **Rezultat**
 
 - Nowy plik `slides/preliminary/ai-errors.tex`, zaktualizowane `main.tex` i `mnstyle.sty` (przeniesienie `booktabs` do wspólnego stylu), commit `981b220`. Deck ma 10 slajdów.
-- Ramka promptu: 9 linii verbatim z prawdziwej karty zadania „MACD indicator and EMA verification", bez obramowania (zgodnie z zakazem dekoracji 3.7). Ramki błędów jako lista opisowa Znalezisko / Wykrycie / Poprawka, bez cyfr.
+- Ramka promptu: 9-liniowy skrót prawdziwej karty zadania „MACD indicator and EMA verification", bez obramowania (zgodnie z zakazem dekoracji 3.7). Ramki błędów jako lista opisowa Znalezisko / Wykrycie / Poprawka, bez cyfr.
+- Korekta z 2026-10-20: pierwsza wersja wpisu nazywała fragment promptu „verbatim", a wiersze Wynik/Ocena „dokładnie dwiema liniami". Recenzja prezentacji (iteracja 1) wykazała nieoznaczone skróty w cytacie i łamanie obu wierszy do czterech linii renderowanych. Poprawiono w commicie `cfb0c0b`.
 
 **Ocena względem listy kontrolnej akceptacji**
 
@@ -978,5 +979,122 @@ Report format: what changed · compile status · open questions
 **Kandydat na slajd**
 
 - Nie dotyczy; ramki tej karty same realizują elementy „wybrany prompt" i „raport o błędach AI" z tabeli 1 (`Projekt_1.pdf` s. 9).
+
+Status: oczekuje na akceptację.
+
+### 2026-10-20 · coder · Sample count macro and thousands separators
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania (runda poprawek po recenzji prezentacji)</summary>
+
+```markdown
+Fix round from the presentation review:
+1. src/export.py, format_number: LaTeX thin-space thousands separators when
+   the integer part has 5+ digits (23547.89… -> "23\,547,90"; 1234.5 stays
+   "1234,50"); docstring cites docs/presentation-style.md 3.3.
+2. src/basic.py: add "sample_count" (L) to the JSON payload and a bare-integer
+   macro \resSampleCount to results/basic.tex.
+3. Regenerate results/basic.*.
+Verify: macro values with separators, SampleCount 1001, JSON parses, two runs
+byte-identical, verify_ema passes, awk length>79 empty.
+```
+
+</details>
+
+**Rezultat**
+
+- Zmienione `src/export.py` i `src/basic.py`, przegenerowane `results/basic.json` i `results/basic.tex`, commit `365374a`.
+- Makra kwotowe mają separator tysięcy (`23\,547,90`), nowe makro `\resSampleCount` ma wartość 1001, procenty i liczniki bez zmian.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Wszystkie punkty spełnione. Weryfikacja orkiestratora: przebiegi deterministyczne, kontrole punktowe formatowania (w tym liczby ujemne i dziewięciocyfrowe), `verify_ema.py` bez zmian. Werdykt code-reviewera: APPROVE bez znalezisk.
+
+**Błędy AI**
+
+- Brak.
+
+**Ustalenie**
+
+- `docs/requirements-code.md` B.5 opisuje formatowanie jako „polski przecinek, dwa miejsca" bez separatora tysięcy, który wynika z `docs/presentation-style.md` 3.3. Rozbieżność zgłoszona użytkownikowi do ujednolicenia przez brief.
+
+**Kandydat na slajd**
+
+- Nie dotyczy.
+
+Status: oczekuje na akceptację.
+
+### 2026-10-20 · latex-assistant · Review fixes and AI-review slides
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania (poprawki iteracji 1 recenzji + grupa recenzji AI)</summary>
+
+```markdown
+## Task card: Review fixes and AI-review slides
+Goal: the 13-slide deck implements every fix from review iteration 1 and
+gains slides/preliminary/ai-review.tex (3 frames), compiling cleanly.
+Fixes: intro opens by expanding the MACD acronym and purpose; notation
+E_i^{(N)}; roles of N1/N2/N3 and alpha_{N3} in the slide-3 legend; equation
+(4) moved to slide 4 as its evidence, simulation rules compressed to one
+line; slide 6 shows four generated lines of results/basic.tex (VerbatimInput)
+beside a four-row table (C_100, V_{L-1}, Zysk, R) with the \resSampleCount
+note; slide-7 title narrowed to the EMA card, cuts marked with [...],
+result+evaluation one rendered line each; error slides name the AI actor
+first, slide 8 quotes the 117 -> 117.0 example, slide-10 title shortened;
+documentclass gains the t option; Makefile prerequisites gain
+$(wildcard *.tex) and ../../results/basic.tex.
+New ai-review.tex: reviewer configuration (4 bullets), review prompt
+(monospace box, English) with result+evaluation, grade frame resolving
+\resReviewScore and \resReviewVerbal from slides/preliminary/review.tex
+(file written by the orchestrator verbatim from the reviewer output).
+```
+
+</details>
+
+**Rezultat**
+
+- Zmienione `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `main.tex`, `Makefile`, `mnstyle.sty` (dodane `\RequirePackage{fancyvrb}`), nowy `ai-review.tex`, plik danych `review.tex` zapisany przez orkiestratora. Commit `cfb0c0b`. Deck ma 13 slajdów.
+- Agent samodzielnie wykrył i naprawił overfull w tabeli slajdu 6 (kolumny 0.49/0.51 z lokalnym `\tabcolsep`), zgłaszając to w raporcie.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Wszystkie punkty spełnione. Weryfikacja orkiestratora: świeży log bez boxów i ostrzeżeń, fonty osadzone, zero rastrów, stopki „1 / 13" … „13 / 13", `touch intro.tex` wyzwala przebudowę, cięcia w cytacie promptu oznaczone `[...]`, slajd 13 rozwiązuje ocenę z `review.tex`.
+
+**Ocena recenzenta prezentacji — iteracja 1 (deck 10-slajdowy, commit `981b220`)**
+
+- Ocena słowna: prezentacja technicznie dopracowana, z tezowymi tytułami i raportem błędów na rzeczywistych zdarzeniach; wstęp nie wyjaśniał, czym jest MACD, a slajdy 4, 6 i 7 stawiały tezy szersze niż dowody. Ocena liczbowa: **7/10** (bez odroczonej grupy recenzji AI).
+- Znaleziska i rozstrzygnięcia (2 major, 9 minor, 5 nit, 0 blocker):
+  1. (major) Wstęp nie mówi, czym jest MACD i do czego służy. Poprawiono w `cfb0c0b` (zdanie otwierające slajd 2).
+  2. (major) Teza slajdu 6 o potoku makr bez dowodu potoku. Poprawiono w `cfb0c0b` (wygenerowane linie `results/basic.tex` obok tabeli).
+  3. (minor) Slajd 4 niósł dwa komunikaty. Poprawiono w `cfb0c0b` (wzór (4) jako dowód, reguły skompresowane).
+  4. (minor) Brak ról N₁/N₂/N₃ i powiązania α z wzorem (1). Poprawiono w `cfb0c0b`.
+  5. (minor) Niespójna notacja EMA. Poprawiono w `cfb0c0b` (wszędzie E_i^{(N)}).
+  6. (minor) Nieoznaczone skróty w cytacie promptu, niezgodne z opisem w dzienniku. Poprawiono w `cfb0c0b` (znaczniki `[...]`), wpis dziennika skorygowano.
+  7. (minor) Teza slajdu 7 szersza niż dowód („każdą kartę"). Poprawiono w `cfb0c0b` (tytuł zawężony do EMA).
+  8. (minor) Wynik i ocena promptu łamały się do czterech linii, ocena oceniała poprawkę, nie prompt. Poprawiono w `cfb0c0b`.
+  9. (minor) Slajdy błędów nie wskazywały sprawcy (agenta/sesji). Poprawiono w `cfb0c0b`.
+  10. (minor) „1001 sesji" wpisane ręcznie. Poprawiono w `365374a` + `cfb0c0b` (makro `\resSampleCount`).
+  11. (minor) Zależności Makefile zostawiały nieaktualny PDF. Poprawiono w `cfb0c0b`.
+  12. (nit) Brak konkretnego przykładu na slajdzie 8. Poprawiono w `cfb0c0b` („117 na 117.0").
+  13. (nit) Etykiety tabeli niezgodne z notacją instrukcji. Poprawiono w `cfb0c0b` ($V_{L-1}$, cztery wiersze).
+  14. (nit) Pionowe centrowanie treści. Poprawiono w `cfb0c0b` (opcja `t`).
+  15. (nit) Tytuły slajdów 7 i 10 łamały się pojedynczym słowem. Poprawiono w `cfb0c0b` (złamanie na granicy frazy, skrócenie tytułu 10).
+  16. (nit) Brak separatora tysięcy. Poprawiono w `365374a`.
+
+**Błędy AI**
+
+- **Znalezisko:** Slajd z promptem przedstawiał skrócony cytat karty zadania jako dosłowny (nieoznaczone cięcia), a wpis dziennika powtórzył to twierdzenie bez weryfikacji.
+  - Waga: minor.
+  - Wymaganie: `zasady` s. 5, 6.3 (prompt lub jego kluczowe fragmenty, rozpoznawalne jako fragmenty).
+  - Sposób wykrycia: recenzent prezentacji porównał box na slajdzie z jedynym pełnym zapisem karty w `docs/ai-log.md`.
+  - Poprawka: znaczniki `[...]` w commicie `cfb0c0b`, korekta wpisu dziennika.
+
+**Kandydat na slajd**
+
+- Nie dotyczy; grupa recenzji AI jest już w decku, a iteracje recenzji dokumentuje ten dziennik.
 
 Status: oczekuje na akceptację.
