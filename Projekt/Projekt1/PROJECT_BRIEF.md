@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 0.5 · 2026-10-20 · status: sections 0–5 and appendices complete; section 6 is a placeholder.
+Version 1.0 · 2026-10-20 · status: complete.
 
 ---
 
@@ -28,7 +28,7 @@ After that, sessions work from `CLAUDE.md` and `docs/`. This file stays in the r
 - Do not guess APIs, file names or requirements. Check the source or say "I don't know".
 - Code, identifiers, comments, commits and agent instructions are in English. Communication with the user and slide content are in Polish.
 
-**Relation to the user's global `~/.claude/CLAUDE.md`** *(proposal — confirm or strike)*. The global rules ("explain the plan before code", "deliver in batches of a few dozen lines") govern **what the orchestrator shows the user**:
+**Relation to the user's global `~/.claude/CLAUDE.md`.** The global rules ("explain the plan before code", "deliver in batches of a few dozen lines") govern **what the orchestrator shows the user**:
 
 - a plan before each stage,
 - a report after each stage,
@@ -743,7 +743,46 @@ Commits follow `~/.claude/rules/git.md` and are made only by the orchestrator.
 
 ## 6. Stages & checkpoints
 
-*Placeholder.*
+Stages run in the order below. Each stage ends with its exit criteria met, a commit and a decision-register entry (section 5). Checkpoints (CP) are points where the user decides. The orchestrator stops at each checkpoint and does not continue past it on its own. Checkpoint IDs use the prefix CP so they cannot be confused with chart IDs (C1, C2).
+
+### 6.1 Order rationale
+
+- The basic computations run **before** the preliminary deck, although the deck does not require results (`Projekt_1.pdf` p. 8, 6.1). Real agent work, review findings and the EMA cross-check give the deck's AI-collaboration slides genuine material instead of hypothetical examples.
+- Charts and the experiment follow the P2 package, because the final deck is due at P3.
+- **P2 guard:** the P2 package has priority over every other stage. If Stage 2 or 3 threatens the deadline of 2026-10-21 10:00, it is paused and Stage 4 proceeds with the material available.
+
+### 6.2 Stages
+
+| # | Stage | Delegated to | Deliverables | Exit criteria |
+|---|---|---|---|---|
+| 1 | Project scaffold | orchestrator | `CLAUDE.md`; `docs/requirements-code.md`, `docs/requirements-charts.md`, `docs/requirements-presentation.md`, `docs/presentation-style.md`; four agent files in `.claude/agents/`; extended `.gitignore` (4.7) | files match sections 1–5; agent frontmatter as in 2.7 |
+| 2 | Input data | orchestrator | `data/pko.csv`: 1000–1200 most recent daily sessions of PKO BP | validation from 4.3 passes; **CP1** |
+| 3 | Basic computations | `coder` → `code-reviewer`, one task card each | `config.py` + `data.py`; `macd.py` + `verify_ema.py`; `simulation.py` + `stats.py` + `export.py`; `basic.py` without charts; `results/basic.*` | verification 4.8; at least one closed trade (`Projekt_1.pdf` p. 5); **CP2** |
+| 4 | Preliminary deck and P2 package | `latex-assistant` → `presentation-reviewer` | `slides/common/mnstyle.sty`, `slides/preliminary/`; ZIP for P2 | section 1.2 (tab. 1) covered; checks 3.8 pass; **CP3**; ZIP submitted by 2026-10-21 10:00 |
+| 5 | Charts A1–E2 | `coder` → `code-reviewer` | `style.py`, `charts.py`, `charts/*.pdf`; `readme.md`; `zrodla.md` | checklist 3.6 and `Projekt_1.pdf` p. 6–7 met; every readme command runs |
+| 6 | Experimental part | `coder` → `code-reviewer` | `experiment.py`, `results/experiment.*`, charts X1… | **CP4** before implementation; global result over all 117 instruments and a local example (`Projekt_1.pdf` p. 8, 5.2) |
+| 7 | Final deck and P3 packages | `latex-assistant` → `presentation-reviewer` | `slides/final/`; presentation ZIP; code ZIP | section 1.2 (tab. 2) covered; **CP5**; packaging test 6.4 passes |
+
+### 6.3 Checkpoints
+
+| CP | After stage | The user decides or confirms |
+|---|---|---|
+| CP1 | 2 | The PKO BP price chart matches an independent source (dates and selected prices), as the instruction requires for data prepared with AI (`Projekt_1.pdf` p. 4). |
+| CP2 | 3 | The user can explain `ema`, signal detection and the simulation loop line by line. The lecturer may require code analysis in class (`zasady` p. 2). |
+| CP3 | 4 | The slide titles (theses) are approved by the user; the PDF is checked in full-screen mode; the AI-error slides or the declaration are confirmed. |
+| CP4 | 5 | The experiment direction (recommended: RSI as an additional decision condition) and its parameters. |
+| CP5 | 7 | The interpretation theses for A1–F and for the experiment are formulated or approved by the user. These carry most of the points in table 2 and are never delegated. |
+
+### 6.4 Packaging procedure
+
+Applies to every ZIP:
+
+1. Build the ZIP from an explicit whitelist (1.5), never from a directory with exclusions.
+2. Unpack it into an empty temporary directory and run there:
+   - `make` for a presentation ZIP,
+   - every command from `readme.md` for the code ZIP, with `MN_DATA_DIR` pointing to the dataset.
+3. Accept the ZIP only if step 2 succeeds and the produced PDF is identical in content to the one in the ZIP.
+4. List the ZIP contents in the decision-register entry of the stage.
 
 ---
 
@@ -806,3 +845,4 @@ Commits follow `~/.claude/rules/git.md` and are made only by the orchestrator.
 | 0.3 | 2026-10-20 | Section 3 (presentation visual style); presentation ZIP includes `slides/common/` | Visual contract required before P2 |
 | 0.4 | 2026-10-20 | Section 4 (code conventions); ADR-6 to ADR-8; presentation ZIP includes `charts/` and `results/*.tex` | Code contract for implementation; slides must compile from the ZIP alone |
 | 0.5 | 2026-10-20 | Section 5 (documentation protocol); decisions in 1.7: author, PKO BP, d = 1; P2 time 11:00–13:00, ZIP by 10:00 | User decisions recorded; documentation flow defined before implementation |
+| 1.0 | 2026-10-20 | Section 6 (stages, checkpoints, packaging procedure); all sections complete | Brief complete; implementation can start |
