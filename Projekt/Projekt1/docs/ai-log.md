@@ -207,6 +207,36 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 **Wynik**
 
 - `PROJECT_BRIEF.md` v1.0 — brief kompletny. Commit `18ce765`.
+- Brief zaakceptowano.
+
+### Etap 8 · Realizacja: etap 1 — szkielet projektu (2026-10-20)
+
+**Polecenia**
+
+- Wykonać etap 1 według sekcji 6.2 briefu.
+
+**Decyzje**
+
+- `docs/presentation-style.md` i cztery definicje agentów w `.claude/agents/` wyodrębniono z briefu skryptem, bez ręcznego przepisywania. Wyklucza to rozbieżność kopii z oryginałem.
+- `docs/requirements-code.md` składa się z dwóch części:
+  - wyciągu z instrukcji: wzory (1)–(7), algorytm symulacji, podsumowanie liczbowe,
+  - konwencji kodu z sekcji 4 briefu.
+- `docs/requirements-charts.md` zawiera wymagania dla wykresów A1–E2, slajdu F i wykresów eksperymentu. Styl wykresów pozostaje wyłącznie w `docs/presentation-style.md`.
+- `docs/requirements-presentation.md` opisuje warunki obowiązkowe, punktację obu prezentacji, raport o błędach AI, recenzję AI oraz terminy.
+- `CLAUDE.md` zawiera wyłącznie protokół orkiestracji, zasady nienegocjowalne i kluczowe parametry projektu, a do pozostałych informacji odsyła do `docs/` i briefu.
+- `.gitignore` rozszerzono o `__pycache__/`, `.venv/` i pliki pomocnicze LaTeX.
+
+**Weryfikacja**
+
+- Definicje agentów i `docs/presentation-style.md` są identyczne z odpowiednimi fragmentami briefu (porównanie automatyczne).
+
+**Ustalenia**
+
+- Agenci zdefiniowani w `Projekt1/.claude/agents/` są wczytywani wyłącznie w sesji Claude Code uruchomionej w katalogu projektu. W sesji uruchomionej w innym katalogu nie są dostępni.
+
+**Wynik**
+
+- Commit `8f1aa28`.
 - Status: oczekuje na akceptację.
 
 ---
