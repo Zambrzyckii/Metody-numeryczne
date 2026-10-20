@@ -23,27 +23,28 @@ Acceptance checklist:
 \end{frame}
 
 \begin{frame}
-  \frametitle{AI potrafi zepsuć dane, gdy poprawia ich format przy zapisie}
+  \frametitle{AI skróciło cytat i przedstawiło go jako pełny}
   \begin{description}
-    \item[Znalezisko] sesja główna Claude Code napisała skrypt przygotowania
-      danych, który zapisał plik przez pandas, zmieniając zapis liczb
-      całkowitych na dziesiętny (np. 117 na 117.0); plik przestał być
-      wierną kopią źródła.
-    \item[Wykrycie] porównanie wierszy pliku wynikowego ze źródłem przed
-      zapisem do repozytorium.
-    \item[Poprawka] zapis surowych wierszy źródła z podmienionym nagłówkiem.
+    \item[Co się stało] na slajd trafił cytat polecenia dla agenta. Agent
+      wyciął z niego fragmenty, ale nie zaznaczył miejsc cięcia. Cytat
+      wyglądał na kompletny, choć nim nie był.
+    \item[Jak to wykryto] recenzent AI porównał cytat ze slajdu z pełnym
+      zapisem polecenia w dzienniku pracy i wymienił brakujące fragmenty.
+    \item[Jak naprawiono] każde cięcie oznaczono znakiem [...], a błędny
+      opis w dzienniku poprawiono.
   \end{description}
 \end{frame}
 
 \begin{frame}
-  \frametitle{AI przedstawiło skrócony cytat jako dosłowny}
+  \frametitle{Poprawka zalecona przez recenzenta AI zepsuła układ slajdu}
   \begin{description}
-    \item[Znalezisko] agent latex-assistant wstawił skrócony fragment karty
-      zadania jako dosłowny cytat, bez oznaczenia opuszczeń, a sesja główna
-      powtórzyła to twierdzenie w dzienniku pracy.
-    \item[Wykrycie] recenzent AI prezentacji porównał cytat ze slajdu
-      z pełnym zapisem karty w dzienniku.
-    \item[Poprawka] opuszczenia oznaczono znakiem [...], a wpis dziennika
-      skorygowano.
+    \item[Co się stało] recenzent AI zalecił drobną zmianę formatowania
+      tekstu. Po zmianie jeden wiersz stał się dłuższy i nasunął się na
+      sąsiednią część slajdu.
+    \item[Jak to wykryto] w kolejnej recenzji ten sam recenzent zauważył
+      nachodzące na siebie elementy w PDF i wskazał, że przyczyną było
+      jego wcześniejsze zalecenie.
+    \item[Jak naprawiono] układ slajdu zmieniono tak, aby oba elementy
+      stały jeden pod drugim.
   \end{description}
 \end{frame}
