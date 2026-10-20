@@ -282,7 +282,13 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 **Wynik**
 
 - `data/pko.csv`, commit `7d8b207`.
-- Status: wstrzymano na punkcie kontrolnym CP1 (weryfikacja danych z niezależnym źródłem).
+
+**Punkt kontrolny CP1**
+
+- Dane zgodne z niezależnym źródłem.
+- Decyzja: w obliczeniach stosuje się ceny skorygowane wstecznie przez stooq. Korekta zostanie opisana w `readme.md`.
+- Decyzję zapisano w briefie (v1.1, sekcja 1.7) i w `docs/requirements-code.md`, commit `ffe8e51`.
+- Wykonanie zaakceptowano.
 
 ---
 
