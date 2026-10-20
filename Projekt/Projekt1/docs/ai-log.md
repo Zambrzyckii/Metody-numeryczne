@@ -290,6 +290,48 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 - Decyzję zapisano w briefie (v1.1, sekcja 1.7) i w `docs/requirements-code.md`, commit `ffe8e51`.
 - Wykonanie zaakceptowano.
 
+### Etap 10 · Realizacja: etap 3 — obliczenia części podstawowej (2026-10-20)
+
+**Polecenia**
+
+- Zweryfikować dostępność agentów `coder` i `code-reviewer`, następnie wykonać etap 3 według sekcji 6.2 briefu, zaczynając od planu kart zadań.
+
+**Decyzje**
+
+- Etap podzielono na cztery karty zadań według grupowania artefaktów z briefu §6.2: (1) `config.py` + `data.py`, (2) `macd.py` + `verify_ema.py`, (3) `simulation.py` + `stats.py` + `export.py`, (4) `basic.py` + `results/basic.*`. Karty realizowano sekwencyjnie, każda w cyklu coder, weryfikacja orkiestratora, code-reviewer, rozstrzygnięcie znalezisk, commit.
+- Moduły `src/` importują się płasko (`import config`), a skrypty uruchamia się wyłącznie jako `python src/<skrypt>.py`. Forma uruchamiania ma zostać zapisana w `readme.md` w etapie 5.
+- Obowiązuje limit 79 znaków PEP 8 (`Projekt_1.pdf` s. 9, odnośnik [9]).
+- Slajd F zasila dwanaście makr `\res…` (od `InitialCapital` do `OpenValue`). Liczniki całkowite zapisywane są bez części dziesiętnej, pozycje bez wartości jako „nie dotyczy" (`Projekt_1.pdf` s. 7, 4.4).
+- `basic.py` przerywa działanie, gdy dane nie dają żadnej zamkniętej transakcji (`Projekt_1.pdf` s. 5, 3.4).
+- Wybór makr należy do punktu wejścia. `export.py` dostarcza wyłącznie mechanizm formatowania i zapisu, wspólny dla części podstawowej i eksperymentalnej.
+- Makra części eksperymentalnej otrzymają prefiks `Exp…` (rozstrzygnięcie znaleziska, do karty etapu 6).
+
+**Weryfikacja**
+
+- Niezależna implementacja referencyjna orkiestratora (EMA przez `pandas ewm`, dosłowna transkrypcja algorytmu z `Projekt_1.pdf` s. 5, bez użycia modułów `src/`): sygnały, wektory C, Q, V i lista egzekucji zgodne co do bitu z modułami na `data/pko.csv`.
+- `python src/verify_ema.py`: maksymalna różnica 0.0 dla N = 12, 26, 9.
+- `python src/basic.py`: bez błędów i ostrzeżeń (`-W error::UserWarning`), dwa przebiegi dają pliki identyczne co do bajtu (sha256).
+- Wyniki części podstawowej: C₁₀₀ = 23547,90 PLN, V₁₀₀₀ = 44415,21 PLN, R = 88,62 %, 34 zamknięte transakcje (19 zyskownych, 15 stratnych), skuteczność 55,88 %, największy zysk 26,13 %, największa strata 8,64 %, bez pozycji otwartej na końcu. Kryterium „co najmniej jedna zamknięta transakcja" spełnione (`Projekt_1.pdf` s. 5).
+
+**Ustalenia**
+
+- Literalna reguła sygnałów z `Projekt_1.pdf` s. 2 dopuszcza sygnał także wtedy, gdy histogram dotyka zera i wraca na tę samą stronę (H₍ᵢ₋₁₎ = 0 spełnia warunek nieostrej nierówności). Kod odwzorowuje regułę dosłownie. Na danych PKO przypadek nie wystąpił.
+- Rozbieżności dokumentacji z kodem, do rozstrzygnięcia przez brief: `docs/requirements-code.md` B.2 opisuje `basic.py` generujący wykresy A1–E2, co jest stanem docelowym po etapie 5, oraz B.5 wymienia przykład `\resOpenPosition` wobec faktycznych `\resOpenQty` i `\resOpenValue`.
+
+**Błędy AI**
+
+- Czternaście znalezisk recenzenta (dwa minor, dwanaście nit, bez blockerów i majorów) udokumentowano wraz z rozstrzygnięciami w warstwie „Zadania agentów" (cztery wpisy z 2026-10-20).
+
+**Punkt kontrolny CP2**
+
+- Oczekuje: omówienie `ema`, detekcji sygnałów i pętli symulacji linia po linii (`zasady_zaliczenia_projektu_v1.pdf` s. 2).
+
+**Wynik**
+
+- Artefakty: `src/config.py`, `src/data.py`, `src/macd.py`, `src/verify_ema.py`, `src/simulation.py`, `src/stats.py`, `src/export.py`, `src/basic.py`, `requirements.txt`, `results/basic.json`, `results/basic.tex`.
+- Commity kroków: `df4292d`, `2f3b5fe`, `4acc666`, `8ba19f2`.
+- Status: wstrzymano na punkcie kontrolnym CP2 (zrozumienie kodu obliczeniowego).
+
 ---
 
 ## Zadania agentów
