@@ -1,0 +1,60 @@
+% Introduction: EMA, MACD/SIGNAL equations, trading algorithm.
+
+\begin{frame}
+  \frametitle{EMA wygładza ceny, nadając największą wagę ostatnim notowaniom}
+  \begin{equation*}
+    \alpha_N = \frac{2}{N+1},\qquad
+    E_0 = x_0,\qquad
+    E_i = \alpha_N x_i + (1 - \alpha_N)\,E_{i-1}
+    \quad\text{dla } i \ge 1
+    \tag{1}
+  \end{equation*}
+  \vskip2mm
+  \begin{itemize}
+    \item $x_i$ --- cena zamknięcia w próbce $i$
+    \item $N$ --- okres średniej
+    \item $\alpha_N$ --- współczynnik wygładzania
+    \item $E_i$ --- wartość EMA o okresie $N$
+  \end{itemize}
+  \vskip2mm
+  Krótszy okres $N$ oznacza szybszą reakcję na zmiany ceny.
+\end{frame}
+
+\begin{frame}
+  \frametitle{MACD mierzy rozbieżność dwóch średnich EMA, a SIGNAL ją wygładza}
+  \begin{equation*}
+    M_i = E_i^{(N_1)} - E_i^{(N_2)}
+    \tag{2}
+  \end{equation*}
+  \begin{equation*}
+    S_0 = M_0,\qquad
+    S_i = \alpha_{N_3} M_i + (1 - \alpha_{N_3})\,S_{i-1}
+    \quad\text{dla } i \ge 1
+    \tag{3}
+  \end{equation*}
+  \begin{equation*}
+    H_i = M_i - S_i
+    \tag{4}
+  \end{equation*}
+  \vskip2mm
+  \begin{itemize}
+    \item $M$ --- linia MACD
+    \item $S$ --- linia SIGNAL
+    \item $H$ --- histogram
+    \item parametry stałe $(N_1, N_2, N_3) = (12, 26, 9)$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Zmiana znaku histogramu wyznacza momenty kupna i sprzedaży}
+  \begin{itemize}
+    \item Kupno w próbce $i$, gdy $H_{i-1} \le 0$ i $H_i > 0$; sprzedaż, gdy
+      $H_{i-1} \ge 0$ i $H_i < 0$, bez interpolacji czasu przecięcia.
+    \item Sygnały rozpatrywane od próbki 101; stan początkowy portfela
+      w próbce 100: $C_{100} = 1000\,x_{100}$.
+    \item Realizacja z opóźnieniem $d = 1$, po cenie następnej sesji; sygnał
+      z ostatniej próbki nie jest realizowany.
+    \item Pełne zaangażowanie: kupno za całą gotówkę, sprzedaż całej pozycji;
+      bez prowizji, ułamkowe jednostki dozwolone.
+  \end{itemize}
+\end{frame}

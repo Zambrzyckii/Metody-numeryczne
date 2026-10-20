@@ -1,0 +1,43 @@
+% Way of working with AI and the no-hand-typed-numbers rule.
+% Result macros (\res...) come from the generated results file.
+\input{../../results/basic.tex}
+
+\begin{frame}
+  \frametitle{Kod, slajdy i recenzje powstają w czterech rolach agentów Claude Code}
+  \begin{itemize}
+    \item Narzędzie: Claude Code; sesja główna jest orkiestratorem i deleguje
+      prace przez karty zadań.
+    \item Role tworzące: coder (Python), latex-assistant (slajdy); role
+      recenzujące: code-reviewer i presentation-reviewer, wyłącznie
+      z narzędziami odczytu.
+    \item Karta zadania zawiera cel, wycinek wymagań z referencjami do
+      instrukcji, listę plików i kryteria akceptacji.
+    \item Decyzje projektowe i interpretacje wyników pozostają po stronie
+      autora.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Żadna liczba nie trafia na slajdy ręcznie: wartości wstawiają
+    makra generowane przez program}
+  \begin{center}
+    \begin{tabular}{@{}lr@{}}
+      \toprule
+      Wielkość & Wartość \\
+      \midrule
+      Kapitał początkowy $C_{100}$ [PLN] & \resInitialCapital \\
+      Wartość końcowa $V$ [PLN] & \resFinalEquity \\
+      Stopa zwrotu $R$ [\%] & \resReturnPct \\
+      Transakcje zamknięte & \resClosedCount{}
+        (zyskowne \resProfitableCount, stratne \resLosingCount) \\
+      Skuteczność [\%] & \resWinRatePct \\
+      Największy zysk / strata [\%] & \resMaxGainPct{} / \resMaxLossPct \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \vskip2mm
+  {\footnotesize\color{mnMuted}
+    Wyniki częściowe części podstawowej (PKO BP, 1001 sesji dziennych).
+    Program zapisuje makra do \texttt{results/basic.tex},
+    a slajd wstawia je przez \texttt{\string\input}.\par}
+\end{frame}
