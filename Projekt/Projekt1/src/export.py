@@ -6,7 +6,10 @@ import config
 
 
 def format_number(value: float, decimals: int = 2) -> str:
-    """Polish decimal comma, two decimals, docs/requirements-code.md B.5."""
+    """Polish comma, thin-space thousands, docs/presentation-style.md 3.3."""
+    grouped = f"{value:,.{decimals}f}"
+    if len(grouped.split(".")[0].lstrip("-").replace(",", "")) >= 5:
+        return grouped.replace(",", "\\,").replace(".", ",")
     return f"{value:.{decimals}f}".replace(".", ",")
 
 

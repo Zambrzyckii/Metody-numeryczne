@@ -40,6 +40,7 @@ def build_numbers(
             if summary.open_trade
             else None
         ),
+        "sample_count": len(result.cash),
         "execution_count": len(result.trades),
         "closed_trades": [
             {
@@ -75,6 +76,7 @@ def build_macros(numbers: dict) -> dict[str, str]:
         "MaxGainPct": export.format_optional(numbers["max_gain_pct"]),
         "OpenQty": export.format_optional(numbers["open_qty"]),
         "OpenValue": export.format_optional(numbers["open_value"]),
+        "SampleCount": export.format_number(numbers["sample_count"], 0),
     }
 
 

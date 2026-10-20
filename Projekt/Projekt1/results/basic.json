@@ -12,6 +12,7 @@
   "open_qty": null,
   "open_value": null,
   "open_trade": null,
+  "sample_count": 1001,
   "execution_count": 68,
   "closed_trades": [
     {
