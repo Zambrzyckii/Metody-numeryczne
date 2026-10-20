@@ -1,0 +1,64 @@
+% mnstyle.sty — shared Beamer style for Projekt 1 (MACD) decks.
+% Implements the visual contract from docs/presentation-style.md (3.2–3.4, 3.7).
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mnstyle}[2026/10/20 MN Projekt 1 Beamer style]
+
+% --- Typography (style 3.3) ---
+\RequirePackage[T1]{fontenc}
+\RequirePackage[polish]{babel}
+\RequirePackage{lmodern}
+\RequirePackage{tgheros}
+\renewcommand{\familydefault}{\sfdefault}
+\usefonttheme[onlymath]{serif}
+
+% --- Palette (style 3.2, copied verbatim) ---
+\definecolor{mnPrimary}{HTML}{173D56}
+\definecolor{mnText}{HTML}{182A3B}
+\definecolor{mnMuted}{HTML}{4E6B7E}
+\definecolor{mnBuy}{HTML}{00856A}
+\definecolor{mnSell}{HTML}{C13F4B}
+\definecolor{mnBuyLight}{HTML}{6EB9AA}
+\definecolor{mnSellLight}{HTML}{DB9198}
+\definecolor{mnSignal}{HTML}{C26A1A}
+\definecolor{mnPrice}{HTML}{9AA5B1}
+\definecolor{mnGrid}{HTML}{DCE3E8}
+
+% --- Base colours: white background, mnText body (style 3.2, 3.4) ---
+\setbeamercolor{normal text}{fg=mnText,bg=white}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{structure}{fg=mnPrimary}
+\setbeamercolor{itemize item}{fg=mnPrimary}
+\setbeamercolor{itemize subitem}{fg=mnPrimary}
+\setbeamercolor{title}{fg=mnPrimary}
+\setbeamercolor{subtitle}{fg=mnText}
+\setbeamercolor{author}{fg=mnText}
+\setbeamercolor{institute}{fg=mnMuted}
+\setbeamercolor{date}{fg=mnMuted}
+
+% --- Layout: 8 mm side margins, no navigation symbols (style 3.4) ---
+\setbeamersize{text margin left=8mm,text margin right=8mm}
+\setbeamertemplate{navigation symbols}{}
+
+% --- Frame title: \large bold mnPrimary, thin mnGrid rule (style 3.3, 3.4) ---
+\setbeamercolor{frametitle}{fg=mnPrimary,bg=white}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamertemplate{frametitle}{%
+  \vskip2mm%
+  {\usebeamerfont{frametitle}\usebeamercolor[fg]{frametitle}\insertframetitle\par}%
+  \vskip1mm%
+  {\color{mnGrid}\hrule height 0.4pt}%
+  \vskip1mm%
+}
+
+% --- Footline: author/project left, n/N right (style 3.4) ---
+\setbeamertemplate{footline}{%
+  \begin{beamercolorbox}[wd=\paperwidth,ht=4mm,dp=2mm,%
+      leftskip=8mm,rightskip=8mm]{normal text}%
+    \color{mnMuted}\footnotesize%
+    Bartosz Zambrzycki \textperiodcentered{} Projekt 1: MACD%
+    \hfill%
+    \insertframenumber\,/\,\inserttotalframenumber%
+  \end{beamercolorbox}%
+}
+
+\endinput
