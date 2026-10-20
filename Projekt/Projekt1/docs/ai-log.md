@@ -324,13 +324,13 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 
 **Punkt kontrolny CP2**
 
-- Oczekuje: omówienie `ema`, detekcji sygnałów i pętli symulacji linia po linii (`zasady_zaliczenia_projektu_v1.pdf` s. 2).
+- Omówienie `ema`, detekcji sygnałów i pętli symulacji linia po linii przeniesiono do osobnej sesji (`zasady_zaliczenia_projektu_v1.pdf` s. 2). Realizacja etapu 4 rozpoczyna się przed tym omówieniem.
 
 **Wynik**
 
 - Artefakty: `src/config.py`, `src/data.py`, `src/macd.py`, `src/verify_ema.py`, `src/simulation.py`, `src/stats.py`, `src/export.py`, `src/basic.py`, `requirements.txt`, `results/basic.json`, `results/basic.tex`.
 - Commity kroków: `df4292d`, `2f3b5fe`, `4acc666`, `8ba19f2`.
-- Status: wstrzymano na punkcie kontrolnym CP2 (zrozumienie kodu obliczeniowego).
+- Wykonanie zaakceptowano.
 
 ---
 
@@ -431,7 +431,7 @@ Iteracja 2, werdykt APPROVE (potwierdzenie poprawek):
 
 - Raport o błędach AI (`Projekt_1.pdf` s. 9, tabela punktacji). Znalezisko minor z iteracji 1 wraz z przeoczeniem recenzenta z iteracji 2 pokazują rzeczywisty cykl recenzji.
 
-Status: oczekuje na akceptację.
+Wykonanie zaakceptowano.
 
 ### 2026-10-20 · coder · MACD indicator and EMA verification
 
@@ -528,7 +528,7 @@ Iteracja 2 (potwierdzenie poprawek przez orkiestratora): `verify_ema.py` bez zmi
 
 - Weryfikacja obliczeń niezależnym odniesieniem: zgodność bitowa własnej rekurencji EMA z `pandas ewm(adjust=False)` dla trzech okresów (`Projekt_1.pdf` s. 2, wzmianka o `Series.ewm`; s. 9, tabela punktacji).
 
-Status: oczekuje na akceptację.
+Wykonanie zaakceptowano.
 
 ### 2026-10-20 · coder · Portfolio simulation, statistics and results export
 
@@ -655,7 +655,7 @@ Iteracja 2 (potwierdzenie poprawek przez orkiestratora): pełna regresja względ
 
 - Weryfikacja symulacji niezależną implementacją referencyjną (zgodność bitowa wektorów i listy transakcji) oraz znalezisko minor o „nie dotyczy" wykryte wyłącznie analizą kodu, poza ścieżką danych rzeczywistych (`Projekt_1.pdf` s. 9, tabela punktacji).
 
-Status: oczekuje na akceptację.
+Wykonanie zaakceptowano.
 
 ### 2026-10-20 · coder · Basic-part entry point and results
 
@@ -755,4 +755,4 @@ Iteracja 2 (potwierdzenie poprawki przez orkiestratora): przebiegi deterministyc
 
 - Zasada „żadna liczba na slajdzie nie jest przepisywana ręcznie": dwanaście makr `\res…` generowanych przez program wprost z wyników symulacji (`Projekt_1.pdf` s. 9, 6.3, wymóg odtwarzalności wyników).
 
-Status: oczekuje na akceptację.
+Wykonanie zaakceptowano.
