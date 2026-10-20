@@ -1233,6 +1233,52 @@ only. Target: 14 slides.
 
 Status: oczekuje na akceptację.
 
+### 2026-10-20 · latex-assistant · Plain-language AI-error slides
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania (druga runda CP3: wymiana slajdów błędów)</summary>
+
+```markdown
+Replace BOTH AI-error slides. The user rejected them: the data-script error
+concerns Python code (out of the preliminary deck's scope) and the quote
+slide was incomprehensible. New principle: dead-simple language, short
+sentences, labels "Co się stało" / "Jak to wykryto" / "Jak naprawiono".
+- New frame 10: "AI skróciło cytat i przedstawiło go jako pełny" (cuts in a
+  quoted command, detected by the AI reviewer against the work log, fixed
+  with [...] markers and a log correction).
+- New frame 11: "Poprawka zalecona przez recenzenta AI zepsuła układ slajdu"
+  (a formatting recommendation lengthened one line, which overlapped a
+  neighbouring element; the reviewer found the collision in its next pass
+  and attributed it to its own recommendation; fixed by stacking elements).
+- The pandas/117 frame is removed entirely.
+Follow-up (iteration 6, optional nit): extend "Jak to wykryto" on frame 11
+with "Kompilacja nie zgłosiła żadnego ostrzeżenia, błąd był widoczny tylko
+w PDF."
+```
+
+</details>
+
+**Rezultat**
+
+- Zmieniony `ai-errors.tex`, commity `65cfec5` i `6395e85`. Oba slajdy błędów opisują rzeczywiste zdarzenia z budowy tej prezentacji, bez odniesień do kodu Pythona, prostym językiem.
+
+**Ocena recenzenta prezentacji — iteracja 6, potwierdzająca (commit `65cfec5`)**
+
+- Werdykt: brak blockerów i majorów, oba nowe slajdy zgodne z zapisami dziennika. Ocena liczbowa: **9/10**, ocena słowna bez zmian względem iteracji 5, `review.tex` bez aktualizacji.
+- Znalezisko (nit, opcjonalne): slajd 11 pomijał przyczynę przeoczenia kolizji, czyli brak ostrzeżenia kompilacji. Poprawiono w `6395e85` (jedno zdanie w polu „Jak to wykryto").
+
+**Błędy AI**
+
+- Brak nowych.
+
+**Kandydat na slajd**
+
+- Nie dotyczy.
+
+Status: oczekuje na akceptację.
+
 ### Etap 11 · Realizacja: etap 4 — prezentacja wstępna i pakiet P2 (2026-10-20)
 
 **Polecenia**
@@ -1265,7 +1311,8 @@ Status: oczekuje na akceptację.
 **Punkt kontrolny CP3**
 
 - Pierwszej wersji talii nie zaakceptowano, ponieważ prezentacja wstępna ma zawierać wyłącznie teorię MACD i planowany sposób pracy z AI, bez faktów z obliczeń, z wolniejszym wprowadzeniem do EMA i z naciskiem na konfigurację zamiast na błędy. Ponowienie: talia przebudowana do 14 slajdów (wpis „Theory-only rework after CP3" w warstwie zadań agentów), ponownie zrecenzowana (iteracje 4 i 5, ocena końcowa 9/10) i ponownie spakowana.
-- Oczekuje: druga runda akceptacji tez slajdów, kontrola PDF w trybie pełnoekranowym, potwierdzenie slajdów o błędach AI (`PROJECT_BRIEF.md` 6.3).
+- W drugiej rundzie slajdów o błędach AI nie zaakceptowano, ponieważ pierwszy dotyczył kodu Pythona (poza zakresem prezentacji wstępnej), a drugi był opisany niezrozumiale. Ponowienie: oba slajdy wymieniono na zdarzenia z budowy samej prezentacji, opisane prostym językiem (wpis „Plain-language AI-error slides"), ocena recenzji potwierdzona na 9/10, pakiet przepakowany i ponownie przetestowany.
+- Oczekuje: trzecia runda akceptacji tez slajdów, kontrola PDF w trybie pełnoekranowym, potwierdzenie slajdów o błędach AI (`PROJECT_BRIEF.md` 6.3).
 
 **Decyzje (uzupełnienie po pierwszej rundzie CP3)**
 
@@ -1276,5 +1323,5 @@ Status: oczekuje na akceptację.
 
 - Artefakty: `slides/common/mnstyle.sty`, `slides/preliminary/` (`main.tex`, `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, `review.tex`, `Makefile`, `main.pdf`), pakiet `zambrzycki_projekt1_wstepna.zip`.
 - Zawartość pakietu (9 plików, struktura katalogów zachowana): `slides/common/mnstyle.sty`; `slides/preliminary/Makefile`, `main.tex`, `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, `review.tex`, `main.pdf`. Pakiet przetestowany według briefu 6.4 (rozpakowanie, `make`, treść PDF identyczna).
-- Commity kroków: `0f9c38e`, `a33a288`, `981b220`, `365374a`, `cfb0c0b`, `a02976d`, `cd1d1f4`, `dcf8803`, `4b0d896`, `05615cf`.
+- Commity kroków: `0f9c38e`, `a33a288`, `981b220`, `365374a`, `cfb0c0b`, `a02976d`, `cd1d1f4`, `dcf8803`, `4b0d896`, `05615cf`, `65cfec5`, `6395e85`.
 - Status: wstrzymano na punkcie kontrolnym CP3 (druga runda: tezy slajdów, kontrola pełnoekranowa, slajdy o błędach AI).
