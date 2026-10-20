@@ -1,0 +1,324 @@
+{
+  "initial_cash": 23547.899999999998,
+  "final_equity": 44415.205651633776,
+  "profit": 20867.30565163378,
+  "portfolio_return_pct": 88.61641866847481,
+  "closed_count": 34,
+  "profitable_count": 19,
+  "losing_count": 15,
+  "win_rate_pct": 55.88235294117647,
+  "max_loss_pct": 8.63807381777737,
+  "max_gain_pct": 26.128329561970574,
+  "open_qty": null,
+  "open_value": null,
+  "open_trade": null,
+  "execution_count": 68,
+  "closed_trades": [
+    {
+      "buy_signal_index": 111,
+      "buy_execution_index": 112,
+      "buy_price": 23.5315,
+      "sell_signal_index": 133,
+      "sell_execution_index": 134,
+      "sell_price": 25.4265,
+      "return_pct": 8.053035293117738
+    },
+    {
+      "buy_signal_index": 144,
+      "buy_execution_index": 145,
+      "buy_price": 27.3786,
+      "sell_signal_index": 152,
+      "sell_execution_index": 153,
+      "sell_price": 26.7905,
+      "return_pct": -2.148028021885695
+    },
+    {
+      "buy_signal_index": 154,
+      "buy_execution_index": 155,
+      "buy_price": 28.0157,
+      "sell_signal_index": 168,
+      "sell_execution_index": 169,
+      "sell_price": 29.4041,
+      "return_pct": 4.95579264483843
+    },
+    {
+      "buy_signal_index": 181,
+      "buy_execution_index": 182,
+      "buy_price": 31.8546,
+      "sell_signal_index": 196,
+      "sell_execution_index": 197,
+      "sell_price": 32.4916,
+      "return_pct": 1.9997111877091411
+    },
+    {
+      "buy_signal_index": 240,
+      "buy_execution_index": 241,
+      "buy_price": 28.4159,
+      "sell_signal_index": 264,
+      "sell_execution_index": 265,
+      "sell_price": 35.8405,
+      "return_pct": 26.128329561970574
+    },
+    {
+      "buy_signal_index": 268,
+      "buy_execution_index": 269,
+      "buy_price": 37.572,
+      "sell_signal_index": 276,
+      "sell_execution_index": 277,
+      "sell_price": 37.5638,
+      "return_pct": -0.02182476312148074
+    },
+    {
+      "buy_signal_index": 282,
+      "buy_execution_index": 283,
+      "buy_price": 40.2674,
+      "sell_signal_index": 285,
+      "sell_execution_index": 286,
+      "sell_price": 40.4635,
+      "return_pct": 0.4869944421542094
+    },
+    {
+      "buy_signal_index": 318,
+      "buy_execution_index": 319,
+      "buy_price": 40.8306,
+      "sell_signal_index": 342,
+      "sell_execution_index": 343,
+      "sell_price": 47.1522,
+      "return_pct": 15.482505767733024
+    },
+    {
+      "buy_signal_index": 357,
+      "buy_execution_index": 358,
+      "buy_price": 48.3093,
+      "sell_signal_index": 370,
+      "sell_execution_index": 371,
+      "sell_price": 48.4601,
+      "return_pct": 0.3121552164903951
+    },
+    {
+      "buy_signal_index": 378,
+      "buy_execution_index": 379,
+      "buy_price": 52.5013,
+      "sell_signal_index": 384,
+      "sell_execution_index": 385,
+      "sell_price": 51.3107,
+      "return_pct": -2.2677533699165586
+    },
+    {
+      "buy_signal_index": 403,
+      "buy_execution_index": 404,
+      "buy_price": 49.4663,
+      "sell_signal_index": 405,
+      "sell_execution_index": 406,
+      "sell_price": 47.8061,
+      "return_pct": -3.356224338590108
+    },
+    {
+      "buy_signal_index": 414,
+      "buy_execution_index": 415,
+      "buy_price": 49.6675,
+      "sell_signal_index": 429,
+      "sell_execution_index": 430,
+      "sell_price": 51.7299,
+      "return_pct": 4.152413550108225
+    },
+    {
+      "buy_signal_index": 456,
+      "buy_execution_index": 457,
+      "buy_price": 50.0036,
+      "sell_signal_index": 474,
+      "sell_execution_index": 475,
+      "sell_price": 47.6233,
+      "return_pct": -4.760257261477174
+    },
+    {
+      "buy_signal_index": 485,
+      "buy_execution_index": 486,
+      "buy_price": 51.2907,
+      "sell_signal_index": 489,
+      "sell_execution_index": 490,
+      "sell_price": 48.311,
+      "return_pct": -5.809435238746985
+    },
+    {
+      "buy_signal_index": 496,
+      "buy_execution_index": 497,
+      "buy_price": 51.2731,
+      "sell_signal_index": 504,
+      "sell_execution_index": 505,
+      "sell_price": 49.457,
+      "return_pct": -3.542013258414256
+    },
+    {
+      "buy_signal_index": 512,
+      "buy_execution_index": 513,
+      "buy_price": 51.132,
+      "sell_signal_index": 520,
+      "sell_execution_index": 521,
+      "sell_price": 49.2807,
+      "return_pct": -3.620628960337935
+    },
+    {
+      "buy_signal_index": 531,
+      "buy_execution_index": 532,
+      "buy_price": 50.9557,
+      "sell_signal_index": 545,
+      "sell_execution_index": 546,
+      "sell_price": 52.7541,
+      "return_pct": 3.5293401915781786
+    },
+    {
+      "buy_signal_index": 561,
+      "buy_execution_index": 562,
+      "buy_price": 57.2855,
+      "sell_signal_index": 572,
+      "sell_execution_index": 573,
+      "sell_price": 58.3787,
+      "return_pct": 1.9083363154725141
+    },
+    {
+      "buy_signal_index": 574,
+      "buy_execution_index": 575,
+      "buy_price": 59.4013,
+      "sell_signal_index": 585,
+      "sell_execution_index": 586,
+      "sell_price": 60.7766,
+      "return_pct": 2.3152691944452464
+    },
+    {
+      "buy_signal_index": 598,
+      "buy_execution_index": 599,
+      "buy_price": 68.8696,
+      "sell_signal_index": 609,
+      "sell_execution_index": 610,
+      "sell_price": 66.2953,
+      "return_pct": -3.7379337182153027
+    },
+    {
+      "buy_signal_index": 624,
+      "buy_execution_index": 625,
+      "buy_price": 67.0358,
+      "sell_signal_index": 643,
+      "sell_execution_index": 644,
+      "sell_price": 66.2777,
+      "return_pct": -1.1308882716399293
+    },
+    {
+      "buy_signal_index": 668,
+      "buy_execution_index": 669,
+      "buy_price": 64.9729,
+      "sell_signal_index": 695,
+      "sell_execution_index": 696,
+      "sell_price": 72.5328,
+      "return_pct": 11.635466479101275
+    },
+    {
+      "buy_signal_index": 698,
+      "buy_execution_index": 699,
+      "buy_price": 77.0519,
+      "sell_signal_index": 709,
+      "sell_execution_index": 710,
+      "sell_price": 70.3961,
+      "return_pct": -8.63807381777737
+    },
+    {
+      "buy_signal_index": 734,
+      "buy_execution_index": 735,
+      "buy_price": 66.3497,
+      "sell_signal_index": 761,
+      "sell_execution_index": 762,
+      "sell_price": 71.3605,
+      "return_pct": 7.552106490308175
+    },
+    {
+      "buy_signal_index": 776,
+      "buy_execution_index": 777,
+      "buy_price": 73.6295,
+      "sell_signal_index": 805,
+      "sell_execution_index": 806,
+      "sell_price": 82.5165,
+      "return_pct": 12.069890465098897
+    },
+    {
+      "buy_signal_index": 814,
+      "buy_execution_index": 815,
+      "buy_price": 87.357,
+      "sell_signal_index": 824,
+      "sell_execution_index": 825,
+      "sell_price": 86.9221,
+      "return_pct": -0.4978421878040651
+    },
+    {
+      "buy_signal_index": 857,
+      "buy_execution_index": 858,
+      "buy_price": 80.8336,
+      "sell_signal_index": 858,
+      "sell_execution_index": 859,
+      "sell_price": 82.1194,
+      "return_pct": 1.590675164782951
+    },
+    {
+      "buy_signal_index": 859,
+      "buy_execution_index": 860,
+      "buy_price": 84.5397,
+      "sell_signal_index": 875,
+      "sell_execution_index": 876,
+      "sell_price": 91.5736,
+      "return_pct": 8.320232979298492
+    },
+    {
+      "buy_signal_index": 892,
+      "buy_execution_index": 893,
+      "buy_price": 94.5328,
+      "sell_signal_index": 901,
+      "sell_execution_index": 902,
+      "sell_price": 94.9015,
+      "return_pct": 0.3900233569724021
+    },
+    {
+      "buy_signal_index": 910,
+      "buy_execution_index": 911,
+      "buy_price": 100.763,
+      "sell_signal_index": 917,
+      "sell_execution_index": 918,
+      "sell_price": 97.9647,
+      "return_pct": -2.7771106457727623
+    },
+    {
+      "buy_signal_index": 927,
+      "buy_execution_index": 928,
+      "buy_price": 106.719,
+      "sell_signal_index": 933,
+      "sell_execution_index": 934,
+      "sell_price": 100.914,
+      "return_pct": -5.439518736120085
+    },
+    {
+      "buy_signal_index": 942,
+      "buy_execution_index": 943,
+      "buy_price": 105.812,
+      "sell_signal_index": 962,
+      "sell_execution_index": 963,
+      "sell_price": 113.5,
+      "return_pct": 7.265716553888035
+    },
+    {
+      "buy_signal_index": 970,
+      "buy_execution_index": 971,
+      "buy_price": 118.32,
+      "sell_signal_index": 978,
+      "sell_execution_index": 979,
+      "sell_price": 123.1,
+      "return_pct": 4.039891818796493
+    },
+    {
+      "buy_signal_index": 979,
+      "buy_execution_index": 980,
+      "buy_price": 123.2,
+      "sell_signal_index": 986,
+      "sell_execution_index": 987,
+      "sell_price": 119.68,
+      "return_pct": -2.857142857142858
+    }
+  ]
+}
