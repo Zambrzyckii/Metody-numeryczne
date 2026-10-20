@@ -487,3 +487,130 @@ Iteracja 2 (potwierdzenie poprawek przez orkiestratora): `verify_ema.py` bez zmi
 - Weryfikacja obliczeń niezależnym odniesieniem: zgodność bitowa własnej rekurencji EMA z `pandas ewm(adjust=False)` dla trzech okresów (`Projekt_1.pdf` s. 2, wzmianka o `Series.ewm`; s. 9, tabela punktacji).
 
 Status: oczekuje na akceptację.
+
+### 2026-10-20 · coder · Portfolio simulation, statistics and results export
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania</summary>
+
+```markdown
+## Task card: Portfolio simulation, statistics and results export
+Goal: `src/simulation.py` simulates the portfolio per the five-step algorithm,
+`src/stats.py` computes R, r and the seven summary items, and `src/export.py`
+writes results JSON and LaTeX macro files.
+
+Requirements slice (with refs):
+  - Vectors C (cash), Q (position_qty), V (equity) of length L; formula (5)
+    V_i = C_i + Q_i*x_i; initial state at sample 100: C_100 = 1000*x_100,
+    Q_100 = 0, V_100 = C_100, no transaction at sample 100; elements 0..99
+    unused and set to NaN — docs/requirements-code.md A.3, B.3;
+    Projekt_1.pdf p. 4-5
+  - Algorithm steps 1-5: signals considered from sample 101; process
+    i = 101..L-1; if i - d >= 101 check the signal at sample i - d
+    (d = config.DELAY = 1, so the first possible execution is at i = 102);
+    buy when signal is buy and C_{i-1} > 0: Q_i = C_{i-1}/x_i, C_i = 0;
+    sell when signal is sell and Q_{i-1} > 0: C_i = Q_{i-1}*x_i, Q_i = 0;
+    otherwise carry C and Q forward; record signal index, execution index,
+    side and execution price; a signal at the last sample is not executed —
+    docs/requirements-code.md A.4; Projekt_1.pdf p. 5
+  - Full capital commitment, fractional units allowed, no commissions, never
+    sell an instrument that is not held — docs/requirements-code.md A.3
+  - Each execution is a dataclass record (signal index, execution index, side,
+    price); closed trades are buy->sell pairs; an open position at the end is
+    reported separately — docs/requirements-code.md B.3, A.5
+  - Invariants checked at run time with if ... raise (not assert):
+    V_i = C_i + Q_i*x_i, C and Q never negative, never sell without a
+    position — docs/requirements-code.md B.3
+  - stats: R per formula (6) from C_100 and V_{L-1}; r per formula (7) from
+    the buy and sell execution prices; r >= 0 counts as profitable; the seven
+    summary items of slide F, with "nie dotyczy" for items that do not apply;
+    largest loss reported as a positive percentage; no rounding during
+    computation — docs/requirements-code.md A.5, B.3; Projekt_1.pdf p. 5-7
+  - export: write_results(part, numbers, macros, results_dir) writes
+    results/<part>.json (every number, unrounded) and results/<part>.tex
+    (one \res<Name> macro per slide value, macro names letters only);
+    formatting helper gives Polish decimal comma and two decimals for money
+    and percentages; macros hold numbers without units —
+    docs/requirements-code.md B.5
+  - simulation.py and stats.py do no file access, plotting or printing;
+    export.py is the only module that writes files and creates the target
+    directory when missing — docs/requirements-code.md B.4, B.5
+  - Flat imports (import config, import macd), scripts run as
+    python src/<script>.py; PEP 8 with the 79-char limit, type hints,
+    one-line docstrings citing formula or requirement, Python 3.10+ —
+    docs/requirements-code.md B.1, B.2, B.4
+
+Files to touch: src/simulation.py, src/stats.py, src/export.py
+Files NOT to touch: src/config.py, src/data.py, src/macd.py,
+src/verify_ema.py, data/**, docs/**, materials/**, requirements.txt
+
+Acceptance checklist:
+  - [ ] Simulation on data/pko.csv with (12, 26, 9), START_INDEX = 100 and
+        DELAY = 1 completes with no invariant raised
+  - [ ] cash, position_qty, equity have length 1001 and NaN exactly for i < 100
+  - [ ] C_100 = 1000 * x_100, Q_100 = 0, V_100 = C_100, no transaction at 100
+  - [ ] Every execution index is in [102, L-1] and equals its signal index + 1
+  - [ ] A signal at the last sample produces no execution (shown structurally
+        or with a constructed input)
+  - [ ] Buy with no cash and sell with no position leave C and Q unchanged
+  - [ ] Closed trades pair each buy with the next sell; an open position at the
+        end is excluded from trade stats
+  - [ ] R matches formula (6) and r matches formula (7) on execution prices;
+        r = 0 counts as profitable; largest loss returned as a positive number
+  - [ ] The seven summary items are produced, with "nie dotyczy" where empty
+  - [ ] Export writes <part>.json and <part>.tex; macros are \res + letters
+        only; sample value 1234.5 formats as "1234,50"
+  - [ ] simulation.py and stats.py have no I/O and no printing; during checks
+        export writes only to the scratchpad, never to results/ in the repo
+  - [ ] awk 'length > 79' finds nothing in the three files; Python 3.10
+        compatible
+
+Report format: what was done · files changed · what was NOT done and why · open questions
+```
+
+</details>
+
+**Rezultat**
+
+- Nowe pliki `src/simulation.py`, `src/stats.py` i `src/export.py`, commit `4acc666`.
+- `simulate` realizuje pięciokrokowy algorytm z `Projekt_1.pdf` s. 5, z niezmiennikami `if … raise`. Egzekucje są rekordami `dataclass` (indeks sygnału, indeks wykonania, strona, cena). `stats.summarize` zwraca siedem pozycji podsumowania jako dane, `export.write_results` zapisuje `results/<część>.json` i `.tex` z makrami `\res…` (tylko litery, polski przecinek, dwa miejsca).
+- Jedna runda poprawek po recenzji, opisana w znaleziskach poniżej.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Wszystkie punkty listy spełnione. Weryfikacja orkiestratora przeciwko niezależnej referencji (EMA przez `pandas ewm`, dosłowna transkrypcja algorytmu ze s. 5, bez użycia modułów codera): sygnały, wektory C, Q, V (łącznie z układem NaN) i pełna lista egzekucji identyczne co do bitu na `data/pko.csv`. Wyniki: C₁₀₀ = 23547,90, V₁₀₀₀ = 44415,21, R = 88,62 %, 68 egzekucji, 34 zamknięte transakcje (19 zyskownych, 15 stratnych), brak pozycji otwartej, największy zysk 26,13 %, największa strata 8,64 %. Sygnał w ostatniej próbce nie jest wykonywany, egzekucje wyłącznie w zakresie [102, L−1] z indeksem sygnału + 1. Kryterium etapu „co najmniej jedna zamknięta transakcja" spełnione (`Projekt_1.pdf` s. 5).
+
+**Znaleziska recenzenta (code-reviewer)**
+
+Iteracja 1, werdykt APPROVE:
+
+- **Znalezisko:** Żaden moduł nie generował tekstu „nie dotyczy" dla pustych pozycji podsumowania. `Summary` zwraca `None`, a `format_number` rzuciłby `TypeError`.
+  - Waga: minor.
+  - Wymaganie: `Projekt_1.pdf` s. 7, 4.4; `docs/requirements-code.md` A.5.
+  - Sposób wykrycia: analiza kodu przez recenzenta. Na danych PKO każda pozycja ma wartość, więc dowody z uruchomień nie pokrywały tej ścieżki.
+  - Poprawka: dodano `export.format_optional`, zwracający „nie dotyczy" dla `None`. Poprawiono w commicie `4acc666`.
+- **Znalezisko:** `closed_trades` parował `(None, sell)` bez błędu, gdy sprzedaż nie miała wcześniejszego kupna, a statystyki zgłosiłyby wtedy `AttributeError` zamiast nazwanego niezmiennika.
+  - Waga: nit.
+  - Wymaganie: `docs/requirements-code.md` B.3.
+  - Sposób wykrycia: analiza kodu przez recenzenta.
+  - Poprawka: `closed_trades` rzuca `ValueError` przy sprzedaży bez oczekującego kupna. Kontrola w `simulate` pozostała bez zmian. Poprawiono w commicie `4acc666`.
+- **Znalezisko:** Ilość i wartość pozycji otwartej (pozycja 7 podsumowania) były odłożone do punktu wejścia, choć B.2 przypisuje siedem pozycji podsumowania modułowi `stats.py`.
+  - Waga: nit.
+  - Wymaganie: `docs/requirements-code.md` B.2, B.4.
+  - Sposób wykrycia: porównanie podziału odpowiedzialności z B.2 przez recenzenta.
+  - Poprawka: `Summary` rozszerzono o `open_qty` i `open_value` liczone w `summarize`. Poprawiono w commicie `4acc666`.
+- **Znalezisko:** `json.dumps` z domyślnym `allow_nan=True` zapisałby wartości NaN jako niepoprawny JSON, gdyby eksportowano wektory portfela (NaN dla i < 100).
+  - Waga: nit.
+  - Wymaganie: `docs/requirements-code.md` B.5, B.3.
+  - Sposób wykrycia: zestawienie kodu eksportu z układem NaN wektorów przez recenzenta.
+  - Poprawka: `allow_nan=False`, błąd zgłaszany przed zapisem pliku. Poprawiono w commicie `4acc666`.
+
+Iteracja 2 (potwierdzenie poprawek przez orkiestratora): pełna regresja względem referencji bez zmian wyników, nowe ścieżki („nie dotyczy", odrzucenie NaN, `ValueError` w `closed_trades`, pola pozycji otwartej) sprawdzone na danych skonstruowanych.
+
+**Kandydat na slajd**
+
+- Weryfikacja symulacji niezależną implementacją referencyjną (zgodność bitowa wektorów i listy transakcji) oraz znalezisko minor o „nie dotyczy" wykryte wyłącznie analizą kodu, poza ścieżką danych rzeczywistych (`Projekt_1.pdf` s. 9, tabela punktacji).
+
+Status: oczekuje na akceptację.
