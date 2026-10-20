@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 0.4 · 2026-10-20 · status: sections 0–4 and appendices complete; sections 5–6 are placeholders.
+Version 0.5 · 2026-10-20 · status: sections 0–5 and appendices complete; section 6 is a placeholder.
 
 ---
 
@@ -111,7 +111,7 @@ Brak któregokolwiek z poniższych elementów oznacza niezaliczenie do czasu pop
 
 | Termin | Co | Kiedy |
 |---|---|---|
-| P2 | Prezentacja wstępna; ZIP ze slajdami | zajęcia 2026-10-21 (godzina: *do uzupełnienia*); ZIP **godzinę przed** zajęciami |
+| P2 | Prezentacja wstępna; ZIP ze slajdami | zajęcia 2026-10-21, 11:00–13:00; ZIP wysłany **najpóźniej o 10:00** |
 | P3 | Prezentacja końcowa; ZIP nr 1 (slajdy) + ZIP nr 2 (kod) | *do uzupełnienia* (ok. 2 tygodnie po P2); ZIP-y godzinę przed zajęciami |
 
 Spóźnienie kosztuje 0,2 pkt za każde rozpoczęte 24 h opóźnienia ZIP-a lub za każdy dzień opóźnienia wystąpienia (`zasady` s. 3, p. 4.1).
@@ -138,14 +138,15 @@ Każdy z tych punktów zwiększa ryzyko slopu bez zysku punktowego:
 - skille ponad cztery role z sekcji 2,
 - wykres świecowy w A1 (opcjonalny — tylko jeśli zostanie czas i użytkownik zdecyduje).
 
-### 1.7 Otwarte decyzje użytkownika
+### 1.7 Decyzje użytkownika
 
-| Decyzja | Rekomendacja | Kiedy |
+| Decyzja | Stan | Uzasadnienie |
 |---|---|---|
-| Instrument części podstawowej | stooq.pl, np. PKO BP lub WIG20 (`Projekt_1.pdf` s. 4) | po P2 |
-| Opóźnienie wykonania d | d = 1, wariant sugerowany (`Projekt_1.pdf` s. 3–4) | po P2 |
-| Kierunek eksperymentu | RSI jako dodatkowy warunek decyzji, kierunek zalecany (`Projekt_1.pdf` s. 7) | po P2 |
-| Data P3 | — | uzupełnić |
+| Autor | **Bartosz Zambrzycki** | slajd tytułowy i stopka |
+| Instrument części podstawowej | **PKO BP (stooq.pl), notowania dzienne, PLN** | jeden z przykładów z instrukcji (`Projekt_1.pdf` s. 4) |
+| Opóźnienie wykonania d | **d = 1**: transakcja w próbce i + 1 po cenie x₍ᵢ₊₁₎ | wariant sugerowany, bliższy praktyce (`Projekt_1.pdf` s. 3–4) |
+| Kierunek eksperymentu | *otwarta*; rekomendacja: RSI jako dodatkowy warunek decyzji | kierunek zalecany (`Projekt_1.pdf` s. 7) |
+| Data P3 | *otwarta* | uzupełnić |
 
 ---
 
@@ -461,7 +462,7 @@ Rules:
 - **Base.** The default Beamer theme stripped of decoration, with a custom style file `slides/common/mnstyle.sty` shared by both decks. No external Beamer theme, so `zrodla.md` needs no entry for it.
 - **Frame title.** Left-aligned, `mnPrimary`, with a thin rule in `mnGrid` under it, full text width.
 - **Footline.**
-  - Left: `Imię Nazwisko · Projekt 1: MACD`, in `mnMuted` and `\footnotesize`.
+  - Left: `Bartosz Zambrzycki · Projekt 1: MACD`, in `mnMuted` and `\footnotesize`.
   - Right: `\insertframenumber\,/\,\inserttotalframenumber`. This "n/N" number is a mandatory element (`zasady` p. 2).
 - **Margins.** 8 mm left and right. Navigation symbols are off.
 - **Title slide.** Topic, author, *„Prezentacja wstępna"* or *„Prezentacja końcowa"* (`Projekt_1.pdf` p. 5, 4.1), course name and date. No logo and no background image.
@@ -676,7 +677,69 @@ Chart IDs X1… are our convention, because the instruction assigns no IDs to ex
 
 ## 5. Documentation & AI-log protocol
 
-*Placeholder.* The ai-log entry format is already defined in 2.6.
+This section defines when each document is written, who owns it and how it ties to commits. The writing rules for the decision register are maintained by the user outside this brief.
+
+### 5.1 Documents and owners
+
+| Document | Language | Owner | Content | Shipped in ZIP |
+|---|---|---|---|---|
+| `PROJECT_BRIEF.md` | EN (goals PL) | orchestrator | source of intent; changes go through the changelog (App. B) and ADRs (App. A) | no |
+| `CLAUDE.md` | EN | orchestrator | short protocol plus pointers to `docs/`, materialized from this brief | no |
+| `docs/requirements-*.md`, `docs/presentation-style.md` | EN | orchestrator | extracts of sections 1, 3 and 4 | no |
+| `docs/ai-log.md` | PL | orchestrator | layer 1: decision register per stage; layer 2: delegated agent tasks (2.6) | no |
+| `readme.md` | PL | `coder` drafts, orchestrator verifies | what the code does, requirements, data location and `MN_DATA_DIR`, instrument description (3.1 of the instruction), one command per chart ID, `verify_ema.py` | yes (code ZIP) |
+| `zrodla.md` | PL | orchestrator | every external template, snippet or auxiliary material: what it is, source URL, licence, where it is used | yes (code ZIP) |
+
+### 5.2 Single direction of truth
+
+Changes flow only downward:
+
+```
+lecturer's PDFs → PROJECT_BRIEF.md → docs/*.md → agent instructions
+```
+
+- When a requirement or convention changes, the brief is edited first: section text, ADR if it is a decision, changelog row, version bump. Only then is `docs/` updated.
+- `docs/` is never edited on its own. This keeps the brief and the docs from drifting apart.
+
+### 5.3 When a log entry is written
+
+**Layer 1, the decision register, gets one entry per stage:**
+
+- The entry is opened when the stage starts and closed with its result.
+- Status is either "zaakceptowano" or "odrzucono" with the reason.
+- If a stage's result is rejected and redone, the rejection and its reason stay in the entry. History is never rewritten.
+
+**Layer 2, delegated agent tasks, gets one entry per delegation, written by the orchestrator right after the agent returns:**
+
+- the full task card verbatim, in a collapsed `<details>` block; this is slide material for „wybrany prompt, rezultat i ocena",
+- the result,
+- the evaluation against the card's acceptance checklist,
+- every reviewer finding together with its resolution: fixed in commit `<hash>`, or rejected with the reason,
+- the presentation-reviewer's score for each review iteration, so the score progression is documented.
+
+### 5.4 AI errors
+
+- **What counts as an AI error.** Any defect produced by AI (a subagent or the orchestrator) that was found by:
+  - a reviewer,
+  - a verification script (`verify_ema.py`, invariants, `pdffonts`),
+  - a compile log,
+  - the user.
+- **How it is recorded.** In the layer 2 entry, in the 2.5 finding format. "Detected by" is mandatory, because it shows that the process caught the error.
+- **Only real errors are recorded.** Errors are never provoked, staged or embellished for the slides. If none occur before a deadline, the presentation uses the declaration from `zasady` p. 4, 5.3.
+
+### 5.5 Commits
+
+Commits follow `~/.claude/rules/git.md` and are made only by the orchestrator.
+
+- **One verified step = one commit.** Typically one task card after reviewer approval.
+- **Generated artifacts go in the same commit as the code that produced them.** `charts/` and `results/` therefore always match the code at that commit.
+- **The log entry goes in a separate, following commit**, because it records the hash of the step commit.
+- **Commits never contain** `materials/`, `.venv/`, LaTeX auxiliaries, or anything outside `~/Metody-Numeryczne`.
+
+### 5.6 `zrodla.md` and `readme.md` timing
+
+- **`zrodla.md`** is created with the first external material used. Templates and snippets are added to it in the same commit that introduces them. If nothing external is used by P3, it still exists and states that, because the code ZIP structure is then unambiguous.
+- **`readme.md`** is created with the first runnable entry point and updated whenever a command or chart ID changes. Before every ZIP, the orchestrator runs every command listed in `readme.md` and confirms that it produces what the readme claims.
 
 ## 6. Stages & checkpoints
 
@@ -742,3 +805,4 @@ Chart IDs X1… are our convention, because the instruction assigns no IDs to ex
 | 0.2 | 2026-10-20 | Lecturer's files moved to `materials/`; orchestrator commits per `~/.claude/rules/git.md` | Project folder made self-contained; user's git rules changed |
 | 0.3 | 2026-10-20 | Section 3 (presentation visual style); presentation ZIP includes `slides/common/` | Visual contract required before P2 |
 | 0.4 | 2026-10-20 | Section 4 (code conventions); ADR-6 to ADR-8; presentation ZIP includes `charts/` and `results/*.tex` | Code contract for implementation; slides must compile from the ZIP alone |
+| 0.5 | 2026-10-20 | Section 5 (documentation protocol); decisions in 1.7: author, PKO BP, d = 1; P2 time 11:00–13:00, ZIP by 10:00 | User decisions recorded; documentation flow defined before implementation |
