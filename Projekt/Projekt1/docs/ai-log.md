@@ -390,3 +390,100 @@ Iteracja 2, werdykt APPROVE (potwierdzenie poprawek):
 - Raport o błędach AI (`Projekt_1.pdf` s. 9, tabela punktacji). Znalezisko minor z iteracji 1 wraz z przeoczeniem recenzenta z iteracji 2 pokazują rzeczywisty cykl recenzji.
 
 Status: oczekuje na akceptację.
+
+### 2026-10-20 · coder · MACD indicator and EMA verification
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania</summary>
+
+```markdown
+## Task card: MACD indicator and EMA verification
+Goal: `src/macd.py` computes EMA, MACD, SIGNAL, histogram and trading signals
+from a close-price array, and `src/verify_ema.py` independently confirms the
+EMA implementation against pandas.
+
+Requirements slice (with refs):
+  - EMA per formula (1): alpha_N = 2/(N+1), E_0 = x_0, explicit recursion —
+    docs/requirements-code.md A.2, B.3; Projekt_1.pdf p. 1
+  - MACD per formula (2), SIGNAL per formula (3) with S_0 = M_0, histogram per
+    formula (4) — docs/requirements-code.md A.2
+  - Parameters come from config.MACD_PARAMS = (12, 26, 9); all curves computed
+    from sample 0, full history kept — docs/requirements-code.md A.2
+  - Signals for i >= 1: buy when H_{i-1} <= 0 and H_i > 0, sell when
+    H_{i-1} >= 0 and H_i < 0, H_i = 0 gives no new signal, assigned to the
+    first sample after the crossing, no interpolation —
+    docs/requirements-code.md A.2; Projekt_1.pdf p. 2
+  - Signals are an int8 array: +1 buy, -1 sell, 0 none; element 0 is 0.
+    Considering signals only from sample 101 is the simulation's job (card 3),
+    detection covers all i >= 1 — docs/requirements-code.md B.3
+  - macd.py is pure computation on numpy float64: no file access, no plotting,
+    no printing — docs/requirements-code.md B.4
+  - verify_ema.py compares ema() with pandas Series.ewm(span=N,
+    adjust=False).mean() on the closes of data/pko.csv for N = 12, 26, 9;
+    pass when max abs diff <= 1e-9; pandas ewm appears only in this file;
+    it prints a short result and exits nonzero on failure —
+    docs/requirements-code.md B.3, B.8
+  - Naming per the symbol map: ema(values, n), macd, signal, hist —
+    docs/requirements-code.md B.4
+  - PEP 8 with the 79-character limit, type hints, one-line docstrings citing
+    the formula, Python 3.10+ syntax — docs/requirements-code.md B.1, B.4
+
+Files to touch: src/macd.py, src/verify_ema.py
+Files NOT to touch: src/config.py, src/data.py, data/pko.csv, requirements.txt,
+docs/**, materials/**
+
+Acceptance checklist:
+  - [ ] ema(values, n) implements formula (1) as an explicit recursion with E_0 = x_0
+  - [ ] macd.py returns macd, signal and hist arrays of length L, computed from sample 0
+  - [ ] Signal detection returns int8 (+1/-1/0) per the rules above, signals[0] = 0
+  - [ ] python src/verify_ema.py reports max abs diff <= 1e-9 for N = 12, 26, 9
+        on data/pko.csv and exits 0; it exits nonzero when the tolerance fails
+  - [ ] pandas ewm is absent from macd.py (and every file except verify_ema.py)
+  - [ ] macd.py does no I/O and no printing; only verify_ema.py prints
+  - [ ] awk 'length > 79' finds nothing in the two files; Python 3.10 compatible
+
+Report format: what was done · files changed · what was NOT done and why · open questions
+```
+
+</details>
+
+**Rezultat**
+
+- Nowe pliki `src/macd.py` i `src/verify_ema.py`, commit `2f3b5fe`.
+- `ema` jako jawna rekurencja wzoru (1), `compute_macd` liczy M, S i H według wzorów (2)–(4), przy czym S powstaje przez `ema(macd, 9)`, co realizuje wzór (3) wraz z S₀ = M₀. `detect_signals` zwraca tablicę `int8` według reguł zmiany znaku histogramu.
+- Przyjęto konwencję płaskich importów między modułami `src/` (`import config`, `import data`), zgodną z `docs/requirements-code.md` B.2. Skrypty uruchamia się jako `python src/<skrypt>.py`.
+- Jedna runda poprawek po recenzji, opisana w znaleziskach poniżej.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Wszystkie punkty listy spełnione. Weryfikacja orkiestratora: `python3 src/verify_ema.py` daje maksymalną różnicę 0.0 (zgodność bitowa) dla N = 12, 26, 9 i kod wyjścia 0, bez ostrzeżeń pod `-W error::UserWarning`. Ścieżka niepowodzenia weryfikacji przetestowana przez codera (sztuczne przesunięcie wartości o 1e-6 daje FAIL i kod 1). `ewm` występuje wyłącznie w `verify_ema.py`. Kontrola przebiegu na `data/pko.csv`: długości tablic 1001, `signals[0] = 0`, 39 sygnałów kupna i 39 sprzedaży. Przypadek brzegowy H = [-1, 0, 0, 1, -2, 0, 3, 3] daje [0, 0, 0, 1, -1, 0, 1, 0], zgodnie z regułami ze s. 2 instrukcji.
+
+**Znaleziska recenzenta (code-reviewer)**
+
+Iteracja 1, werdykt APPROVE:
+
+- **Znalezisko:** Docstring `compute_macd` cytował „Projekt_1.pdf p. 1", a wzory (2)–(4) znajdują się na s. 2.
+  - Waga: nit.
+  - Wymaganie: `docs/requirements-code.md` B.4; `Projekt_1.pdf` s. 2.
+  - Sposób wykrycia: porównanie cytatów ze stronami 1–2 PDF przez recenzenta, potwierdzone niezależnie przez orkiestratora w PDF.
+  - Poprawka: cytat zmieniono na s. 2. Poprawiono w commicie `2f3b5fe`.
+- **Znalezisko:** Docstring `main` w `verify_ema.py` nie cytował wymagania, wbrew konwencji pozostałych funkcji publicznych.
+  - Waga: nit.
+  - Wymaganie: `docs/requirements-code.md` B.4.
+  - Sposób wykrycia: analiza kodu przez recenzenta.
+  - Poprawka: dodano cytat B.8. Poprawiono w commicie `2f3b5fe`.
+- **Znalezisko:** Płaski import `import data` może przy odwrotnej kolejności `sys.path` (korzeń projektu przed `src/`) wskazać katalog `data/` jako pakiet przestrzeni nazw zamiast modułu `src/data.py`.
+  - Waga: nit.
+  - Wymaganie: `docs/requirements-code.md` B.2.
+  - Sposób wykrycia: analiza rozwiązywania importów przez recenzenta.
+  - Poprawka: odrzucono zmianę kodu, ponieważ konwencja płaskich importów jest zgodna z B.2, a udokumentowane polecenia `python src/<skrypt>.py` ustawiają `src/` na początku `sys.path`. Wymóg uruchamiania w tej formie zostanie zapisany w `readme.md` w etapie 5, a kontrole orkiestratora używają od teraz tej samej formy.
+
+Iteracja 2 (potwierdzenie poprawek przez orkiestratora): `verify_ema.py` bez zmian wyniku, limit 79 znaków zachowany.
+
+**Kandydat na slajd**
+
+- Weryfikacja obliczeń niezależnym odniesieniem: zgodność bitowa własnej rekurencji EMA z `pandas ewm(adjust=False)` dla trzech okresów (`Projekt_1.pdf` s. 2, wzmianka o `Series.ewm`; s. 9, tabela punktacji).
+
+Status: oczekuje na akceptację.
