@@ -117,6 +117,36 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 **Wynik**
 
 - `PROJECT_BRIEF.md` v0.3, commit `737cdca`.
+- Wykonanie zaakceptowano.
+
+### Etap 5 · Plik wsadowy: konwencje kodu (2026-10-20)
+
+**Polecenia**
+
+- Zrealizować cały brief i cały projekt jeszcze tego samego wieczoru.
+- Kontynuować planowanie od kolejnej sekcji briefu.
+- Wyniki i decyzje każdej sekcji zapisywać w briefie zgodnie z przyjętą konwencją: treść sekcji, załącznik A i historia zmian.
+
+**Decyzje**
+
+- Kolejność prac: najpierw elementy potrzebne na P2, następnie część podstawowa, a część eksperymentalna w miarę dostępnego czasu. Prezentacja końcowa obowiązuje dopiero na P3.
+- Zależności:
+  - tylko `numpy`, `pandas` i `matplotlib`, z wersjami minimalnymi zamiast przypiętych,
+  - kod zgodny z Pythonem 3.10 lub nowszym,
+  - bez instalowania nowych narzędzi.
+- Płaska struktura `src/`: osobne moduły dla danych, wskaźnika, symulacji, statystyk, eksportu, stylu i wykresów. Dwa punkty wejścia: `basic.py` i `experiment.py`.
+- EMA implementowana jako jawna rekurencja według wzoru (1). Funkcja `pandas ewm(adjust=False)` służy wyłącznie jako niezależna referencja w `verify_ema.py`, z tolerancją 1e-9 (ADR-6).
+- Rdzeń obliczeniowy działa na tablicach `numpy` indeksowanych tak jak w instrukcji (ADR-7).
+- Niezmienniki symulacji są sprawdzane w trakcie działania programu (`if … raise`, nie `assert`).
+- Liczby trafiają na slajdy wyłącznie przez makra `\res…` generowane do `results/*.tex`, z polskim przecinkiem dziesiętnym.
+- Wygenerowane wykresy i wyniki są commitowane do repozytorium.
+- Dane części eksperymentalnej są wczytywane z katalogu wskazanego zmienną środowiskową `MN_DATA_DIR`.
+- `Makefile` slajdów wywołuje `pdflatex` dwukrotnie, bez `latexmk`, ze względu na środowisko MiKTeX + MSYS2 zalecane przez prowadzącego (ADR-8).
+- Archiwum ZIP prezentacji obejmuje `charts/` i `results/*.tex`, aby kompilacja nie zależała od uruchomienia kodu.
+
+**Wynik**
+
+- `PROJECT_BRIEF.md` v0.4, commit `8415847`.
 - Status: oczekuje na akceptację.
 
 ---
