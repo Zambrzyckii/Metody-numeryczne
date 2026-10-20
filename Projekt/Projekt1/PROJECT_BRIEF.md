@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 0.3 · 2026-10-20 · status: sections 0–3 and appendices complete; sections 4–6 are placeholders.
+Version 0.4 · 2026-10-20 · status: sections 0–4 and appendices complete; sections 5–6 are placeholders.
 
 ---
 
@@ -122,7 +122,7 @@ Pakujemy według białej listy. Nie wykluczamy wszystkich plików `*.md`, bo dwa
 
 | ZIP | Zawiera |
 |---|---|
-| Prezentacja (P2 i P3 nr 1) | `slides/<preliminary|final>/` (PDF, `.tex`, `Makefile`, użyte wykresy) oraz `slides/common/` (wspólny plik stylu potrzebny do kompilacji), z zachowaniem struktury katalogów |
+| Prezentacja (P2 i P3 nr 1) | `slides/<preliminary|final>/` (PDF, `.tex`, `Makefile`, użyte wykresy) oraz `slides/common/` (wspólny plik stylu), `charts/` (wykresy użyte na slajdach) i `results/*.tex` (liczby wstawiane do slajdów) — wszystko potrzebne do kompilacji, z zachowaniem struktury katalogów |
 | Kod (P3 nr 2) | `src/`, dane wejściowe części podstawowej z `data/`, `readme.md`, `zrodla.md` (jeśli dotyczy), plik zależności |
 
 Nigdy nie pakujemy: `.venv/`, `CLAUDE.md`, `PROJECT_BRIEF.md`, `docs/`, `.claude/`, `materials/` (materiały prowadzącego, w tym wspólny zbiór `dane_pro1.zip`) (`Projekt_1.pdf` s. 9; `zasady` s. 2).
@@ -526,7 +526,153 @@ The reviewer treats any occurrence as a finding of at least *minor* severity:
 
 ## 4. Code conventions
 
-*Placeholder — after P2.*
+This is the contract for `coder` and the source of the `code-reviewer` checklist. It is materialized as `docs/requirements-code.md`, together with the requirement extracts from section 1.
+
+### 4.1 Environment and dependencies
+
+- **Python.** Development runs on Python 3.14. Code must stay compatible with Python 3.10 or newer, because the lecturer's environment is unknown. No syntax newer than 3.10.
+- **Dependencies.** `numpy`, `pandas` and `matplotlib` only. They are listed in `requirements.txt` with minimum versions (`numpy>=1.24`, `pandas>=2.0`, `matplotlib>=3.7`) rather than exact pins.
+  - Trade-off: installability on the lecturer's machine wins over bit-exact reproducibility. The computations are deterministic arithmetic, so this costs nothing in practice.
+- **Tooling.** No new package, linter or formatter is installed without the user's approval. PEP 8 is checked by review, which matches the instruction's reference [9] in `Projekt_1.pdf`.
+
+### 4.2 Layout of `src/`
+
+Modules are flat, run from the project root and import each other directly:
+
+| File | Responsibility |
+|---|---|
+| `config.py` | constants: `MACD_PARAMS = (12, 26, 9)`, `START_INDEX = 100`, `DELAY`, paths, `MN_DATA_DIR` |
+| `data.py` | loading CSV files and validating them |
+| `macd.py` | `ema`, MACD/SIGNAL/histogram, signal detection |
+| `simulation.py` | portfolio simulation and the list of trades |
+| `stats.py` | R, r and the seven summary items |
+| `export.py` | writing `results/*.json` and `results/*.tex` |
+| `style.py` | palette and matplotlib settings from 3.6; font loading with fallback |
+| `charts.py` | one function per chart: A1, B1, C1, C2, D1, E1, E2 |
+| `basic.py` | entry point for the basic part |
+| `experiment.py` | entry point for the experimental part |
+| `verify_ema.py` | independent check of the EMA implementation |
+
+What each entry point produces:
+
+| Command | Produces |
+|---|---|
+| `python src/basic.py` | the basic part end to end: computations, simulation, `results/basic.*`, every chart from A1 to E2 |
+| `python src/experiment.py` | the experimental part: `results/experiment.*`, charts X1, X2, … |
+
+Chart IDs X1… are our convention, because the instruction assigns no IDs to experiment charts. A single command may generate all charts (`Projekt_1.pdf` p. 9).
+
+### 4.3 Numerical conventions
+
+- **EMA is implemented from formula (1) as an explicit recursion**, with E₀ = x₀ (`Projekt_1.pdf` p. 1).
+  - `pandas Series.ewm(span=N, adjust=False).mean()` is used **only** in `verify_ema.py`, as an independent reference.
+  - Acceptance criterion: the maximum absolute difference is ≤ 1e-9.
+- **The computational core works on `numpy` float64 arrays** indexed exactly like the instruction: i = 0…L−1, with dates in a parallel array.
+  - `pandas` is used only for CSV input.
+  - This removes the `.loc`/`.iloc` off-by-one class of errors.
+- **Signals** are an `int8` array:
+  - `+1` buy, `−1` sell, `0` none,
+  - computed from the sign change of H for i ≥ 1, per formula (4) and the rules on p. 2,
+  - no interpolation of the crossing time.
+- **Simulation** follows the five steps of `Projekt_1.pdf` p. 5, 3.3 literally:
+  - Signals are considered from sample 101.
+  - Initial cash: C₁₀₀ = 1000 · x₁₀₀.
+  - Buy with all cash; sell the whole position.
+  - With `DELAY = 1`, a signal at the last sample is not executed.
+- **Portfolio vectors.** `cash`, `position_qty` and `equity` have length L and hold `NaN` for i < 100. They are never plotted there.
+- **Trades.** Each trade is a `dataclass` holding the signal index, execution index, side and price. Closed trades are buy→sell pairs.
+- **Invariants checked at run time.** These checks use `if … raise`, because `assert` is stripped by `python -O`:
+  - V_i = C_i + Q_i·x_i at every step,
+  - C and Q never negative,
+  - never sell without a position.
+- **Statistics.**
+  - r = 0 counts as profitable (`Projekt_1.pdf` p. 5, 3.4).
+  - The largest loss is reported as a positive percentage, e.g. "największa strata: 8%" (`Projekt_1.pdf` p. 7, 4.4).
+  - No rounding during computation; rounding happens only at export.
+- **Data validation**, failing with a clear `ValueError`:
+  - the basic-part data has 1000–1200 rows (`Projekt_1.pdf` p. 4, 3.1),
+  - dates are strictly increasing,
+  - no duplicate dates,
+  - no missing or non-positive closes,
+  - no filling of gaps between sessions.
+
+### 4.4 Naming and style
+
+- PEP 8 and English identifiers.
+- Symbols map to the instruction as follows:
+
+| Instruction symbol | Identifier |
+|---|---|
+| x | `close` |
+| E⁽ᴺ⁾ | `ema(values, n)` |
+| M | `macd` |
+| S | `signal` |
+| H | `hist` |
+| C | `cash` |
+| Q | `position_qty` |
+| V | `equity` |
+| R | `portfolio_return_pct` |
+| r | `trade_return_pct` |
+| d | `DELAY` |
+
+- Public functions have type hints and a one-line docstring that cites the formula, e.g. `"""EMA per formula (1), Projekt_1.pdf p. 1."""`. Other comments appear only where they state a constraint the code cannot show.
+- Computation is pure; input and output are isolated. `macd.py`, `simulation.py` and `stats.py` do no file access, plotting or printing. Only the entry points print, as a short summary.
+- No classes except `dataclass` records. No mutable module-level state.
+
+### 4.5 Results export (ADR-4)
+
+- **Files.** `export.py` writes two files per part:
+  - `results/<part>.json` — every number,
+  - `results/<part>.tex` — one LaTeX macro per value shown on slides.
+- **Macro names** contain letters only (LaTeX does not allow digits in macro names) and are prefixed `\res`. Examples:
+  - `\resInitialCapital`, `\resFinalEquity`, `\resReturnPct`,
+  - `\resProfitableCount`, `\resLosingCount`, `\resWinRatePct`,
+  - `\resMaxLossPct`, `\resMaxGainPct`, `\resOpenPosition`,
+  - `\resTradeBuyDate`, `\resTradeSellDate`, `\resTradeReturnPct` for D1.
+- **Formatting.** Macros hold formatted numbers without units:
+  - Polish decimal comma,
+  - two decimals for money and for percentages.
+  
+  The slide adds the unit.
+- **Generated artifacts are committed.** `charts/*.pdf` and `results/*` go into git, so slides compile from the repo without running Python.
+  - Trade-off: generated files in history, accepted for a reproducible deck.
+
+### 4.6 Input data
+
+- **Basic part.** `data/<instrument>.csv` holds at least `date` and `close`, plus `open`, `high`, `low` if a candlestick A1 is chosen.
+- **What `readme.md` states about the instrument** (`Projekt_1.pdf` p. 4, 3.1):
+  - name and unit,
+  - source URL,
+  - date range,
+  - any corporate-action adjustments.
+- **Experimental part.** Read from the directory given by the environment variable `MN_DATA_DIR`. The default is `materials/dane_pro1/`, the unzipped `dane_pro1.zip`. Files have the columns `date, open, high, low, close, volume` (`Projekt_1.pdf` p. 8, 5.2). This data is never copied into the repo or a ZIP.
+- **Read-only data.** Code never writes into data directories.
+
+### 4.7 Build conventions
+
+- **Slides `Makefile`.**
+  - Calls plain `pdflatex` twice, because "n/N" needs the total frame count from the first pass.
+  - No `latexmk`: the lecturer's recommended Windows setup is MiKTeX + MSYS2 (`zasady` p. 2), where `latexmk`'s Perl dependency is not guaranteed.
+  - Targets: `all` and `clean`.
+- **The `Makefile` does not run Python.** Charts and results are generated beforehand and shipped in the presentation ZIP (1.5).
+- **`.gitignore`** adds the following to `materials/`:
+  - `__pycache__/`,
+  - `.venv/`,
+  - LaTeX auxiliaries: `*.aux`, `*.log`, `*.nav`, `*.out`, `*.snm`, `*.toc`, `*.vrb`.
+- **`readme.md`** lists:
+  - requirements,
+  - the data location and `MN_DATA_DIR`,
+  - the command for every chart by ID (`Projekt_1.pdf` p. 9),
+  - the command for `verify_ema.py`.
+
+### 4.8 Verification for each code task
+
+| Check | Pass criterion |
+|---|---|
+| `python src/verify_ema.py` | maximum difference against pandas ≤ 1e-9 for N = 12, 26, 9 |
+| `python src/basic.py` | runs without errors or warnings; every expected file in `charts/` and `results/` is created |
+| Invariants (4.3) | no exception raised on the chosen instrument |
+| `code-reviewer` | verdict APPROVE against `docs/requirements-code.md` |
 
 ## 5. Documentation & AI-log protocol
 
@@ -570,6 +716,24 @@ The reviewer treats any occurrence as a finding of at least *minor* severity:
 - **Why:** consistency with code and identifiers, and precise technical vocabulary.
 - **Trade-off:** prompts shown on slides are in English.
 
+**ADR-6. Own EMA recursion; pandas only as an independent reference.**
+
+- **Decision:** `ema()` implements formula (1) directly. `pandas ewm(adjust=False)` is used only in `verify_ema.py`.
+- **Why:** this is a numerical-methods course, so the implementation must show the formula. Two independent implementations that agree are evidence of correctness, which a single library call cannot provide.
+- **Trade-off:** a Python loop is slower than vectorised pandas, which is negligible at about 1000 samples × 117 instruments.
+
+**ADR-7. numpy arrays in the computational core, indexed like the instruction.**
+
+- **Decision:** pandas only for CSV input. The core uses arrays with i = 0…L−1.
+- **Why:** code indices then match the formula indices one to one (sample 100, signals from 101, d = 1). This removes the off-by-one errors typical of mixed label- and position-based indexing.
+- **Trade-off:** dates are carried in a parallel array.
+
+**ADR-8. Slides `Makefile` uses plain `pdflatex` twice, not `latexmk`.**
+
+- **Decision:** as stated.
+- **Why:** the lecturer's recommended Windows setup is MiKTeX + MSYS2 (`zasady` p. 2). There, `latexmk`'s Perl dependency is not guaranteed, and two passes are enough for "n/N".
+- **Trade-off:** no automatic rebuild on changed dependencies.
+
 ## Appendix B: Brief changelog
 
 | Version | Date | Change | Reason |
@@ -577,3 +741,4 @@ The reviewer treats any occurrence as a finding of at least *minor* severity:
 | 0.1 | 2026-10-20 | Sections 0, 1, 2 and appendices; 3–6 as placeholders | Initial brief |
 | 0.2 | 2026-10-20 | Lecturer's files moved to `materials/`; orchestrator commits per `~/.claude/rules/git.md` | Project folder made self-contained; user's git rules changed |
 | 0.3 | 2026-10-20 | Section 3 (presentation visual style); presentation ZIP includes `slides/common/` | Visual contract required before P2 |
+| 0.4 | 2026-10-20 | Section 4 (code conventions); ADR-6 to ADR-8; presentation ZIP includes `charts/` and `results/*.tex` | Code contract for implementation; slides must compile from the ZIP alone |
