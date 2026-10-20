@@ -1,31 +1,34 @@
 % Selected prompt with result and evaluation, then three real AI-error findings.
+% The prompt excerpt quotes the task card logged in docs/ai-log.md; cuts are
+% marked with [...].
 
 \begin{frame}[fragile]
-  \frametitle{Każdą kartę zadania weryfikuje niezależne odniesienie, nie zaufanie do AI}
+  \frametitle{Własną implementację EMA potwierdza niezależne odniesienie,\\
+    nie zaufanie do AI}
   {\footnotesize
 \begin{verbatim}
 ## Task card: MACD indicator and EMA verification
-Goal: src/macd.py computes EMA, MACD, SIGNAL, histogram
-and trading signals, and src/verify_ema.py independently
-confirms the EMA implementation against pandas.
+Goal: `src/macd.py` computes EMA, MACD, SIGNAL, histogram
+and trading signals [...], and `src/verify_ema.py` independently
+confirms the EMA implementation against pandas. [...]
   - EMA per formula (1): alpha_N = 2/(N+1), E_0 = x_0,
-    explicit recursion - docs/requirements-code.md A.2
-  - verify_ema.py compares ema() with pandas
-    Series.ewm(span=N, adjust=False).mean() for
-    N = 12, 26, 9; pass when max abs diff <= 1e-9
+    explicit recursion - docs/requirements-code.md A.2 [...]
+[...]
+  - verify_ema.py compares ema() with pandas Series.ewm(span=N,
+    adjust=False).mean() [...] for N = 12, 26, 9;
+    pass when max abs diff <= 1e-9 [...]
 \end{verbatim}}
   \vskip1mm
-  Wynik: różnica własnej rekurencji EMA i pandas równa zeru dla wszystkich
-  trzech okresów.\\
-  Ocena: zaakceptowano po jednej rundzie poprawek (cytaty stron instrukcji
-  w docstringach).
+  Wynik: różnica względem pandas równa zeru dla wszystkich trzech okresów.\\
+  Ocena: jawna tolerancja w karcie uczyniła odbiór mechaniczną kontrolą.
 \end{frame}
 
 \begin{frame}
   \frametitle{AI potrafi zepsuć dane, gdy poprawia ich format przy zapisie}
   \begin{description}
-    \item[Znalezisko] skrypt przygotowania danych zapisał plik przez pandas,
-      zmieniając zapis liczb całkowitych na dziesiętny; plik przestał być
+    \item[Znalezisko] sesja główna Claude Code napisała skrypt przygotowania
+      danych, który zapisał plik przez pandas, zmieniając zapis liczb
+      całkowitych na dziesiętny (np. 117 na 117.0); plik przestał być
       wierną kopią źródła.
     \item[Wykrycie] porównanie wierszy pliku wynikowego ze źródłem przed
       zapisem do repozytorium.
@@ -36,9 +39,9 @@ confirms the EMA implementation against pandas.
 \begin{frame}
   \frametitle{Błędne założenie w walidacji odrzuciłoby poprawne dane}
   \begin{description}
-    \item[Znalezisko] kontrola danych zakładała całkowite wartości wolumenu,
-      co jest nieprawdziwe dla notowań skorygowanych wstecznie przez serwis
-      źródłowy.
+    \item[Znalezisko] sesja główna Claude Code napisała kontrolę danych
+      zakładającą całkowite wartości wolumenu, co jest nieprawdziwe dla
+      notowań skorygowanych wstecznie.
     \item[Wykrycie] niepowodzenie walidacji i analiza wierszy wokół daty
       ostatniej korekty notowań.
     \item[Poprawka] kontrolę zmieniono na informacyjną, a dane pozostawiono
@@ -47,11 +50,11 @@ confirms the EMA implementation against pandas.
 \end{frame}
 
 \begin{frame}
-  \frametitle{Recenzja kodu wykrywa błędy niewidoczne w testach na danych rzeczywistych}
+  \frametitle{Recenzja kodu znajduje błędy niewidoczne w testach}
   \begin{description}
-    \item[Znalezisko] brak obsługi „nie dotyczy'' dla pustych pozycji
-      podsumowania; program zgłosiłby wyjątek, gdyby zabrakło transakcji
-      stratnych lub zyskownych.
+    \item[Znalezisko] agent coder pominął obsługę „nie dotyczy'' dla pustych
+      pozycji podsumowania; program zgłosiłby wyjątek, gdyby zabrakło
+      transakcji stratnych lub zyskownych.
     \item[Wykrycie] analiza kodu przez agenta code-reviewer; dane części
       podstawowej nie pokrywały tej ścieżki.
     \item[Poprawka] funkcja formatująca zwracająca „nie dotyczy'' dla

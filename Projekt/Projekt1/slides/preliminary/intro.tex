@@ -2,21 +2,24 @@
 
 \begin{frame}
   \frametitle{EMA wygładza ceny, nadając największą wagę ostatnim notowaniom}
+  MACD (ang. moving average convergence/divergence) to wskaźnik analizy
+  technicznej, który z cen zamknięcia wyznacza kierunek i dynamikę trendu
+  oraz sygnały kupna i sprzedaży.
   \begin{equation*}
     \alpha_N = \frac{2}{N+1},\qquad
-    E_0 = x_0,\qquad
-    E_i = \alpha_N x_i + (1 - \alpha_N)\,E_{i-1}
+    E_0^{(N)} = x_0,\qquad
+    E_i^{(N)} = \alpha_N x_i + (1 - \alpha_N)\,E_{i-1}^{(N)}
     \quad\text{dla } i \ge 1
     \tag{1}
   \end{equation*}
-  \vskip2mm
+  \vskip1mm
   \begin{itemize}
     \item $x_i$ --- cena zamknięcia w próbce $i$
     \item $N$ --- okres średniej
     \item $\alpha_N$ --- współczynnik wygładzania
-    \item $E_i$ --- wartość EMA o okresie $N$
+    \item $E_i^{(N)}$ --- wartość EMA o okresie $N$
   \end{itemize}
-  \vskip2mm
+  \vskip1mm
   Krótszy okres $N$ oznacza szybszą reakcję na zmiany ceny.
 \end{frame}
 
@@ -32,29 +35,29 @@
     \quad\text{dla } i \ge 1
     \tag{3}
   \end{equation*}
+  \vskip2mm
+  \begin{itemize}
+    \item $M$ --- linia MACD
+    \item $S$ --- linia SIGNAL
+    \item $N_1$ i $N_2$ --- okresy krótszej i dłuższej EMA cen,
+      $N_3$ --- okres wygładzania SIGNAL
+    \item $\alpha_{N_3} = 2/(N_3+1)$ jak we wzorze (1);
+      w projekcie $(N_1, N_2, N_3) = (12, 26, 9)$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Zmiana znaku histogramu wyznacza momenty kupna i sprzedaży}
   \begin{equation*}
     H_i = M_i - S_i
     \tag{4}
   \end{equation*}
   \vskip2mm
   \begin{itemize}
-    \item $M$ --- linia MACD
-    \item $S$ --- linia SIGNAL
-    \item $H$ --- histogram
-    \item parametry stałe $(N_1, N_2, N_3) = (12, 26, 9)$
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Zmiana znaku histogramu wyznacza momenty kupna i sprzedaży}
-  \begin{itemize}
-    \item Kupno w próbce $i$, gdy $H_{i-1} \le 0$ i $H_i > 0$; sprzedaż, gdy
-      $H_{i-1} \ge 0$ i $H_i < 0$, bez interpolacji czasu przecięcia.
-    \item Sygnały rozpatrywane od próbki 101; stan początkowy portfela
-      w próbce 100: $C_{100} = 1000\,x_{100}$.
-    \item Realizacja z opóźnieniem $d = 1$, po cenie następnej sesji; sygnał
-      z ostatniej próbki nie jest realizowany.
-    \item Pełne zaangażowanie: kupno za całą gotówkę, sprzedaż całej pozycji;
-      bez prowizji, ułamkowe jednostki dozwolone.
+    \item Kupno w próbce $i$, gdy $H_{i-1} \le 0$ i $H_i > 0$.
+    \item Sprzedaż, gdy $H_{i-1} \ge 0$ i $H_i < 0$; bez interpolacji czasu
+      przecięcia.
+    \item Symulacja: sygnały od próbki 101, realizacja kolejnej sesji
+      ($d = 1$), pełne zaangażowanie kapitału.
   \end{itemize}
 \end{frame}

@@ -1,0 +1,46 @@
+% AI review of the deck: reviewer setup, review prompt, resulting grade.
+% Grade macros (\resReviewScore, \resReviewVerbal) come from review.tex,
+% maintained by the orchestrator.
+\input{review.tex}
+
+\begin{frame}
+  \frametitle{Prezentację ocenia osobny agent z trzema źródłami kryteriów}
+  \begin{itemize}
+    \item Agent presentation-reviewer czyta skompilowany PDF i źródła LaTeX;
+      ma wyłącznie narzędzia odczytu.
+    \item Źródła kryteriów: zasady zaliczenia, instrukcja projektu, przewodnik
+      stylu prezentacji (tytuły w formie tez).
+    \item Recenzja jest iteracyjna: każda iteracja daje znaleziska z wagami
+      oraz ocenę słowną i liczbową; wszystkie iteracje trafiają do dziennika
+      pracy.
+    \item Ocena AI jest doradcza i nie przesądza o punktach.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+  \frametitle{Recenzję uruchamia prompt wskazujący źródła kryteriów i skalę ocen}
+  {\footnotesize
+\begin{verbatim}
+Review slides/preliminary/main.pdf and its .tex sources
+against: (1) zasady_zaliczenia_projektu_v1.pdf, mandatory
+conditions and slide groups; (2) Projekt_1.pdf table 1,
+preliminary deck content; (3) docs/presentation-style.md,
+assertion-evidence titles, budgets, palette, banned
+elements. Report findings with severity and a suggested
+fix. End with a verbal grade and a score 1-10.
+\end{verbatim}}
+  \vskip1mm
+  Wynik: lista znalezisk z wagami i poprawkami oraz ocena słowna i liczbowa.\\
+  Ocena: wskazanie trzech źródeł kryteriów zawęziło recenzję do wymagań kursu.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Recenzent AI ocenił prezentację wstępną na \resReviewScore{} na 10}
+  „\resReviewVerbal''
+  \vskip3mm
+  Ocena: \resReviewScore{} / 10.
+  \vskip3mm
+  {\footnotesize\color{mnMuted}
+    Ocena pochodzi z końcowej iteracji recenzji; przebieg iteracji
+    dokumentuje dziennik pracy z AI.\par}
+\end{frame}

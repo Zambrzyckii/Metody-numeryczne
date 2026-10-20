@@ -20,24 +20,28 @@
 \begin{frame}
   \frametitle{Żadna liczba nie trafia na slajdy ręcznie: wartości wstawiają
     makra generowane przez program}
-  \begin{center}
-    \begin{tabular}{@{}lr@{}}
-      \toprule
-      Wielkość & Wartość \\
-      \midrule
-      Kapitał początkowy $C_{100}$ [PLN] & \resInitialCapital \\
-      Wartość końcowa $V$ [PLN] & \resFinalEquity \\
-      Stopa zwrotu $R$ [\%] & \resReturnPct \\
-      Transakcje zamknięte & \resClosedCount{}
-        (zyskowne \resProfitableCount, stratne \resLosingCount) \\
-      Skuteczność [\%] & \resWinRatePct \\
-      Największy zysk / strata [\%] & \resMaxGainPct{} / \resMaxLossPct \\
-      \bottomrule
-    \end{tabular}
-  \end{center}
-  \vskip2mm
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.49\textwidth}
+      \VerbatimInput[firstline=1,lastline=4,fontsize=\footnotesize]%
+        {../../results/basic.tex}
+    \end{column}
+    \begin{column}{0.51\textwidth}
+      \setlength{\tabcolsep}{3pt}%
+      \begin{tabular}{@{}lr@{}}
+        \toprule
+        Wielkość & Wartość \\
+        \midrule
+        Kapitał początkowy $C_{100}$ [PLN] & \resInitialCapital \\
+        Wartość końcowa $V_{L-1}$ [PLN] & \resFinalEquity \\
+        Zysk [PLN] & \resProfitAmount \\
+        Stopa zwrotu $R$ [\%] & \resReturnPct \\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+  \end{columns}
+  \vskip3mm
   {\footnotesize\color{mnMuted}
-    Wyniki częściowe części podstawowej (PKO BP, 1001 sesji dziennych).
-    Program zapisuje makra do \texttt{results/basic.tex},
-    a slajd wstawia je przez \texttt{\string\input}.\par}
+    Część podstawowa: \resSampleCount{} sesji dziennych PKO BP.
+    Pozostałe wartości (liczby transakcji, skrajne stopy)
+    są w \texttt{results/basic.tex}.\par}
 \end{frame}
