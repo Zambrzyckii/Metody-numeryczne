@@ -827,3 +827,82 @@ Report format: what changed · compile status · open questions
 - Konfiguracja agenta `latex-assistant` i kontrakt wizualny `docs/presentation-style.md` jako przykład organizacji pracy (`zasady` s. 4, 5.2).
 
 Status: oczekuje na akceptację.
+
+### 2026-10-20 · latex-assistant · Intro and AI-work slides
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania</summary>
+
+```markdown
+## Task card: Intro and AI-work slides
+Goal: slides/preliminary/intro.tex (3 frames) and slides/preliminary/ai-work.tex
+(2 frames) exist, are \input from main.tex after the title slide, and the deck
+compiles cleanly to 6 slides.
+
+Requirements slice (with refs):
+  - Introduction, about 3 slides: what MACD is and what for, equations of
+    EMA/MACD/SIGNAL with symbol meanings, general algorithm meaning —
+    docs/requirements-presentation.md 3.1; Projekt_1.pdf p. 5, 4.1
+  - Way of working and key AI configuration —
+    docs/requirements-presentation.md 3.1; zasady p. 4, 5.2
+  - Slide types and budgets: Equation slide max three displayed equations +
+    legend max four lines; bullet slides max four bullets; Table slide one
+    booktabs table with values only via \input from results/ —
+    docs/presentation-style.md 3.5, 3.1
+  - Assertion-evidence titles, full-sentence claims of max two lines; Polish
+    typography — docs/presentation-style.md 3.1, 3.3
+  - No number typed by hand: the table uses \res… macros from
+    results/basic.tex — CLAUDE.md non-negotiables; docs/presentation-style.md 3.7
+
+Frame titles (binding):
+  2. „EMA wygładza ceny, nadając największą wagę ostatnim notowaniom"
+     (równanie (1) + legenda symboli)
+  3. „MACD mierzy rozbieżność dwóch średnich EMA, a SIGNAL ją wygładza"
+     (równania (2)–(4) + legenda)
+  4. „Zmiana znaku histogramu wyznacza momenty kupna i sprzedaży"
+     (reguły sygnałów, start od próbki 101, d = 1, pełne zaangażowanie)
+  5. „Kod, slajdy i recenzje powstają w czterech rolach agentów Claude Code"
+     (orkiestrator, karty zadań, role tworzące i recenzujące, decyzje autora)
+  6. „Żadna liczba nie trafia na slajdy ręcznie: wartości wstawiają makra
+     generowane przez program" (tabela booktabs z makr \res… przez
+     \input{../../results/basic.tex}, notka o potoku)
+
+Files to touch: slides/preliminary/intro.tex, slides/preliminary/ai-work.tex,
+slides/preliminary/main.tex (only the two \input lines)
+
+Acceptance checklist:
+  - [ ] make compiles cleanly: no errors, no overfull box warnings
+  - [ ] 6 slides, footline 6/6 on the last one
+  - [ ] Equation slides within budget; bullet slides max 4 bullets
+  - [ ] Table values only from \res macros; no digit of a result typed in the
+        .tex sources (requirement constants such as (12, 26, 9) may be typed)
+  - [ ] Titles exactly as specified (assertion sentences)
+  - [ ] No banned elements (3.7)
+
+Report format: what changed · compile status · open questions
+```
+
+</details>
+
+**Rezultat**
+
+- Nowe pliki `slides/preliminary/intro.tex` i `slides/preliminary/ai-work.tex`, zaktualizowany `main.tex`, commit `a33a288`. Deck ma 6 slajdów.
+- `\input{../../results/basic.tex}` na początku `ai-work.tex`, blisko jedynego miejsca użycia makr.
+- Odstępstwo od karty: w preambule `main.tex` dodano `\usepackage{booktabs}`, bo pakietu nie można załadować po `\begin{document}`, a `mnstyle.sty` był poza listą plików karty. Decyzja: pakiet zostanie przeniesiony do `mnstyle.sty` w następnej karcie jako element wspólnego stylu.
+- Największa strata prezentowana bez znaku minus, zgodnie z `Projekt_1.pdf` s. 7, 4.4.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Wszystkie punkty spełnione. Weryfikacja orkiestratora po wymuszonej przebudowie: 0 boxów overfull/underfull i 0 ostrzeżeń w logu, wszystkie fonty osadzone, brak rastrów, stopki 1/6…6/6, w źródłach slajdów nie występuje żadna cyfra wyników (kontrola grep na wartościach z `results/basic.tex`), tabela rozwiązuje makra (np. kapitał początkowy 23547,90).
+
+**Błędy AI**
+
+- Brak. Recenzja `presentation-reviewer` nastąpi po skompletowaniu grup treści.
+
+**Kandydat na slajd**
+
+- Slajd 6 sam dokumentuje potok makr i służy jako dowód dla elementu „sposób pracy i konfiguracja AI" (`zasady` s. 4, 5.2).
+
+Status: oczekuje na akceptację.
