@@ -147,6 +147,39 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 **Wynik**
 
 - `PROJECT_BRIEF.md` v0.4, commit `8415847`.
+- Wykonanie zaakceptowano.
+
+### Etap 6 · Decyzje projektowe i protokół dokumentacji (2026-10-20)
+
+**Polecenia**
+
+- Instrument części podstawowej: PKO BP (stooq.pl, notowania dzienne, PLN).
+- Opóźnienie wykonania transakcji: d = 1.
+- Autor prezentacji: Bartosz Zambrzycki.
+- Termin P2: 2026-10-21, 11:00–13:00. Archiwum ZIP wysłać do 10:00.
+- Opracować sekcję 5 briefu: protokół dokumentacji i dziennika.
+
+**Decyzje**
+
+- Każdy dokument ma właściciela, ustalony język oraz określony status względem archiwów ZIP. `readme.md` i `zrodla.md` są po polsku i trafiają do archiwum kodu.
+- Zmiany przechodzą w jednym kierunku: PDF-y prowadzącego, potem brief, potem `docs/`, na końcu instrukcje agentów. Dokumentów w `docs/` nie edytuje się z pominięciem briefu.
+- Dziennik, warstwa 1: jeden wpis na etap. Odrzucenia pozostają w historii wraz z powodem.
+- Dziennik, warstwa 2: jeden wpis na delegację. Wpis zawiera:
+  - pełną kartę zadania,
+  - ocenę względem kryteriów akceptacji,
+  - rozstrzygnięcie każdego znaleziska recenzenta,
+  - ocenę recenzenta prezentacji z każdej iteracji.
+- Błędy AI dokumentuje się wyłącznie rzeczywiste, z obowiązkowym polem „sposób wykrycia”. Błędów nie wywołuje się ani nie inscenizuje na potrzeby slajdów.
+- Commity:
+  - jeden zweryfikowany krok to jeden commit,
+  - wygenerowane wykresy i wyniki trafiają do tego samego commita co kod, który je wytworzył,
+  - wpis dziennika trafia do osobnego, następnego commita.
+- Plik `zrodla.md` powstaje przy pierwszym użyciu materiału zewnętrznego. Jeśli takich materiałów nie było, plik zawiera stosowną informację.
+- Przed każdym spakowaniem archiwum ZIP wykonuje się wszystkie polecenia z `readme.md`.
+
+**Wynik**
+
+- `PROJECT_BRIEF.md` v0.5, commit `07f54bd`.
 - Status: oczekuje na akceptację.
 
 ---
