@@ -1163,6 +1163,76 @@ Final micro-fix after iteration 3: one [...] marker on slide 12 sat after
 
 Status: oczekuje na akceptację.
 
+### 2026-10-20 · latex-assistant · Theory-only rework after CP3
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania (przebudowa po pierwszej rundzie CP3)</summary>
+
+```markdown
+Major rework after the user's CP3 review. Principle: the preliminary deck
+contains NO facts from computations (no results, no simulation, no
+code-verification outcomes). Theory of MACD plus the PLANNED AI workflow
+only. Target: 14 slides.
+- Global: replace every em dash in slide text with a plain hyphen; separate
+  factors in formulas with \cdot.
+- Intro in 4 frames: moving-average intuition (średnia -> EMA -> szybka
+  i wolna EMA); formula (1) with a plain-language legend; MACD+SIGNAL in
+  words (no English parenthesis) with formulas (2)-(3), no "jak we wzorze
+  (1)" and no "w projekcie" phrasing; signals with formula (4), no
+  interpolation phrase, no simulation content.
+- AI configuration in 3 frames: agent roles (unchanged); single source of
+  truth (instrukcje -> brief -> docs -> agenci); checkpoints and the
+  two-layer work log.
+- Prompt slide quoting the real deck-skeleton task card (cuts marked) with
+  result and evaluation.
+- Two AI-error frames: data-format corruption during input preparation;
+  an abridged quote presented as verbatim during the building of this deck.
+- Review group: remove "(tytuły w formie tez)", replace "trafia do
+  dziennika pracy" with "jest odnotowywana".
+- Remove: results table, EMA-verification prompt, volume-validation error,
+  code-review error; drop the results/basic.tex input and Makefile
+  dependency.
+```
+
+</details>
+
+**Rezultat**
+
+- Przebudowane `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex` i `Makefile`, commity `dcf8803`, `4b0d896` i `05615cf`. Talia ma 14 slajdów, bez żadnych faktów z obliczeń. `review.tex` zaktualizowany przez orkiestratora do oceny końcowej.
+
+**Ocena recenzenta prezentacji — iteracja 4 (commit `dcf8803`)**
+
+- Ocena słowna: prezentacja spełnia warunki obowiązkowe i stopniowo prowadzi od intuicji do wzorów; planowany sposób pracy z AI opisany konkretnie; spadek względem iteracji 3 wynika z czterech znalezisk minor w nowej treści. Ocena liczbowa: **8/10**.
+- Znaleziska i rozstrzygnięcia (4 minor, 2 nit):
+  1. (minor) Cytat karty na slajdzie 9 ponownie miał nieoznaczone opuszczenia, tę samą klasę błędu, którą slajd 11 opisuje jako naprawioną. Poprawiono w `4b0d896` (box zastąpiony 10 liniami z kompletem znaczników); powtórzenie odnotowano jako błąd AI poniżej.
+  2. (minor) Slajd 8 niósł dwa komunikaty i powtarzał punkty slajdu 6. Poprawiono w `4b0d896` (zawężony do punktów kontrolnych i dziennika).
+  3. (minor) Nowy slajd błędu nie wskazywał sprawcy. Poprawiono w `4b0d896` (agent latex-assistant i sesja główna).
+  4. (minor) Slajd 2 sugerował, że tylko zwykła średnia reaguje z opóźnieniem. Poprawiono w `4b0d896` („z większym opóźnieniem niż EMA").
+  5. (nit) Brak powiązania α z wzorem (1) na slajdzie 4. Poprawiono w `4b0d896`.
+  6. (nit) Tytuły slajdów 3, 7 i 8 łamały się pojedynczym słowem. Poprawiono w `4b0d896`.
+
+**Ocena recenzenta prezentacji — iteracja 5, końcowa (commit `4b0d896`)**
+
+- Ocena słowna: prezentacja spełnia wszystkie warunki obowiązkowe i stopniowo prowadzi od intuicji średniej kroczącej do wzorów EMA, MACD i SIGNAL oraz reguł sygnałów; planowany sposób pracy z AI opisany konkretnie i spójnie; raport o błędach AI rzetelnie dokumentuje rzeczywiste zdarzenia wraz ze sposobem wykrycia. Ocena liczbowa: **9/10**.
+- Znalezisko (nit): punkt o interpretacjach na slajdzie 8 powtarzał slajd 6. Poprawiono w `05615cf` (punkt usunięty ze slajdu 8).
+- Zalecenia na deck końcowy: wektorowe wykresy jako dowody na slajdach wstępu i sposobu pracy; kontrola boxów monospace z tyłu sali przy przeglądzie pełnoekranowym.
+
+**Błędy AI**
+
+- **Znalezisko:** Przy przebudowie talii agent latex-assistant ponownie umieścił skrócony cytat karty zadania bez oznaczenia opuszczeń, powtarzając klasę błędu opisaną na slajdzie 11 jako naprawioną, a komentarz w źródle twierdził, że opuszczenia są oznaczone.
+  - Waga: minor.
+  - Wymaganie: `zasady` s. 5, 6.3 (fragmenty promptu rozpoznawalne jako fragmenty).
+  - Sposób wykrycia: recenzent AI prezentacji porównał box ze slajdu 9 z pełnym zapisem karty w dzienniku (iteracja 4).
+  - Poprawka: box zastąpiony cytatem z kompletem znaczników `[...]`, komentarz źródłowy skorygowany, commit `4b0d896`.
+
+**Kandydat na slajd**
+
+- Nie dotyczy; powtórzony błąd cytowania może zasilić raport o błędach AI w prezentacji końcowej.
+
+Status: oczekuje na akceptację.
+
 ### Etap 11 · Realizacja: etap 4 — prezentacja wstępna i pakiet P2 (2026-10-20)
 
 **Polecenia**
@@ -1194,11 +1264,17 @@ Status: oczekuje na akceptację.
 
 **Punkt kontrolny CP3**
 
-- Oczekuje: akceptacja tez slajdów, kontrola PDF w trybie pełnoekranowym, potwierdzenie slajdów o błędach AI (`PROJECT_BRIEF.md` 6.3).
+- Pierwszej wersji talii nie zaakceptowano, ponieważ prezentacja wstępna ma zawierać wyłącznie teorię MACD i planowany sposób pracy z AI, bez faktów z obliczeń, z wolniejszym wprowadzeniem do EMA i z naciskiem na konfigurację zamiast na błędy. Ponowienie: talia przebudowana do 14 slajdów (wpis „Theory-only rework after CP3" w warstwie zadań agentów), ponownie zrecenzowana (iteracje 4 i 5, ocena końcowa 9/10) i ponownie spakowana.
+- Oczekuje: druga runda akceptacji tez slajdów, kontrola PDF w trybie pełnoekranowym, potwierdzenie slajdów o błędach AI (`PROJECT_BRIEF.md` 6.3).
+
+**Decyzje (uzupełnienie po pierwszej rundzie CP3)**
+
+- Prezentacja wstępna nie zawiera faktów z obliczeń: usunięto tabelę wyników, treści symulacyjne, prompt weryfikacji EMA oraz błędy AI zależne od kodu. Wstęp prowadzi od średniej kroczącej do szybkiej i wolnej EMA w czterech slajdach. Konfiguracja AI zajmuje trzy slajdy, błędy AI dwa.
+- W legendach i tekście slajdów obowiązuje zwykły dywiz zamiast pauzy, a czynniki we wzorach rozdziela znak mnożenia. Zmiana stylu wymaga ujednolicenia w briefie i `docs/presentation-style.md` (3.3).
 
 **Wynik**
 
 - Artefakty: `slides/common/mnstyle.sty`, `slides/preliminary/` (`main.tex`, `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, `review.tex`, `Makefile`, `main.pdf`), pakiet `zambrzycki_projekt1_wstepna.zip`.
-- Zawartość pakietu (10 plików, struktura katalogów zachowana): `slides/common/mnstyle.sty`; `slides/preliminary/Makefile`, `main.tex`, `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, `review.tex`, `main.pdf`; `results/basic.tex`.
-- Commity kroków: `0f9c38e`, `a33a288`, `981b220`, `365374a`, `cfb0c0b`, `a02976d`, `cd1d1f4`.
-- Status: wstrzymano na punkcie kontrolnym CP3 (tezy slajdów, kontrola pełnoekranowa, slajdy o błędach AI).
+- Zawartość pakietu (9 plików, struktura katalogów zachowana): `slides/common/mnstyle.sty`; `slides/preliminary/Makefile`, `main.tex`, `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, `review.tex`, `main.pdf`. Pakiet przetestowany według briefu 6.4 (rozpakowanie, `make`, treść PDF identyczna).
+- Commity kroków: `0f9c38e`, `a33a288`, `981b220`, `365374a`, `cfb0c0b`, `a02976d`, `cd1d1f4`, `dcf8803`, `4b0d896`, `05615cf`.
+- Status: wstrzymano na punkcie kontrolnym CP3 (druga runda: tezy slajdów, kontrola pełnoekranowa, slajdy o błędach AI).
