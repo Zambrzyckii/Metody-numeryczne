@@ -46,17 +46,12 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 - `PROJECT_BRIEF.md` v0.1: sekcje 0–2 oraz załączniki A (dziennik decyzji) i B (historia zmian). Sekcje 3–6 pozostały jako zaślepki.
 - Wykonanie zaakceptowano.
 
-### Etap 2 · Środowisko i porządek w katalogu projektu (2026-10-20)
+### Etap 2 · Środowisko i struktura katalogu projektu (2026-10-20)
 
 **Polecenia**
 
-- Zdiagnozować błąd 404 przy instalacji TeX Live.
+- Przygotować środowisko kompilacji LaTeX.
 - Przenieść materiały prowadzącego do katalogu projektu.
-
-**Diagnoza**
-
-- Lokalna baza pakietów pacmana była nieaktualna od 2026-03-17. Serwery lustrzane nie udostępniały już wersji pakietów, których szukała baza.
-- Rozwiązanie: pełna aktualizacja systemu (`pacman -Syu`) połączona z instalacją pakietów TeX Live.
 
 **Decyzje**
 
@@ -123,13 +118,12 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 
 **Polecenia**
 
-- Zrealizować cały brief i cały projekt jeszcze tego samego wieczoru.
 - Kontynuować planowanie od kolejnej sekcji briefu.
 - Wyniki i decyzje każdej sekcji zapisywać w briefie zgodnie z przyjętą konwencją: treść sekcji, załącznik A i historia zmian.
 
 **Decyzje**
 
-- Kolejność prac: najpierw elementy potrzebne na P2, następnie część podstawowa, a część eksperymentalna w miarę dostępnego czasu. Prezentacja końcowa obowiązuje dopiero na P3.
+- Priorytet mają elementy wymagane na P2. Prezentacja końcowa obowiązuje na P3.
 - Zależności:
   - tylko `numpy`, `pandas` i `matplotlib`, z wersjami minimalnymi zamiast przypiętych,
   - kod zgodny z Pythonem 3.10 lub nowszym,
@@ -180,6 +174,39 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 **Wynik**
 
 - `PROJECT_BRIEF.md` v0.5, commit `07f54bd`.
+- Wykonanie zaakceptowano.
+
+### Etap 7 · Plik wsadowy: etapy i punkty kontrolne (2026-10-20)
+
+**Polecenia**
+
+- Opracować sekcję 6 briefu: etapy realizacji i punkty kontrolne.
+- Zachować profesjonalny charakter dokumentacji.
+
+**Decyzje**
+
+- Siedem etapów:
+  1. szkielet projektu,
+  2. dane wejściowe,
+  3. obliczenia części podstawowej,
+  4. prezentacja wstępna i archiwum na P2,
+  5. wykresy A1–E2,
+  6. część eksperymentalna,
+  7. prezentacja końcowa i archiwa na P3.
+- Obliczenia części podstawowej poprzedzają prezentację wstępną. Slajdy o współpracy z AI opierają się dzięki temu na rzeczywistej pracy agentów, a nie na przykładach hipotetycznych.
+- Archiwum na P2 ma pierwszeństwo przed pozostałymi etapami. Etap zagrażający terminowi (2026-10-21, 10:00) jest wstrzymywany.
+- Pięć punktów kontrolnych użytkownika:
+  - weryfikacja danych z niezależnym źródłem,
+  - zrozumienie kodu obliczeniowego,
+  - akceptacja tez slajdów i kontrola PDF w trybie pełnoekranowym,
+  - wybór kierunku eksperymentu,
+  - interpretacje wyników.
+- Interpretacje wyników nie są delegowane agentom.
+- Każde archiwum ZIP jest budowane z białej listy i testowane przez rozpakowanie w pustym katalogu oraz ponowną kompilację lub uruchomienie.
+
+**Wynik**
+
+- `PROJECT_BRIEF.md` v1.0 — brief kompletny. Commit `18ce765`.
 - Status: oczekuje na akceptację.
 
 ---
