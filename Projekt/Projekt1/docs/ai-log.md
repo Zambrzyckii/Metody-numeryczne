@@ -756,3 +756,74 @@ Iteracja 2 (potwierdzenie poprawki przez orkiestratora): przebiegi deterministyc
 - Zasada „żadna liczba na slajdzie nie jest przepisywana ręcznie": dwanaście makr `\res…` generowanych przez program wprost z wyników symulacji (`Projekt_1.pdf` s. 9, 6.3, wymóg odtwarzalności wyników).
 
 Wykonanie zaakceptowano.
+
+### 2026-10-20 · latex-assistant · Beamer style file, Makefile and deck skeleton
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania</summary>
+
+```markdown
+## Task card: Beamer style file, Makefile and deck skeleton
+Goal: `slides/common/mnstyle.sty`, `slides/preliminary/main.tex` and
+`slides/preliminary/Makefile` exist and compile to a clean one-slide PDF
+(title slide), ready for content cards.
+
+Requirements slice (with refs):
+  - mnstyle.sty implements the visual contract: colour definitions copied
+    verbatim, typography (pdflatex, [T1]fontenc, [polish]babel, lmodern,
+    tgheros, onlymath serif), frame title \large bold mnPrimary with a thin
+    mnGrid rule, footline "Bartosz Zambrzycki · Projekt 1: MACD" left in
+    mnMuted \footnotesize and n/N right, 8 mm side margins, no navigation
+    symbols, white background — docs/presentation-style.md 3.2-3.4
+  - \documentclass[aspectratio=169,11pt]{beamer}; n/N on every slide —
+    docs/requirements-presentation.md 1-2; zasady p. 2
+  - Makefile with targets all and clean, plain pdflatex run twice, no
+    latexmk — docs/requirements-code.md B.7
+  - Title slide: topic "Projekt 1: Wskaźnik MACD", author Bartosz Zambrzycki,
+    "Prezentacja wstępna", course "Metody numeryczne", date 2026-10-21, no
+    logo, no background image — docs/presentation-style.md 3.4;
+    Projekt_1.pdf p. 5, 4.1
+  - main.tex is the deck root; content arrives in later cards as separate
+    files (intro.tex, ai-work.tex, ai-errors.tex, ai-review.tex) added via
+    \input, so structure main.tex accordingly but do not create or \input
+    them yet — no placeholders in the compiled PDF
+  - No icons, emoji, overlays, \pause, gradients, shadows or extra themes —
+    docs/presentation-style.md 3.7
+
+Files to touch: slides/common/mnstyle.sty, slides/preliminary/main.tex,
+slides/preliminary/Makefile
+Files NOT to touch: src/**, results/**, data/**, docs/**, materials/**
+
+Acceptance checklist:
+  - [ ] `make` in slides/preliminary/ compiles with no errors and no overfull
+        box warnings; `make clean` removes auxiliaries
+  - [ ] The PDF has exactly the title slide; the footline shows 1/1
+  - [ ] Every colour and font size comes from docs/presentation-style.md
+  - [ ] No placeholder text anywhere in the PDF
+
+Report format: what changed · compile status · open questions
+```
+
+</details>
+
+**Rezultat**
+
+- Nowe pliki `slides/common/mnstyle.sty`, `slides/preliminary/main.tex` i `slides/preliminary/Makefile`, commit `0f9c38e`.
+- Styl rozwiązywany przez `TEXINPUTS := ../common:` w `Makefile`, co przeżywa rozpakowanie archiwum z zachowaną strukturą katalogów (`PROJECT_BRIEF.md` 1.5). Data na slajdzie tytułowym w polskiej typografii („21 października 2026"). Slajd tytułowy w domyślnym, wyśrodkowanym układzie Beamera, czego styl 3.4 nie precyzuje.
+- Bez źródeł zewnętrznych. Styl napisany od zera na bazie domyślnego motywu Beamera, `zrodla.md` nie wymaga wpisu.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Wszystkie punkty spełnione. Weryfikacja orkiestratora po wymuszonej przebudowie: `make` bez błędów, 0 boxów overfull/underfull, 0 ostrzeżeń LaTeX, `pdffonts` pokazuje wyłącznie `emb: yes`, `pdfimages -list` nie wykazuje rastrów, stopka „1/1", 10 kolorów palety obecnych dosłownie w stylu.
+
+**Błędy AI**
+
+- Brak. Recenzja `presentation-reviewer` nastąpi na poziomie kompletnego decku po kartach treści.
+
+**Kandydat na slajd**
+
+- Konfiguracja agenta `latex-assistant` i kontrakt wizualny `docs/presentation-style.md` jako przykład organizacji pracy (`zasady` s. 4, 5.2).
+
+Status: oczekuje na akceptację.
