@@ -8,7 +8,7 @@ PDFLATEX = pdflatex -interaction=nonstopmode -halt-on-error
 
 all: main.pdf
 
-main.pdf: $(wildcard *.tex) ../common/mnstyle.sty ../../results/basic.tex
+main.pdf: $(wildcard *.tex) ../common/mnstyle.sty
 	$(PDFLATEX) main.tex
 	$(PDFLATEX) main.tex
 

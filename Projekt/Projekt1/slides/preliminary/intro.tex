@@ -1,48 +1,60 @@
-% Introduction: EMA, MACD/SIGNAL equations, trading algorithm.
+% Introduction: moving averages, EMA, MACD/SIGNAL, buy and sell signals.
 
 \begin{frame}
-  \frametitle{EMA wygładza ceny, nadając największą wagę ostatnim notowaniom}
-  \begin{equation*}
-    \alpha_N = \frac{2}{N+1},\qquad
-    E_0^{(N)} = x_0,\qquad
-    E_i^{(N)} = \alpha_N x_i + (1 - \alpha_N)\,E_{i-1}^{(N)}
-    \quad\text{dla } i \ge 1
-    \tag{1}
-  \end{equation*}
-  \vskip1mm
+  \frametitle{Średnia krocząca wygładza ceny, a EMA mocniej waży ostatnie sesje}
   \begin{itemize}
-    \item $x_i$ --- cena zamknięcia w próbce $i$
-    \item $N$ --- okres średniej
-    \item $\alpha_N$ --- współczynnik wygładzania
-    \item $E_i^{(N)}$ --- wartość EMA o okresie $N$
+    \item Pojedyncze notowania skaczą z sesji na sesję, dlatego patrzy się
+      na średnią z ostatnich $N$ sesji.
+    \item Zwykła średnia traktuje wszystkie $N$ sesji jednakowo, więc
+      reaguje z opóźnieniem.
+    \item EMA nadaje sesjom wagi malejące wykładniczo: najnowsza cena
+      znaczy najwięcej.
+    \item Krótki okres $N$ daje szybką EMA, długi okres wolną EMA.
   \end{itemize}
-  \vskip1mm
-  Krótszy okres $N$ oznacza szybszą reakcję na zmiany ceny.
 \end{frame}
 
 \begin{frame}
-  \frametitle{MACD mierzy rozbieżność dwóch średnich EMA, a SIGNAL ją wygładza}
-  MACD (ang. moving average convergence/divergence) to wskaźnik analizy
-  technicznej, który na podstawie cen zamknięcia pomaga ocenić kierunek
-  i dynamikę zmian cen oraz wyznacza sygnały kupna i sprzedaży.
+  \frametitle{Wartość EMA wyznacza się rekurencyjnie ze współczynnika
+    wygładzania}
+  \begin{equation*}
+    \alpha_N = \frac{2}{N+1},\qquad
+    E_0^{(N)} = x_0,\qquad
+    E_i^{(N)} = \alpha_N \cdot x_i + (1 - \alpha_N) \cdot E_{i-1}^{(N)}
+    \quad\text{dla } i \ge 1
+    \tag{1}
+  \end{equation*}
+  \vskip2mm
+  \begin{itemize}
+    \item $x_i$ - cena zamknięcia z sesji numer $i$
+    \item $E_i^{(N)}$ - wartość EMA o okresie $N$ po sesji $i$
+    \item $\alpha_N$ - waga najnowszej ceny, tym większa, im krótszy
+      okres $N$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{MACD to różnica szybkiej i wolnej EMA, a SIGNAL to wygładzone
+    MACD}
+  MACD to wskaźnik analizy technicznej, który na podstawie cen zamknięcia
+  pomaga ocenić kierunek i dynamikę zmian cen oraz wyznacza sygnały kupna
+  i sprzedaży.
   \begin{equation*}
     M_i = E_i^{(N_1)} - E_i^{(N_2)}
     \tag{2}
   \end{equation*}
   \begin{equation*}
     S_0 = M_0,\qquad
-    S_i = \alpha_{N_3} M_i + (1 - \alpha_{N_3})\,S_{i-1}
+    S_i = \alpha_{N_3} \cdot M_i + (1 - \alpha_{N_3}) \cdot S_{i-1}
     \quad\text{dla } i \ge 1
     \tag{3}
   \end{equation*}
   \vskip2mm
   \begin{itemize}
-    \item $M$ --- linia MACD
-    \item $S$ --- linia SIGNAL
-    \item $N_1$ i $N_2$ --- okresy krótszej i dłuższej EMA cen,
-      $N_3$ --- okres wygładzania SIGNAL
-    \item $\alpha_{N_3} = 2/(N_3+1)$ jak we wzorze (1);
-      w projekcie $(N_1, N_2, N_3) = (12, 26, 9)$
+    \item $M$ - linia MACD, różnica szybkiej EMA (okres $N_1$) i wolnej
+      EMA (okres $N_2$)
+    \item $S$ - linia SIGNAL, czyli EMA liczona z wartości MACD
+      (okres $N_3$)
+    \item Standardowe ustawienie: MACD(12, 26, 9).
   \end{itemize}
 \end{frame}
 
@@ -54,10 +66,9 @@
   \end{equation*}
   \vskip2mm
   \begin{itemize}
-    \item Kupno w próbce $i$, gdy $H_{i-1} \le 0$ i $H_i > 0$.
-    \item Sprzedaż, gdy $H_{i-1} \ge 0$ i $H_i < 0$; bez interpolacji czasu
-      przecięcia.
-    \item Symulacja: sygnały od próbki 101, realizacja kolejnej sesji
-      ($d = 1$), pełne zaangażowanie kapitału.
+    \item Kupno w sesji $i$, gdy histogram przechodzi z wartości ujemnej
+      lub zera na dodatnią ($H_{i-1} \le 0$ i $H_i > 0$).
+    \item Sprzedaż, gdy histogram przechodzi z wartości dodatniej lub zera
+      na ujemną ($H_{i-1} \ge 0$ i $H_i < 0$).
   \end{itemize}
 \end{frame}

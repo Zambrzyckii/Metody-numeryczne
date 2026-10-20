@@ -1,6 +1,4 @@
-% Way of working with AI and the no-hand-typed-numbers rule.
-% Result macros (\res...) come from the generated results file.
-\input{../../results/basic.tex}
+% Planned AI workflow: agent roles, source hierarchy, checkpoints.
 
 \begin{frame}
   \frametitle{Kod, slajdy i recenzje powstają w czterech rolach agentów Claude Code}
@@ -18,26 +16,31 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Żadna liczba nie trafia na slajdy ręcznie: wartości wstawiają
-    makra generowane przez program}
-  \VerbatimInput[firstline=1,lastline=4,fontsize=\footnotesize]%
-    {../../results/basic.tex}
-  \vskip2mm
-  \begin{center}
-    \begin{tabular}{@{}lr@{}}
-      \toprule
-      Wielkość & Wartość \\
-      \midrule
-      Kapitał początkowy $C_{100}$ [PLN] & \resInitialCapital \\
-      Wartość końcowa $V_{L-1}$ [PLN] & \resFinalEquity \\
-      Zysk [PLN] & \resProfitAmount \\
-      Stopa zwrotu $R$ [\%] & \resReturnPct \\
-      \bottomrule
-    \end{tabular}
-  \end{center}
-  \vskip2mm
-  {\footnotesize\color{mnMuted}
-    Część podstawowa: \resSampleCount{} sesji dziennych PKO BP.
-    Pozostałe wartości (liczby transakcji, skrajne stopy)
-    są w \texttt{results/basic.tex}.\par}
+  \frametitle{Jedno źródło prawdy: od instrukcji prowadzącego, przez brief,
+    do agentów}
+  \begin{itemize}
+    \item Projekt zaczyna się od pliku wsadowego (brief): cele z tabel
+      punktacji, role agentów, konwencje kodu i styl slajdów.
+    \item Z briefu wygenerowano CLAUDE.md oraz docs/ z wycinkami wymagań,
+      każdy z referencją do strony instrukcji.
+    \item Hierarchia źródeł: PDF-y prowadzącego wygrywają z briefem, brief
+      z docs/, a docs/ z instrukcjami agentów.
+    \item Zmiany płyną wyłącznie w dół hierarchii, nigdy z pominięciem
+      briefu.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Decyzje zapadają w punktach kontrolnych, a delegacje opisują
+    karty zadań}
+  \begin{itemize}
+    \item Karta zadania: cel, wycinek wymagań z referencjami, lista plików
+      i kryteria akceptacji.
+    \item Agenci recenzujący mają wyłącznie narzędzia odczytu; nie poprawiają
+      kodu ani slajdów.
+    \item Pięć punktów kontrolnych użytkownika: dane, zrozumienie kodu, tezy
+      slajdów, kierunek eksperymentu, interpretacje wyników.
+    \item Dziennik pracy z AI ma dwie warstwy: rejestr decyzji i zadania
+      agentów.
+  \end{itemize}
 \end{frame}
