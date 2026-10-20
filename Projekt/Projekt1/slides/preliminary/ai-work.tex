@@ -20,26 +20,22 @@
 \begin{frame}
   \frametitle{Żadna liczba nie trafia na slajdy ręcznie: wartości wstawiają
     makra generowane przez program}
-  \begin{columns}[T,onlytextwidth]
-    \begin{column}{0.49\textwidth}
-      \VerbatimInput[firstline=1,lastline=4,fontsize=\footnotesize]%
-        {../../results/basic.tex}
-    \end{column}
-    \begin{column}{0.51\textwidth}
-      \setlength{\tabcolsep}{3pt}%
-      \begin{tabular}{@{}lr@{}}
-        \toprule
-        Wielkość & Wartość \\
-        \midrule
-        Kapitał początkowy $C_{100}$ [PLN] & \resInitialCapital \\
-        Wartość końcowa $V_{L-1}$ [PLN] & \resFinalEquity \\
-        Zysk [PLN] & \resProfitAmount \\
-        Stopa zwrotu $R$ [\%] & \resReturnPct \\
-        \bottomrule
-      \end{tabular}
-    \end{column}
-  \end{columns}
-  \vskip3mm
+  \VerbatimInput[firstline=1,lastline=4,fontsize=\footnotesize]%
+    {../../results/basic.tex}
+  \vskip2mm
+  \begin{center}
+    \begin{tabular}{@{}lr@{}}
+      \toprule
+      Wielkość & Wartość \\
+      \midrule
+      Kapitał początkowy $C_{100}$ [PLN] & \resInitialCapital \\
+      Wartość końcowa $V_{L-1}$ [PLN] & \resFinalEquity \\
+      Zysk [PLN] & \resProfitAmount \\
+      Stopa zwrotu $R$ [\%] & \resReturnPct \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+  \vskip2mm
   {\footnotesize\color{mnMuted}
     Część podstawowa: \resSampleCount{} sesji dziennych PKO BP.
     Pozostałe wartości (liczby transakcji, skrajne stopy)
