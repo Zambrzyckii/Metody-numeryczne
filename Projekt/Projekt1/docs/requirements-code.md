@@ -15,6 +15,10 @@
 
 Chosen instrument: **PKO BP**, daily, PLN, from stooq.pl (brief 1.7).
 
+- **File:** `data/pko.csv`, 1001 sessions, 2022-10-19 … 2026-10-20, verified against an independent source (CP1).
+- **Columns:** `date, open, high, low, close, volume`. Rows are verbatim from the source.
+- **Adjustment:** prices are backward-adjusted by stooq, with the last adjustment on 2026-08-04, covering 945 of the 1001 sessions. Volume before that date is fractional for the same reason. The data is used as is. The adjustment is described in `readme.md`.
+
 ### A.2 Indicator (`Projekt_1.pdf` p. 1–2)
 
 | # | Formula |

@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 1.0 · 2026-10-20 · status: complete.
+Version 1.1 · 2026-10-20 · status: complete.
 
 ---
 
@@ -144,6 +144,7 @@ Każdy z tych punktów zwiększa ryzyko slopu bez zysku punktowego:
 |---|---|---|
 | Autor | **Bartosz Zambrzycki** | slajd tytułowy i stopka |
 | Instrument części podstawowej | **PKO BP (stooq.pl), notowania dzienne, PLN** | jeden z przykładów z instrukcji (`Projekt_1.pdf` s. 4) |
+| Dane części podstawowej | **`data/pko.csv`: 1001 ostatnich sesji, 2022-10-19 … 2026-10-20; ceny skorygowane wstecznie przez stooq (ostatnia korekta 2026-08-04)** | zweryfikowane z niezależnym źródłem (CP1); korekta usuwa sztuczne spadki ceny w dniach dywidendy, które dawałyby fałszywe sygnały; precedens: zbiór prowadzącego zawiera „OHLC z korektami dostawcy" (`charts_pro1.pdf`); korekta opisana w `readme.md` (`Projekt_1.pdf` s. 4) |
 | Opóźnienie wykonania d | **d = 1**: transakcja w próbce i + 1 po cenie x₍ᵢ₊₁₎ | wariant sugerowany, bliższy praktyce (`Projekt_1.pdf` s. 3–4) |
 | Kierunek eksperymentu | *otwarta*; rekomendacja: RSI jako dodatkowy warunek decyzji | kierunek zalecany (`Projekt_1.pdf` s. 7) |
 | Data P3 | *otwarta* | uzupełnić |
@@ -846,3 +847,4 @@ Applies to every ZIP:
 | 0.4 | 2026-10-20 | Section 4 (code conventions); ADR-6 to ADR-8; presentation ZIP includes `charts/` and `results/*.tex` | Code contract for implementation; slides must compile from the ZIP alone |
 | 0.5 | 2026-10-20 | Section 5 (documentation protocol); decisions in 1.7: author, PKO BP, d = 1; P2 time 11:00–13:00, ZIP by 10:00 | User decisions recorded; documentation flow defined before implementation |
 | 1.0 | 2026-10-20 | Section 6 (stages, checkpoints, packaging procedure); all sections complete | Brief complete; implementation can start |
+| 1.1 | 2026-10-20 | Decision in 1.7: basic-part data window and use of adjusted prices | CP1 passed |
