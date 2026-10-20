@@ -294,4 +294,99 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 
 ## Zadania agentów
 
-Brak wpisów. Do tej pory nie delegowano zadań subagentom.
+### 2026-10-20 · coder · Project constants and data loading
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania</summary>
+
+```markdown
+## Task card: Project constants and data loading
+Goal: `src/config.py` and `src/data.py` exist, giving later modules the project
+constants and a validated load of `data/pko.csv` into numpy arrays.
+
+Requirements slice (with refs):
+  - Constants `MACD_PARAMS = (12, 26, 9)`, `START_INDEX = 100`, `DELAY = 1`,
+    project paths, experiment data dir from env `MN_DATA_DIR` with default
+    `materials/dane_pro1/` — docs/requirements-code.md B.2, B.6; brief 1.7
+  - Data rules: 1000–1200 rows, dates strictly increasing, no duplicate dates,
+    no missing or non-positive closes, gaps between sessions never filled —
+    docs/requirements-code.md A.1, B.3; Projekt_1.pdf p. 4
+  - pandas only reads the CSV; callers get numpy arrays (float64 prices,
+    datetime64 dates), indexed i = 0…L−1 — docs/requirements-code.md B.3
+  - Validation failures raise ValueError naming the broken rule —
+    docs/requirements-code.md B.3
+  - Code never writes into data directories — docs/requirements-code.md B.6
+  - Python 3.10+ syntax; only numpy and pandas imported here —
+    docs/requirements-code.md B.1
+  - PEP 8, English identifiers, type hints, one-line docstrings citing the
+    requirement; no classes except dataclass records; no printing —
+    docs/requirements-code.md B.4
+  - `requirements.txt` with numpy>=1.24, pandas>=2.0, matplotlib>=3.7 —
+    docs/requirements-code.md B.1
+
+Files to touch: src/config.py, src/data.py, requirements.txt
+Files NOT to touch: data/pko.csv, docs/**, materials/**, CLAUDE.md, PROJECT_BRIEF.md
+
+Acceptance checklist:
+  - [ ] config.py defines MACD_PARAMS = (12, 26, 9), START_INDEX = 100, DELAY = 1,
+        paths for data/pko.csv, results/ and charts/, and MN_DATA_DIR resolution
+  - [ ] data.py exposes one public loader returning a dataclass of parallel numpy
+        arrays: dates (datetime64), open, high, low, close, volume (float64), length L
+  - [ ] Loading data/pko.csv succeeds with L = 1001
+  - [ ] Each validation rule rejects a broken input: row count outside 1000–1200,
+        non-increasing or duplicate dates, missing close, close ≤ 0
+  - [ ] ValueError messages name the broken rule
+  - [ ] No writes into data directories, no printing, no matplotlib import
+  - [ ] Rejection cases are checked with throwaway inputs outside the repo;
+        no test files are committed
+
+Report format: what was done · files changed · what was NOT done and why · open questions
+```
+
+</details>
+
+**Rezultat**
+
+- Nowe pliki `src/config.py`, `src/data.py` i `requirements.txt`, commit `df4292d`.
+- `load_prices` zwraca zamrożony `dataclass` `PriceSeries` z równoległymi tablicami numpy. Daty mają typ `datetime64[D]`, ceny i wolumen `float64`, L = 1001.
+- Po recenzji wykonano dwie rundy poprawek, opisane w znaleziskach poniżej.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Wszystkie punkty listy spełnione. Weryfikacja orkiestratora: wczytanie `data/pko.csv` daje L = 1001 bez ostrzeżeń (`python -W error::UserWarning`), jedenaście zepsutych wariantów danych odrzucono z komunikatem wskazującym złamaną regułę i stronę instrukcji, puste oraz ustawione `MN_DATA_DIR` rozwiązywane są poprawnie, kontrola `awk 'length > 79'` nie zwraca wyników.
+
+**Znaleziska recenzenta (code-reviewer)**
+
+Iteracja 1, werdykt APPROVE:
+
+- **Znalezisko:** Niesparsowalna data, nienumeryczna cena zamknięcia lub brak wymaganej kolumny kończyły się ogólnym błędem pandas/numpy zamiast `ValueError` wskazującego regułę.
+  - Waga: minor.
+  - Wymaganie: `docs/requirements-code.md` B.3 (czytelny `ValueError`).
+  - Sposób wykrycia: analiza kodu przez recenzenta. Ścieżka nie była pokryta dowodami z uruchomień.
+  - Poprawka: kontrola obecności sześciu kolumn oraz opakowanie konwersji daty i ceny zamknięcia w nazwane `ValueError`. Poprawiono w commicie `df4292d`.
+- **Znalezisko:** Loader wymaga bezwarunkowo sześciu kolumn, a `docs/requirements-code.md` B.6 gwarantuje dla części podstawowej jedynie `date` i `close`.
+  - Waga: nit.
+  - Wymaganie: `docs/requirements-code.md` B.6.
+  - Sposób wykrycia: porównanie kodu z B.6.
+  - Poprawka: odrzucono zmianę zachowania, ponieważ oba rzeczywiste zbiory danych (`data/pko.csv`, `dane_pro1`) mają komplet sześciu kolumn. Wymóg udokumentowano w docstringu w commicie `df4292d`.
+- **Znalezisko:** Puste `MN_DATA_DIR` dawało `Path("")` zamiast ścieżki domyślnej.
+  - Waga: nit.
+  - Wymaganie: `docs/requirements-code.md` B.6 (domyślny katalog `materials/dane_pro1/`).
+  - Sposób wykrycia: analiza kodu przez recenzenta (`os.environ.get` zwraca pusty łańcuch zamiast wartości domyślnej).
+  - Poprawka: zamiana na `os.environ.get("MN_DATA_DIR") or <domyślna>`. Poprawiono w commicie `df4292d`.
+
+Iteracja 2, werdykt APPROVE (potwierdzenie poprawek):
+
+- **Znalezisko:** Pięć linii przekracza limit 79 znaków PEP 8, w tym dwie obecne już w pierwszej iteracji i wtedy przeoczone przez recenzenta.
+  - Waga: nit.
+  - Wymaganie: `docs/requirements-code.md` B.1 i B.4 (PEP 8 sprawdzany w recenzji).
+  - Sposób wykrycia: pomiar długości linii przez recenzenta w drugiej iteracji.
+  - Poprawka: zawinięcie sygnatury, długich `raise` i skrócenie docstringów, bez zmiany zachowania. Poprawiono w commicie `df4292d`.
+
+**Kandydat na slajd**
+
+- Raport o błędach AI (`Projekt_1.pdf` s. 9, tabela punktacji). Znalezisko minor z iteracji 1 wraz z przeoczeniem recenzenta z iteracji 2 pokazują rzeczywisty cykl recenzji.
+
+Status: oczekuje na akceptację.
