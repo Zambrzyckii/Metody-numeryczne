@@ -906,3 +906,77 @@ Report format: what changed · compile status · open questions
 - Slajd 6 sam dokumentuje potok makr i służy jako dowód dla elementu „sposób pracy i konfiguracja AI" (`zasady` s. 4, 5.2).
 
 Status: oczekuje na akceptację.
+
+### 2026-10-20 · latex-assistant · Prompt slide and AI-errors slides
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania</summary>
+
+```markdown
+## Task card: Prompt slide and AI-errors slides
+Goal: slides/preliminary/ai-errors.tex (4 frames: one prompt frame, three
+AI-error frames) exists, is \input from main.tex after ai-work.tex, the
+booktabs package moves from main.tex to mnstyle.sty, and the deck compiles
+cleanly to 10 slides.
+
+Requirements slice (with refs):
+  - Selected prompt, its result and its evaluation —
+    docs/requirements-presentation.md 3.1
+  - AI errors report, about 3 slides, real findings only, one error per slide
+    with the finding fields (what, how detected, fix) —
+    docs/requirements-presentation.md 4; docs/presentation-style.md 3.5
+  - Prompt slide type: claim title; prompt excerpt in a monospace box of max
+    10 lines (English); result and evaluation in two lines —
+    docs/presentation-style.md 3.5
+  - No result digits typed by hand; these frames need no numbers at all —
+    docs/presentation-style.md 3.7
+
+Frame titles (binding):
+  7. „Każdą kartę zadania weryfikuje niezależne odniesienie, nie zaufanie
+     do AI" (fragment prawdziwej karty zadania 2, wynik i ocena)
+  8. „AI potrafi zepsuć dane, gdy poprawia ich format przy zapisie"
+  9. „Błędne założenie w walidacji odrzuciłoby poprawne dane"
+  10. „Recenzja kodu wykrywa błędy niewidoczne w testach na danych
+      rzeczywistych"
+  Ramki 8–10: pola Znalezisko / Wykrycie / Poprawka, po jednym błędzie
+  na slajd, treści z dziennika (wpisy z 2026-10-20).
+
+Files to touch: slides/preliminary/ai-errors.tex, slides/preliminary/main.tex
+(one \input line, remove \usepackage{booktabs}), slides/common/mnstyle.sty
+(add \RequirePackage{booktabs})
+
+Acceptance checklist:
+  - [ ] make compiles cleanly: no errors, no overfull box warnings
+  - [ ] 10 slides, footline 10/10 on the last one
+  - [ ] Prompt box max 10 lines, monospace, English; exactly two lines of
+        result+evaluation
+  - [ ] Three error frames, one finding each
+  - [ ] booktabs loaded from mnstyle.sty; main.tex preamble free of package
+        loads
+  - [ ] No banned elements (3.7); titles exactly as specified
+
+Report format: what changed · compile status · open questions
+```
+
+</details>
+
+**Rezultat**
+
+- Nowy plik `slides/preliminary/ai-errors.tex`, zaktualizowane `main.tex` i `mnstyle.sty` (przeniesienie `booktabs` do wspólnego stylu), commit `981b220`. Deck ma 10 slajdów.
+- Ramka promptu: 9 linii verbatim z prawdziwej karty zadania „MACD indicator and EMA verification", bez obramowania (zgodnie z zakazem dekoracji 3.7). Ramki błędów jako lista opisowa Znalezisko / Wykrycie / Poprawka, bez cyfr.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Wszystkie punkty spełnione. Weryfikacja orkiestratora po wymuszonej przebudowie: 0 boxów overfull/underfull i 0 ostrzeżeń, wszystkie fonty osadzone, brak rastrów, stopki „1 / 10" … „10 / 10", tytuły ramek 7–10 zgodne z kartą. Jedyne cyfry w `ai-errors.tex` to stałe wymagań w cytowanym fragmencie promptu.
+
+**Błędy AI**
+
+- Brak.
+
+**Kandydat na slajd**
+
+- Nie dotyczy; ramki tej karty same realizują elementy „wybrany prompt" i „raport o błędach AI" z tabeli 1 (`Projekt_1.pdf` s. 9).
+
+Status: oczekuje na akceptację.
