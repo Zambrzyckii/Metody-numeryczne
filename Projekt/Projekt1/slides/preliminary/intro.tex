@@ -6,7 +6,7 @@
     \item Pojedyncze notowania skaczą z sesji na sesję, dlatego patrzy się
       na średnią z ostatnich $N$ sesji.
     \item Zwykła średnia traktuje wszystkie $N$ sesji jednakowo, więc
-      reaguje z opóźnieniem.
+      reaguje z większym opóźnieniem niż EMA.
     \item EMA nadaje sesjom wagi malejące wykładniczo: najnowsza cena
       znaczy najwięcej.
     \item Krótki okres $N$ daje szybką EMA, długi okres wolną EMA.
@@ -14,8 +14,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Wartość EMA wyznacza się rekurencyjnie ze współczynnika
-    wygładzania}
+  \frametitle{EMA wyznacza się rekurencyjnie ze współczynnika wygładzania}
   \begin{equation*}
     \alpha_N = \frac{2}{N+1},\qquad
     E_0^{(N)} = x_0,\qquad
@@ -53,7 +52,7 @@
     \item $M$ - linia MACD, różnica szybkiej EMA (okres $N_1$) i wolnej
       EMA (okres $N_2$)
     \item $S$ - linia SIGNAL, czyli EMA liczona z wartości MACD
-      (okres $N_3$)
+      (okres $N_3$; wzór (1) dla $N = N_3$)
     \item Standardowe ustawienie: MACD(12, 26, 9).
   \end{itemize}
 \end{frame}

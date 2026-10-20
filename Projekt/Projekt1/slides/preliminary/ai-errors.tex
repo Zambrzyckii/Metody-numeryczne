@@ -1,6 +1,5 @@
 % Selected prompt with result and evaluation, then two real AI-error findings.
-% The prompt excerpt quotes a real task card of this deck; cuts are marked
-% with [...].
+% The prompt excerpt quotes a real task card of this deck.
 
 \begin{frame}[fragile]
   \frametitle{Kartę zadania odbiera się po liście kryteriów, nie po wrażeniu}
@@ -9,11 +8,11 @@
 ## Task card: Beamer style file, Makefile and deck
 skeleton
 Goal: slides/common/mnstyle.sty, slides/preliminary/
-main.tex [...] compile to a clean one-slide PDF
-(title slide), ready for content cards.
+main.tex [...] compile to a clean one-slide PDF [...]
+[...]
 Acceptance checklist:
-- [ ] make compiles with no errors and no overfull
-      box warnings [...]
+- [ ] make [...] compiles with no errors and no
+      overfull box warnings [...]
 - [ ] Every colour and font size comes from
       docs/presentation-style.md [...]
 \end{verbatim}}
@@ -39,9 +38,9 @@ Acceptance checklist:
 \begin{frame}
   \frametitle{AI przedstawiło skrócony cytat jako dosłowny}
   \begin{description}
-    \item[Znalezisko] podczas budowy tej prezentacji skrócony fragment karty
-      zadania trafił na slajd jako dosłowny cytat, bez oznaczenia opuszczeń,
-      i tak też opisano go w dzienniku pracy.
+    \item[Znalezisko] agent latex-assistant wstawił skrócony fragment karty
+      zadania jako dosłowny cytat, bez oznaczenia opuszczeń, a sesja główna
+      powtórzyła to twierdzenie w dzienniku pracy.
     \item[Wykrycie] recenzent AI prezentacji porównał cytat ze slajdu
       z pełnym zapisem karty w dzienniku.
     \item[Poprawka] opuszczenia oznaczono znakiem [...], a wpis dziennika
