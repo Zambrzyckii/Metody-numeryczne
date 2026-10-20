@@ -1,1 +1,10 @@
 materials/
+__pycache__/
+.venv/
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
