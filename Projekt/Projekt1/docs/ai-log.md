@@ -237,7 +237,52 @@ Narzędzie: Claude Code. Repozytorium: `~/Metody-Numeryczne`.
 **Wynik**
 
 - Commit `8f1aa28`.
-- Status: oczekuje na akceptację.
+- Wykonanie zaakceptowano.
+
+### Etap 9 · Realizacja: etap 2 — dane wejściowe (2026-10-20)
+
+**Polecenia**
+
+- Wykonać etap 2 w bieżącej sesji.
+
+**Źródło danych**
+
+- Notowania dzienne PKO BP ze stooq.pl, pełna historia od 2004-11-10.
+- Plik pobrano ręcznie przez przeglądarkę, ponieważ serwis blokuje pobieranie automatyczne (weryfikacja JavaScript).
+- Plik źródłowy: `pko_d.csv`, 5492 sesje, SHA-256 `222e072b684752f52fc75b2350ad215a38ff4f4ad478ec0e77ef52ba440f15e7`.
+
+**Decyzje**
+
+- Okno danych obejmuje 1001 ostatnich sesji (L = 1001, indeksy 0…1000), zgodnie z przykładem w instrukcji: 2022-10-19 … 2026-10-20.
+- Nagłówki ujednolicono do `date, open, high, low, close, volume`, w formacie zbioru `dane_pro1`.
+- Wiersze danych są identyczne treściowo ze źródłem. Zmieniono jedynie znak końca wiersza (CRLF na LF).
+- Ceny stooq są skorygowane wstecznie. Ostatnia korekta przypada na 2026-08-04 i obejmuje 945 z 1001 sesji okna. Dane pozostawiono bez zmian. Korekta zostanie opisana w `readme.md` (`Projekt_1.pdf` s. 4).
+
+**Weryfikacja**
+
+- 1001 wierszy.
+- Daty ściśle rosnące, bez duplikatów.
+- Brak braków danych.
+- Ceny dodatnie, spójność OHLC zachowana.
+- Najdłuższa przerwa między sesjami wynosi 6 dni kalendarzowych.
+
+**Błędy AI**
+
+- **Znalezisko:** Pierwsza wersja skryptu przygotowującego dane zapisywała plik przez pandas, co zmieniało zapis liczb (np. `117` → `117.0`). Plik przestawał być wierną kopią źródła.
+  - Waga: minor.
+  - Wymaganie: identyfikowalność danych wejściowych (`Projekt_1.pdf` s. 4).
+  - Sposób wykrycia: porównanie wierszy pliku wynikowego z plikiem źródłowym przed commitem.
+  - Poprawka: zapis surowych wierszy źródła z podmienionym nagłówkiem.
+- **Znalezisko:** Kontrola danych zakładała całkowite wartości wolumenu, co jest nieprawdziwe dla danych skorygowanych wstecznie. Poprawne dane zostałyby odrzucone.
+  - Waga: minor.
+  - Wymaganie: kryteria danych z `Projekt_1.pdf` s. 4, które nie obejmują wolumenu.
+  - Sposób wykrycia: niepowodzenie walidacji i analiza wierszy wokół daty 2026-08-04.
+  - Poprawka: kontrolę zmieniono na informacyjną, a wartości pozostawiono bez zmian.
+
+**Wynik**
+
+- `data/pko.csv`, commit `7d8b207`.
+- Status: wstrzymano na punkcie kontrolnym CP1 (weryfikacja danych z niezależnym źródłem).
 
 ---
 
