@@ -1098,3 +1098,107 @@ New ai-review.tex: reviewer configuration (4 bullets), review prompt
 - Nie dotyczy; grupa recenzji AI jest już w decku, a iteracje recenzji dokumentuje ten dziennik.
 
 Status: oczekuje na akceptację.
+
+### 2026-10-20 · latex-assistant · Iteration-2 fixes and final review grade
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania (dwie rundy: poprawki iteracji 2, przesunięcie znacznika po iteracji 3)</summary>
+
+```markdown
+Fix round after review iteration 2 (grade 8/10, one major left):
+1. (major) Slide 6: the code excerpt overlaps the table; put the four-line
+   \VerbatimInput excerpt ABOVE the table at full text width.
+2. (minor) Slide 12: mark the cuts in the review-prompt box with [...].
+3. (minor) Slide 11: merge bullets 3 and 4; add one bullet naming the
+   evaluated criteria from .claude/agents/presentation-reviewer.md.
+4. (minor) Move the MACD definition to the top of slide 3, softened per
+   Projekt_1.pdf p. 1 ("pomaga ocenić kierunek i dynamikę zmian cen").
+5. (nit) Slide 10 title: "Recenzja kodu znajduje błędy, których nie
+   ujawniają dane rzeczywiste".
+6. (nit) Slide 13 title with \resReviewScore{}/10; drop the separate
+   "Ocena" line.
+
+Final micro-fix after iteration 3: one [...] marker on slide 12 sat after
+"slide groups" (nothing removed there) while the real cut
+"(five graded elements)" was unmarked; marker moved.
+```
+
+</details>
+
+**Pełny prompt recenzji** (cytowany we fragmentach na slajdzie 12):
+
+> Review slides/preliminary/main.pdf and its .tex sources against: (1) materials/zasady_zaliczenia_projektu_v1.pdf, mandatory conditions and slide groups; (2) materials/Projekt_1.pdf table 1, preliminary deck content (five graded elements); (3) docs/presentation-style.md, assertion-evidence titles, budgets, palette, banned elements. Report findings with severity and a suggested fix. End with a verbal grade and a score 1-10.
+
+**Rezultat**
+
+- Zmienione `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, commity `a02976d` i `cd1d1f4`. Plik danych `review.tex` zaktualizowany przez orkiestratora do oceny końcowej i commitowany wraz z finalnym `main.pdf` w `cd1d1f4`.
+
+**Ocena recenzenta prezentacji — iteracja 2 (deck 13-slajdowy, commit `cfb0c0b`)**
+
+- Ocena słowna: prezentacja spełnia warunki obowiązkowe, wstęp zwięzły z poprawnymi wzorami, współpraca z AI rzetelnie udokumentowana; uwagi dotyczą układu jednego slajdu i dokładności cytatów. Ocena liczbowa: **8/10**.
+- Znaleziska i rozstrzygnięcia (1 major, 3 minor, 2 nit):
+  1. (major) Fragment kodu nachodził na tabelę slajdu 6 (regresja po separatorze tysięcy z iteracji 1, wskazana przez samego recenzenta). Poprawiono w `a02976d` (fragment nad tabelą, pełna szerokość).
+  2. (minor) Nieoznaczone cięcia w prompcie recenzji na slajdzie 12. Poprawiono w `a02976d`; błędnie umieszczony znacznik skorygowano w `cd1d1f4`.
+  3. (minor) Slajd 11 wymieniał źródła kryteriów bez samych kryteriów. Poprawiono w `a02976d`.
+  4. (minor) Definicja MACD zawyżała działanie wskaźnika i stała pod tytułem o EMA. Poprawiono w `a02976d` („pomaga ocenić", przeniesiona na slajd 3).
+  5. (nit) Tytuł slajdu 10 mówił o „testach", których projekt nie ma. Poprawiono w `a02976d`.
+  6. (nit) Tytuł slajdu 13 czytał się „na 7 na 10". Poprawiono w `a02976d`.
+- Recenzent zaakceptował cytat-akapit oceny słownej na slajdzie 13 (typ slajdu z 3.5 przewiduje ocenę słowną) i dywiz zamiast pauzy w cytacie promptu (normalizacja typograficzna przy oznaczonych cięciach).
+
+**Ocena recenzenta prezentacji — iteracja 3, końcowa (commit `a02976d`)**
+
+- Ocena słowna: prezentacja spełnia wszystkie warunki obowiązkowe, ma zwięzły wstęp z poprawnymi wzorami EMA, MACD i SIGNAL oraz rzetelnie udokumentowaną współpracę z AI; tytuły są tezami popartymi treścią, a układ jest czytelny na pełnym ekranie. Ocena liczbowa: **9/10**.
+- Znalezisko (minor): jeden znacznik `[...]` na slajdzie 12 w złym miejscu. Poprawiono w `cd1d1f4`.
+- Zalecenia na przyszłość: wykres przecięć MACD i SIGNAL we wstępie decku końcowego (przyjęto do etapu 7); wskazanie ocenianej wersji na slajdzie 13 (odrzucono, powiązanie oceny z wersją dokumentuje ten dziennik).
+
+**Błędy AI**
+
+- Brak nowych poza udokumentowanymi wyżej znaleziskami recenzji; regresja ze znaleziska 1 iteracji 2 wynikła z poprawki zleconej przez recenzenta w iteracji 1, co recenzent sam odnotował.
+
+**Kandydat na slajd**
+
+- Nie dotyczy; przebieg iteracji 7/10, 8/10, 9/10 jest już treścią grupy recenzji AI.
+
+Status: oczekuje na akceptację.
+
+### Etap 11 · Realizacja: etap 4 — prezentacja wstępna i pakiet P2 (2026-10-20)
+
+**Polecenia**
+
+- Rozpocząć etap 4 przed omówieniem kodu z CP2, które przeniesiono do osobnej sesji.
+- Przygotować prezentację wstępną i pakiet ZIP na P2 (termin przesłania 2026-10-21, 10:00).
+
+**Decyzje**
+
+- Deck ma 13 slajdów i powstał w czterech kartach zadań (szkielet i styl; wstęp i sposób pracy; prompt i błędy AI; poprawki recenzji i grupa recenzji AI), każda w cyklu latex-assistant, weryfikacja orkiestratora, commit.
+- Ocena recenzji AI trafia na slajd wyłącznie przez plik danych `slides/preliminary/review.tex`, zapisywany przez orkiestratora dosłownie z wyniku recenzji. `results/*.tex` pozostaje zarezerwowane dla `export.py`.
+- Recenzja prezentacji jest iteracyjna: iteracja 1 (7/10) na decku 10-slajdowym, iteracja 2 (8/10) i iteracja 3, końcowa (9/10) na decku 13-slajdowym. Wszystkie iteracje i rozstrzygnięcia znalezisk są w warstwie „Zadania agentów".
+- Skompilowany `main.pdf` commitowany jest wyłącznie w wersji finalnej decku.
+- Styl współdzielony `slides/common/mnstyle.sty` ładuje `booktabs` i `fancyvrb`; ramki wyrównane do góry (opcja `t`), slajd tytułowy wyśrodkowany.
+
+**Weryfikacja**
+
+- `make`: zero błędów, zero boxów overfull/underfull, zero ostrzeżeń LaTeX; `pdffonts`: wszystkie fonty osadzone; `pdfimages -list`: brak rastrów; stopki „1 / 13" … „13 / 13"; zmiana dowolnego źródła wyzwala przebudowę.
+- Test pakietu według briefu 6.4: ZIP rozpakowany do pustego katalogu, `make` przechodzi, treść odtworzonego PDF identyczna z PDF z archiwum, fonty osadzone.
+
+**Ustalenia**
+
+- Rozbieżności dokumentacji do rozstrzygnięcia przez brief: `docs/requirements-code.md` B.5 nie wspomina separatora tysięcy (wynika z `docs/presentation-style.md` 3.3) ani makr `\resOpenQty`/`\resOpenValue` (wymienia przykład `\resOpenPosition`); B.2 opisuje `basic.py` generujący wykresy, co nastąpi w etapie 5.
+- Zalecenie recenzenta do decku końcowego: wektorowy wykres przecięć MACD i SIGNAL we wstępie (jak rys. 1 instrukcji).
+
+**Błędy AI**
+
+- Udokumentowane w warstwie „Zadania agentów" (m.in. skrócony cytat promptu przedstawiony jako dosłowny, z korektą wpisu dziennika).
+
+**Punkt kontrolny CP3**
+
+- Oczekuje: akceptacja tez slajdów, kontrola PDF w trybie pełnoekranowym, potwierdzenie slajdów o błędach AI (`PROJECT_BRIEF.md` 6.3).
+
+**Wynik**
+
+- Artefakty: `slides/common/mnstyle.sty`, `slides/preliminary/` (`main.tex`, `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, `review.tex`, `Makefile`, `main.pdf`), pakiet `zambrzycki_projekt1_wstepna.zip`.
+- Zawartość pakietu (10 plików, struktura katalogów zachowana): `slides/common/mnstyle.sty`; `slides/preliminary/Makefile`, `main.tex`, `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, `review.tex`, `main.pdf`; `results/basic.tex`.
+- Commity kroków: `0f9c38e`, `a33a288`, `981b220`, `365374a`, `cfb0c0b`, `a02976d`, `cd1d1f4`.
+- Status: wstrzymano na punkcie kontrolnym CP3 (tezy slajdów, kontrola pełnoekranowa, slajdy o błędach AI).
