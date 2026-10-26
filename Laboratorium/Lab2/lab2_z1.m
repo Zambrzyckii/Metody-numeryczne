@@ -24,10 +24,10 @@ function [b, x, c, z1, z2, z5] = lab2_z1()
 xmin = -2;
 xmax = 1;
 % Liczba punktów: całkowita od 200 do 1000.
-nx = 200;
+nx = 420;
 % UZUPEŁNIJ: wybierz rzeczywiste b z przedziału [-1.5, 1.5].
 % Początkowe 2 jest poza zakresem i trzeba je zmienić.
-b = 2;
+b = 1;
 % Dodatnia, skończona granica widoku. Nie zmienia wyników obliczeń.
 plot_limit = 10;
 
@@ -35,28 +35,30 @@ plot_limit = 10;
 % UZUPEŁNIJ: utwórz nx równomiernych współrzędnych od xmin do xmax.
 % Możesz skorzystać z linspace, które uwzględnia oba końce przedziału.
 % https://www.mathworks.com/help/matlab/ref/double.linspace.html
-x = [];
+x = linspace(xmin, xmax, nx);
 % UZUPEŁNIJ: połącz części rzeczywiste x ze wspólną częścią urojoną b.
 % Użyj jednostki urojonej 1i albo funkcji complex.
 % https://www.mathworks.com/help/matlab/ref/complex.html
-c = [];
+c = complex(x, b);
 % UZUPEŁNIJ: przygotuj wartości początkowe dla wszystkich punktów c.
 % Pomocne są zeros oraz size do zachowania rozmiaru wektora.
 % https://www.mathworks.com/help/matlab/ref/zeros.html
 % https://www.mathworks.com/help/matlab/ref/double.size.html
-z0 = [];
+z0 = zeros(size(x));
 
 %% Wartości dla wymaganych numerów kroków.
 % UZUPEŁNIJ: oblicz z1 zgodnie z rekurencją podaną w opisie.
 % Operator .^ wykonuje potęgowanie każdego elementu wektora osobno.
 % https://www.mathworks.com/help/matlab/ref/double.power.html
-z1 = [];
+z1 = z0.^2 + c;
 % UZUPEŁNIJ: wyznacz z2 na podstawie poprzedniego kroku i tego samego c.
 % Możesz ponownie użyć operatorów .^ oraz +.
-z2 = [];
+z2 = z1.^2 + c;
+z3 = z2.^2 + c;
+z4 = z3.^2 + c;
 % UZUPEŁNIJ: wyznacz z5, uwzględniając również trzeci i czwarty krok.
 % Możesz zachować wyniki pośrednie w zmiennych z3 i z4.
-z5 = [];
+z5 = z4.^2 + c;
 %===============================================================================
 
 %% Wykres modułów wyników z kodu startowego.
