@@ -38,13 +38,13 @@ p(1).N = 80;
 % Kod startowy symetrycznie poszerzy krótszy bok do proporcji 1:1.
 % Wymagany udział zer w K: od 10% do 90%, z końcami włącznie.
 % ZMIEŃ: co najmniej -2 i mniej niż p(2).x_max.
-p(2).x_min = [];
+p(2).x_min = -0.08564456432056454;
 % ZMIEŃ: więcej niż p(2).x_min i co najwyżej 1.
-p(2).x_max = [];
+p(2).x_max = -0.085643681798233437;
 % ZMIEŃ: co najmniej -1.5 i mniej niż p(2).y_max.
-p(2).y_min = [];
+p(2).y_min = 0.8753943460402398;
 % ZMIEŃ: więcej niż p(2).y_min i co najwyżej 1.5.
-p(2).y_max = [];
+p(2).y_max = 0.87539522856257102;
 % Siatka zadania: 240*scale + 1 punktów. Nie zmieniaj wzoru.
 p(2).nx = 240*scale + 1;
 % Siatka zadania: 200*scale + 1 punktów. Nie zmieniaj wzoru.
@@ -167,11 +167,10 @@ function [x, y, X, Y, C, F, K, B] = calculate_mandelbrot_fractal( ...
 % https://www.mathworks.com/help/matlab/ref/double.linspace.html
 % https://www.mathworks.com/help/matlab/ref/meshgrid.html
 % https://www.mathworks.com/help/matlab/ref/complex.html
-x = [];
-y = [];
-X = [];
-Y = [];
-C = [];
+x = linspace(x_min, x_max, nx);
+y = linspace(y_min, y_max, ny);
+[X, Y] = meshgrid(x, y);
+C = complex(X, Y);
 
 %% UZUPEŁNIJ: przenieś algorytm czasu ucieczki z zadania 2 na macierze.
 % 1. Przygotuj początkowe wartości F, czasy K i maskę aktywności B.
@@ -184,9 +183,16 @@ C = [];
 % https://www.mathworks.com/help/matlab/ref/true.html
 % https://www.mathworks.com/help/matlab/ref/double.size.html
 % https://www.mathworks.com/help/matlab/ref/double.power.html
-F = [];
-K = [];
-B = [];
+F = zeros(size(C));
+K = zeros(size(C));
+B = true(size(C));
+
+for k = 1:N
+    F(B) = F(B).^2 + C(B);
+    escaped = B & (abs(F) > 2);
+    K(escaped) = k;
+    B(escaped) = false;
+end
 %===============================================================================
 end
 
