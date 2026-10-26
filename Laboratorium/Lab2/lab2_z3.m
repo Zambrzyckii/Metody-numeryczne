@@ -27,17 +27,16 @@ function [p, c, z_history, k_escape] = lab2_z3()
 % Początkowe c_re = 2 i c_im = 2 są poza zakresem. Zmień obie wartości.
 % Gdy nie ma takiego punktu, zmień b lub N i ponów zadanie 2.
 p = struct();
-% UZUPEŁNIJ: część rzeczywista wybranego punktu, od -2 do 1.
-p.c_re = 2;
+p.c_re = -1.3399999999999999;
+p.c_im = 0.10000000000000001;
 % UZUPEŁNIJ: część urojona tego samego punktu, od -1.5 do 1.5.
-p.c_im = 2;
 % Całkowity limit iteracji: od 11 do 200.
 p.N = 100;
 
 %% 2. Parametr zespolony i miejsce na historię.
 % UZUPEŁNIJ: połącz p.c_re i p.c_im w jeden skalar zespolony.
 % https://www.mathworks.com/help/matlab/ref/complex.html
-c = [];
+c = complex(p.c_re, p.c_im);
 % Kod startowy przydziela pamięć przed pętlą. Indeks 1 przechowuje z_0.
 % https://www.mathworks.com/help/matlab/ref/zeros.html
 z = 0;
@@ -54,6 +53,12 @@ for k = 1:p.N
     % Zapisz czas ucieczki i zakończ pętlę przez break.
     % https://www.mathworks.com/help/matlab/ref/break.html
     % Moduł równy 2 nie spełnia kryterium wykrycia ucieczki.
+    z = z.^2 + c;
+    z_history(k + 1) = z;
+    if abs(z) > 2
+        k_escape = k;
+        break;
+    end
 end
 
 %===============================================================================

@@ -75,7 +75,7 @@ end
 % https://www.mathworks.com/help/matlab/ref/fprintf.html
 % Wybierz point_index od 1 do numel(c).
 % Do zadania 3 wymagane jest k_escape(point_index) > 10.
-point_index = 1;
+point_index = 67;
 print_point = 0;
 if print_point == 1
     % Sprawdź, czy wskazany element c istnieje.
