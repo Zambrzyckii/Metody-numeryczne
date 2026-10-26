@@ -36,18 +36,17 @@ p.ny = 101;     % Całkowita liczba wierszy: od 5 do 300.
 %% 2. Współrzędne i siatka.
 % UZUPEŁNIJ: przygotuj wiersze współrzędnych x i y przez linspace.
 % https://www.mathworks.com/help/matlab/ref/double.linspace.html
-x = [];
-y = [];
+x = linspace(p.x_min, p.x_max, p.nx);
+y = linspace(p.y_min, p.y_max, p.ny);
 % UZUPEŁNIJ: zastąp dwa poniższe przypisania wywołaniem meshgrid.
 % Liczba wierszy macierzy ma wynosić p.ny, a liczba kolumn p.nx.
 % https://www.mathworks.com/help/matlab/ref/meshgrid.html
-X = [];
-Y = [];
+[X, Y] = meshgrid(x, y);
 
 %% 3. Parametry zespolone i trzeci krok rekurencji.
 % UZUPEŁNIJ: zbuduj C z części rzeczywistej X i części urojonej Y.
 % https://www.mathworks.com/help/matlab/ref/complex.html
-C = [];
+C = complex(X, Y);
 % UZUPEŁNIJ: dla każdego elementu C wyznacz z_3, zaczynając od z_0 = 0.
 % Wykonaj dokładnie trzy kroki, również gdy moduł wcześniej przekroczy 2.
 % Użyj potęgowania element po elemencie: .^ zamiast potęgowania macierzy ^.
@@ -55,7 +54,10 @@ C = [];
 % https://www.mathworks.com/help/matlab/ref/zeros.html
 % https://www.mathworks.com/help/matlab/ref/double.size.html
 % https://www.mathworks.com/help/matlab/ref/double.power.html
-z3 = [];
+z0 = zeros(size(C))
+z1 = z0.^2 + C;
+z2 = z1.^2 + C;
+z3 = z2.^2 + C;
 
 % Możesz zmienić jet(64) (Jet, 64 kolory), np. na:
 % parula(64) - Parula, 64 kolory,
