@@ -35,18 +35,18 @@ p.N = 100;       % Całkowity limit iteracji: od 10 do 200.
 % UZUPEŁNIJ: przenieś własne przygotowanie x i c z zadania 1.
 % https://www.mathworks.com/help/matlab/ref/double.linspace.html
 % https://www.mathworks.com/help/matlab/ref/complex.html
-x = [];
-c = [];
+x = linspace(p.x_min, p.x_max, p.nx);
+c = complex(x, p.b);
 % UZUPEŁNIJ: przygotuj wartości początkowe orbit i k_escape dla całej linii.
 % https://www.mathworks.com/help/matlab/ref/zeros.html
 % https://www.mathworks.com/help/matlab/ref/double.size.html
-z = [];
-k_escape = [];
+z = zeros(size(x));
+k_escape = zeros(size(x));
 % UZUPEŁNIJ: utwórz maskę logiczną wskazującą początkowo wszystkie punkty.
 % active ma ten sam rozmiar co c. Możesz skorzystać z true i size.
 % https://www.mathworks.com/help/matlab/ref/true.html
 % https://www.mathworks.com/help/matlab/ref/double.size.html
-active = [];
+active = true(size(x));
 
 %% 3. Czasy ucieczki dla wielu orbit.
 % UZUPEŁNIJ wnętrze pętli, rozwijając własną iterację z zadania 1.
@@ -58,6 +58,10 @@ for k = 1:p.N
     % Wyłącz te punkty z dalszych zmian, zachowując wartości z i k_escape.
     % Możesz zakończyć pętlę wcześniej, gdy nie ma aktywnych punktów.
     % https://www.mathworks.com/help/matlab/ref/break.html
+    z(active) = z(active).^2 + c(active);
+    escaped = active & (abs(z) > 2);
+    k_escape(escaped) = k;
+    active(escaped) = false;
 end
 %===============================================================================
 
