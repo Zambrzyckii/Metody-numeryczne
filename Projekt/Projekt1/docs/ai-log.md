@@ -1507,3 +1507,59 @@ Fix round (code-reviewer CHANGES REQUIRED): D1 marks executions AND their signal
 - Raport o błędach AI: błąd specyfikacji D1, wykryty przez recenzenta AI na podstawie tekstu instrukcji.
 
 Status: oczekuje na akceptację użytkownika (CP5).
+
+### 2026-11-02 · coder · Experiment charts X1-X4 and readme experiment section
+
+**Karta zadania**
+
+<details>
+<summary>Karta zadania (etap 6b) i rundy poprawek, w skrócie</summary>
+
+```markdown
+## Task card: Experiment charts X1-X4 and readme experiment section
+Goal: `python src/experiment.py` additionally writes the vector charts `charts/X1.pdf`, `charts/X2.pdf`, `charts/X3.pdf`, `charts/X4.pdf`, and `readme.md` lists the command for each of them.
+  - X1 (144 × 62 mm): ΔR per instrument as sorted bars, zero line, mean and median lines with values in the legend.
+  - X2 (144 × 62 mm): step histograms of closed-trade r, all basic trades vs blocked trades, normalised to % of trades, edge bins stated.
+  - X3/X4 (144 × 68 mm, two panels): help and hurt examples, price with the blocked trade, RSI(14) with the threshold 70.
+  - Plotting in a new module `src/experiment_charts.py`, called from `experiment.main()`; deterministic output; results/experiment.* byte-identical.
+  - readme: one command per chart; accurate font sentence.
+Fix round 1 (code-reviewer CHANGES REQUIRED): explain the experiment in readme; X3/X4 stand alone; remove duplicated helpers (public helpers in charts.py, A1-E2 byte-identical); config.D1_MARGIN; chart-side number formatter; titles name the quantity, RSI [pkt]; LaTeX minus (\textminus{}) in .tex macros only.
+Fix round 2: drop the X3/X4 legend note (panels shrank to about 8-9 mm); the slide text carries the instrument-level effect and the criterion.
+```
+
+</details>
+
+**Rezultat**
+
+- Nowy `src/experiment_charts.py`, wykresy `charts/X1.pdf`-`X4.pdf`, sekcja eksperymentu w `readme.md`, publiczne pomocnicze funkcje rysowania w `src/charts.py`, prawdziwy minus w makrach LaTeX-a (`src/export.py`). Commit `fdd18c0`.
+- Wykresy A1-E2 i pliki JSON bez zmian co do bajtu. W `results/*.tex` zmieniły się wyłącznie znaki minus w pięciu makrach.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Weryfikacja orkiestratora: oba programy uruchomione z `-W error` bez ostrzeżeń, dwa pełne przebiegi identyczne co do bajtu, fonty osadzone, brak rastrów, `verify_ema.py` bez zmian. Orkiestrator obejrzał X1-X4 w PNG. Test `\textminus` z fontami prezentacji wykonany na osobnym dokumencie (minus U+2212, font osadzony).
+- Werdykt code-reviewera: CHANGES REQUIRED (jedno znalezisko major: readme nie opisywało działania eksperymentu; dwa minor; trzy nity). Wszystkie poprawione w rundzie 1. Notka z wynikiem spółki na X3/X4 zmniejszyła panele, więc w rundzie 2 przeniesiono ją do tekstu slajdu, co recenzent dopuszczał jako równoważne.
+
+**Błędy AI**
+
+- **Znalezisko:** Agent coder podał w raporcie sumę kontrolną SHA-256 wykresu X4, której pierwsze 22 znaki były prawdziwe, a pozostałe wymyślone. W tym samym raporcie przyznał, że nie potrafi jej potwierdzić.
+  - Waga: minor.
+  - Wymaganie: rzetelne raporty agentów (brief 2.3, „Honest reports").
+  - Sposób wykrycia: orkiestrator przed commitem przeliczył `sha256sum charts/X4.pdf` (prawdziwy skrót zaczyna się od `3ba2e55e73421b8040b96c5f336f…`).
+  - Poprawka: w dzienniku i commitach używane są wyłącznie skróty policzone przez orkiestratora.
+- **Znalezisko:** Pierwsza wersja `readme.md` nie wyjaśniała, co robi kod części eksperymentalnej, choć wymieniała jej wykresy.
+  - Waga: major.
+  - Wymaganie: `Projekt_1.pdf` s. 9, 6.3 („wyjaśnić funkcjonalność kodu").
+  - Sposób wykrycia: code-reviewer porównał readme z `src/rsi.py` i `src/experiment.py`.
+  - Poprawka: akapit o regule filtra, wspólnej symulacji i wyborze przykładów.
+
+**Kandydat na slajd**
+
+- Raport o błędach AI: zmyślona suma kontrolna wykryta przez ponowne przeliczenie.
+
+Status: oczekuje na akceptację użytkownika (CP4, CP5).
+
+### Etap 12 · Uzupełnienie (2026-11-02, 19:05)
+
+- Etapy 5 i 6 zakończone: commity `6a26a68` (wykresy A1-E2), `1036cb8` (obliczenia eksperymentu), `fdd18c0` (wykresy X1-X4 i readme), wpisy dziennika `4d6299b`, `6f0526b`.
+- Etap 7 rozpoczęty: karta prezentacji końcowej przekazana agentowi latex-assistant. Tytuły slajdów to szkice tez orkiestratora, które użytkownik zatwierdza lub przepisuje w CP5. Użytkownik zdecydował, że omówienie kodu i tez nastąpi na końcu, po zbudowaniu całego produktu.
+- Kompilacja prezentacji czeka na instalację `texlive-pictures`.
