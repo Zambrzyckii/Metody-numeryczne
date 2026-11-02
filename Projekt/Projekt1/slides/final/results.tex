@@ -11,11 +11,11 @@
 \end{frame}
 
 \begin{frame}[b]
-  \frametitle{MACD waha się wokół zera, a jego skala rośnie razem z ceną}
+  \frametitle{MACD jest przeważnie dodatni, a jego skala rośnie razem z ceną}
   \includegraphics{B1.pdf}\par
   \vskip1mm
-  MACD to różnica dwóch EMA, więc jest w PLN, a jego skala zależy od poziomu
-  ceny. Przecięcia ceny z liniami MACD nic nie znaczą.
+  MACD to różnica dwóch EMA w PLN, więc jego skala zależy od ceny, a znak od
+  trendu. Przecięcia ceny z liniami MACD nic nie znaczą.
 \end{frame}
 
 \begin{frame}[b]
@@ -38,13 +38,13 @@
   \frametitle{Strategia MACD dała \resReturnPct{}\,\%, a trzymanie akcji
     \resBuyHoldReturnPct{}\,\%}
   \includegraphics{E1_E2.pdf}\par
-  Wykonano wszystkie \resExecutedSignalCount{} sygnałów, pozycja otwarta przez
+  Wykonano \resExecutedSignalCount{} z \resSignalCount{} sygnałów, pozycja otwarta przez
   \resTimeInMarketPct{}\,\% sesji.
 \end{frame}
 
 \begin{frame}
-  \frametitle{W silnym trendzie wzrostowym MACD zarabia, ale oddaje większość
-    wzrostu}
+  \frametitle{Na PKO BP strategia MACD zarobiła, ale ominęła większość wzrostu,
+    bo była w rynku przez \resTimeInMarketPct{}\,\% sesji}
   \renewcommand{\arraystretch}{1.2}
   \begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}rl@{\hspace{6mm}}r@{}}
     \toprule
@@ -59,7 +59,7 @@
     Stopa zwrotu R & \resReturnPct{}\,\%
       & Największy zysk & \resMaxGainPct{}\,\% \\
     Transakcje zyskowne & \resProfitableCount{} z \resClosedCount{}
-      & Pozycja otwarta na końcu & nie \\
+      & Wartość otwartej pozycji & \resOpenValue \\
     Kup i trzymaj & \resBuyHoldReturnPct{}\,\%
       & Czas w rynku & \resTimeInMarketPct{}\,\% \\
     \bottomrule

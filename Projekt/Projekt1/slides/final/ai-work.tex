@@ -3,8 +3,7 @@
 % The prompt excerpt quotes the real stage 6a task card (ai-log 2026-11-02).
 
 \begin{frame}
-  \frametitle{Pracę prowadził orkiestrator, który delegował zadania czterem
-    rolom agentów}
+  \frametitle{Orkiestrator delegował zadania czterem rolom agentów}
   \begin{itemize}
     \item Claude Code: sesja główna jest orkiestratorem i deleguje zadania
       agentom.
@@ -23,18 +22,17 @@
   \begin{itemize}
     \item Etap 5 (wykresy części podstawowej) i etap 6a (obliczenia
       eksperymentu) ruszyły w tym samym czasie.
-    \item Każda karta wymieniała pliki do zmiany i pliki, których nie wolno
-      ruszać.
-    \item Wspólne moduły były tylko importowane, żaden nie był edytowany
-      przez obu agentów.
-    \item Wynik: brak konfliktów i osobna recenzja code-reviewera dla każdej
-      karty.
+    \item Karta etapu 6a wymieniała jedyne pliki do zmiany, czyli nowe moduły
+      eksperymentu i jego wyniki.
+    \item Wspólne moduły zmieniał tylko agent etapu 5, a agent etapu 6a je
+      wyłącznie importował.
+    \item Wynik: commity obu etapów nie mają wspólnych plików, a każdą kartę
+      sprawdził osobno code-reviewer.
   \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]
-  \frametitle{Kryterium akceptacji podane liczbami nie zostawia agentowi miejsca
-    na interpretację}
+  \frametitle{Kryterium w liczbach nie zostawia agentowi pola do interpretacji}
 \begin{Verbatim}[commandchars=\\\{\},fontsize=\footnotesize]
 [...]
 Acceptance reference - an independent implementation written by the
@@ -47,6 +45,5 @@ and report it instead of adjusting the spec.
 \end{Verbatim}
   \vskip1mm
   Wynik: agent odtworzył wszystkie wartości dokładnie.\\
-  Ocena: niezależna sonda i liczby w karcie pozwalają odebrać pracę bez
-  uznaniowości.
+  Ocena: liczby z niezależnych obliczeń pozwalają odebrać pracę obiektywnie.
 \end{frame}

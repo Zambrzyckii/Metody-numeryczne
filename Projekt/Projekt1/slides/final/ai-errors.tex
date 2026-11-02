@@ -2,7 +2,7 @@
 % one error per slide.
 
 \begin{frame}
-  \frametitle{AI źle odczytało instrukcję i zaznaczyło sygnały na złym wykresie}
+  \frametitle{AI źle odczytało instrukcję i zaznaczyło sygnały na złej krzywej}
   \begin{description}
     \item[Co się stało] w karcie zadania AI zapisało, że sygnały na wykresie
       transakcji mają leżeć na krzywej MACD. Instrukcja wymaga zaznaczenia na
@@ -12,7 +12,8 @@
       się w jeden.
     \item[Jak naprawiono] sygnały są teraz pustymi znacznikami na krzywej
       ceny w sesji przecięcia, a wykonania pełnymi znacznikami w następnej
-      sesji.
+      sesji. Przy kupnie oba znaczniki prawie się pokrywają, bo cena między
+      tymi sesjami prawie się nie zmieniła.
   \end{description}
 \end{frame}
 
@@ -20,9 +21,9 @@
   \frametitle{AI wybrało przykład, który przeczył wynikowi całej spółki}
   \begin{description}
     \item[Co się stało] reguła wyboru przykładu lokalnego, zapisana przez AI
-      w karcie zadania, dała przykład opisany jako „filtr pomógł'', choć
-      zablokowana transakcja była stratna, a cała spółka na filtrze straciła.
-      Przykład przeczył wnioskowi dla spółki.
+      w karcie zadania, dała przykład „filtr pomógł'', bo zablokowana
+      transakcja była stratna. Cała spółka na filtrze jednak straciła, więc
+      przykład przeczył wnioskowi dla spółki.
     \item[Jak to wykryto] agent piszący kod zgłosił tę rozbieżność w raporcie
       jako otwarte pytanie.
     \item[Jak naprawiono] przykład wybiera się tylko wśród spółek z jedną
