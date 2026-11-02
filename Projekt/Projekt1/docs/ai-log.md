@@ -1325,3 +1325,52 @@ Status: oczekuje na akceptację.
 - Zawartość pakietu (9 plików, struktura katalogów zachowana): `slides/common/mnstyle.sty`; `slides/preliminary/Makefile`, `main.tex`, `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, `review.tex`, `main.pdf`. Pakiet przetestowany według briefu 6.4 (rozpakowanie, `make`, treść PDF identyczna).
 - Commity kroków: `0f9c38e`, `a33a288`, `981b220`, `365374a`, `cfb0c0b`, `a02976d`, `cd1d1f4`, `dcf8803`, `4b0d896`, `05615cf`, `65cfec5`, `6395e85`.
 - Status: wstrzymano na punkcie kontrolnym CP3 (druga runda: tezy slajdów, kontrola pełnoekranowa, slajdy o błędach AI).
+
+### Etap 12 · Wznowienie pracy przed P3 (2026-11-02)
+
+**Polecenia**
+
+- Przypomnieć plan i kolejne iteracje projektu po przerwie.
+- Kontynuować etapy 5-7 samodzielnie. Omówienie kodu i tez przenieść na sam koniec, żeby jak najszybciej mieć gotowy produkt.
+
+**Ustalenia**
+
+- Najbliższe zajęcia 2026-11-04 to P3 grupy `pro_gr3a` (zapis do grup w eNauczanie), nie P2.
+- Prezentację wstępną przesłano do zadania P1W 2026-10-20 o 21:37 (stan zadania w eNauczanie), co zamyka etap 4. Użytkownik nie wygłaszał prezentacji na P2, więc na P3 może zostać wybrany do wystąpienia.
+- `harmonogram_2026_v3.pdf` z 2026-11-01 zmienia tylko terminy laboratorium grupy 6. Terminy projektu są bez zmian.
+- Rozbieżność: brief podawał dla P2 godzinę 11:00, a harmonogram podaje 11:15. Termin ZIP-ów na P3 ustalono na 10:00, z zapasem względem wymaganych 10:15.
+- Repozytorium sklonowano ponownie 2026-10-26, więc brakowało katalogów spoza gita, czyli `materials/` i `.venv/`. PDF-y prowadzącego skopiowano z pobranych plików, `dane_pro1.zip` pobrano z eNauczanie i rozpakowano do `materials/dane_pro1/` (117 plików CSV, zgodnie z briefem). Środowisko zainstalował użytkownik.
+- Kontrola stanu. `python src/basic.py` odtwarza `results/basic.*` co do bajtu (sha256), a `verify_ema.py` daje różnicę 0 dla N = 12, 26, 9.
+
+**Decyzje**
+
+- Kierunek eksperymentu to filtr RSI(14) na sygnałach kupna. Sygnał kupna MACD wykonuje się tylko, gdy RSI w próbce sygnału jest mniejszy niż 70. Sprzedaż jest bez zmian. To założenie orkiestratora, CP4 czeka na akceptację użytkownika.
+- Przed wyborem orkiestrator sprawdził cztery warianty na całym zbiorze niezależnym skryptem spoza repozytorium. Wybrano wariant najprostszy do interpretacji i zgodny z klasycznym progiem wykupienia [1, rozdz. 10], a nie wariant o najlepszym wyniku.
+
+  | Wariant | Średnia zmiana R [pp] | Mediana [pp] | Pomogło | Zaszkodziło | Bez zmian |
+  |---|---|---|---|---|---|
+  | kupno tylko przy RSI < 70 (wybrany) | -4,16 | 0,00 | 49 | 43 | 25 |
+  | kupno przy RSI < 70, sprzedaż przy RSI > 30 | -4,11 | 0,00 | 58 | 48 | 11 |
+  | kupno tylko przy RSI > 50 | -9,75 | -2,68 | 53 | 64 | 0 |
+  | kupno przy RSI > 50, sprzedaż przy RSI < 50 | +1,51 | +0,84 | 59 | 58 | 0 |
+
+- Transakcja D1 to zamknięta transakcja o największym r. Przykład lokalny eksperymentu to transakcja zablokowana przez filtr o najniższym r oraz o najwyższym r, czyli przypadek pogorszenia.
+- Pary wykresów C1/C2 i E1/E2 powstają jako jedna figura 144 × 68 mm z dwoma panelami.
+- Etapy 5 i 6a delegowano równolegle, z rozłącznymi zbiorami plików. Wykresy eksperymentu (6b) powstaną po `style.py` z etapu 5.
+- Ze względu na termin każda karta ma jedną rundę `code-reviewer`, a recenzja prezentacji najwyżej dwie iteracje. Znaleziska nit odkłada się z adnotacją.
+- Decyzje zapisano w briefie v1.2 i w `docs/`, commit `5f1c46c`.
+
+**Błędy AI**
+
+- **Znalezisko:** Orkiestrator przyjął w rozmowie z 2026-10-07, że użytkownik jest w grupie projektowej 3b, i na tej podstawie podał błędne terminy P2 (28.10) i P3 (9.11).
+  - Waga: major.
+  - Wymaganie: terminowość oddania i wystąpienia (`zasady` s. 3, p. 4.1).
+  - Sposób wykrycia: porównanie daty P2 w `CLAUDE.md` projektu (21.10) z harmonogramem i odczyt zapisu do grup w eNauczanie (`pro_gr3a`).
+  - Poprawka: terminy skorygowano, P3 to 2026-11-04.
+- **Znalezisko:** Orkiestrator zaproponował listę pakietów TeX Live bez `texlive-pictures`, który dostarcza pakiet `pgf` wymagany przez Beamera. Żadna prezentacja nie kompilowała się na nowym środowisku.
+  - Waga: major.
+  - Wymaganie: PDF zbudowany przez kompilację LaTeX-a zdefiniowaną w Makefile (`zasady` s. 2).
+  - Sposób wykrycia: kompilacja prezentacji wstępnej w katalogu tymczasowym zakończyła się błędem „File `pgfmath.sty' not found".
+  - Poprawka: instalacja `texlive-pictures` przez użytkownika.
+
+Status: w toku.
