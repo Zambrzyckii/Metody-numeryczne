@@ -1563,3 +1563,61 @@ Status: oczekuje na akceptację użytkownika (CP4, CP5).
 - Etapy 5 i 6 zakończone: commity `6a26a68` (wykresy A1-E2), `1036cb8` (obliczenia eksperymentu), `fdd18c0` (wykresy X1-X4 i readme), wpisy dziennika `4d6299b`, `6f0526b`.
 - Etap 7 rozpoczęty: karta prezentacji końcowej przekazana agentowi latex-assistant. Tytuły slajdów to szkice tez orkiestratora, które użytkownik zatwierdza lub przepisuje w CP5. Użytkownik zdecydował, że omówienie kodu i tez nastąpi na końcu, po zbudowaniu całego produktu.
 - Kompilacja prezentacji czeka na instalację `texlive-pictures`.
+
+### 2026-11-02 · latex-assistant · Final deck sources
+
+**Karta zadania**
+
+<details>
+<summary>Karta zadania (etap 7), w skrócie</summary>
+
+```markdown
+## Task card: Final deck (prezentacja końcowa)
+Goal: `slides/final/` holds a Beamer deck (main.tex plus content files, Makefile, review.tex) that compiles with `make` into `slides/final/main.pdf`: introduction, basic part (A1-F), experimental part (X1-X4), AI collaboration, AI-errors report and AI review.
+  - Reuse: mnstyle.sty unchanged, Makefile copied from the preliminary deck, intro.tex copied unchanged, charts at native size, numbers only from results/*.tex macros.
+  - Slide plan of 27 frames with draft theses as titles (the user approves or rewrites them at CP5): A1, B1, C1_C2, D1, E1_E2, table F, RSI rule, X1, comparison table, X2, X3, X4, conclusion, two AI-work slides, a prompt slide quoting the stage-6a acceptance reference, three AI-error slides, three AI-review slides.
+  - If pgf is still missing: write all sources, check macros and paths, report "compile pending".
+```
+
+</details>
+
+**Rezultat**
+
+- Nowy katalog `slides/final/` (9 plików), commit `2a7ec61`. Talia ma 28 slajdów, o jeden więcej niż w planie. Agent dodał slajd z kryterium wyboru przykładów lokalnych, bo to uzasadnienie nie mieściło się pod wykresami X3 i X4.
+- Kompilacja nie była możliwa, bo w systemie nadal brakuje pakietu `pgf` (`texlive-pictures`). Agent sprawdził bez kompilacji, że każde z 65 użytych makr istnieje w `results/*.tex` lub `review.tex`, a dziewięć wykresów istnieje w `charts/`. Wysokość ramek oszacował na osobnym dokumencie testowym w katalogu tymczasowym.
+- Agent zgłosił odstępstwa od karty. Tytuły B1, C1_C2, D1, E1_E2, X1, X3 i X4 skrócono do jednego wiersza, w B1 i C1_C2 kosztem części tezy. Pod wykresami 144 × 68 mm został jeden wiersz tekstu. Tabela F ma dwa dodatkowe wiersze („Kup i trzymaj", „Czas w rynku") jako dowód tezy z tytułu. Wyjaśnienie we wniosku eksperymentu ma etykietę „(hipoteza)". W cytacie karty znaki ΔR i minus zapisano w ASCII, bo font maszynowy ich nie ma.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Weryfikacja orkiestratora bez kompilacji. Orkiestrator przeczytał wszystkie źródła i porównał tezy z danymi. „Bez zmian" w 25 spółkach to dokładnie spółki bez zablokowanych zakupów. Zablokowane transakcje były stratne w 53,28 % przypadków wobec 59,27 % wszystkich. Średnia największa strata zmieniła się z 14,60 % na 14,55 %. Wszystkie 68 sygnałów wykonano, a pozycja na końcu jest zamknięta. Wykresy A1 i D1 obejrzano w PNG pod kątem tez z tytułów. Cytat na slajdzie promptu zgadza się z kartą etapu 6a w tym dzienniku.
+- Orkiestrator poprawił tekst trzech miejsc. Lata „2021-2024" usunięto z tytułu i z zakresu wniosku eksperymentu, bo były liczbą wpisaną ręcznie. Niezdefiniowane na slajdach „$d = 1$" zastąpiono słowami „wykonanie w następnej sesji". Średniki i dwukropki w środku zdań na slajdach recenzji AI zamieniono na osobne zdania.
+- Po instalacji `pgf` zostają przegląd każdej strony (szczególnie dziewięciu slajdów z wykresami, gdzie zapas wysokości wynosi około 2 mm), `pdffonts`, `pdfimages -list`, numeracja n/N oraz recenzja prezentacji.
+- Talia ma 28 slajdów, więcej niż orientacyjne 20-25 z `docs/presentation-style.md` (długość prezentacji). Decyzja należy do użytkownika w CP5.
+
+**Błędy AI**
+
+- **Znalezisko:** Karta etapu 7 napisana przez orkiestratora kazała umieścić w tytule i w zakresie wniosku eksperymentu lata „2021-2024", czyli liczby wpisane ręcznie.
+  - Waga: minor.
+  - Wymaganie: zasada liczb w `CLAUDE.md` projektu (żadna liczba na slajdzie nie jest wpisywana ręcznie).
+  - Sposób wykrycia: orkiestrator przeszukał źródła slajdów pod kątem liczb spoza makr.
+  - Poprawka: lata usunięte, zakres wniosku podaje liczbę spółek z makra i jeden badany próg.
+- **Znalezisko:** Agent latex-assistant zapisywał pliki poleceniami powłoki i uruchamiał `pdflatex` poza `make`, choć definicja roli pozwala używać Basha tylko do `make` i odczytu logów.
+  - Waga: minor.
+  - Wymaganie: `.claude/agents/latex-assistant.md`, wiersz 8.
+  - Sposób wykrycia: agent zgłosił to sam w raporcie.
+  - Poprawka: bez skutków w plikach projektu. Orkiestrator przeczytał wszystkie źródła przed commitem.
+
+**Kandydat na slajd**
+
+- Nie dotyczy.
+
+Status: w toku (kompilacja czeka na `texlive-pictures`, tezy czekają na CP5).
+
+### Etap 13 · Realizacja etapu 7, prezentacja końcowa i pakiety P3 (2026-11-02)
+
+**Weryfikacja**
+
+- Pakiet z kodem `zambrzycki_projekt1_kod.zip` zbudowano z białej listy (brief 1.5) skryptem spoza repozytorium. Zawiera 17 plików: `src/` (`basic.py`, `charts.py`, `config.py`, `data.py`, `experiment.py`, `experiment_charts.py`, `export.py`, `macd.py`, `rsi.py`, `simulation.py`, `stats.py`, `style.py`, `verify_ema.py`), `data/pko.csv`, `readme.md`, `zrodla.md`, `requirements.txt`.
+- Test pakietu według briefu 6.4. Archiwum rozpakowano do pustego katalogu i uruchomiono polecenia z `readme.md` (`basic.py`, `verify_ema.py`, `experiment.py` z ustawionym `MN_DATA_DIR`) z opcją `-W error`. Wszystkie 13 plików wynikowych (9 wykresów i 4 pliki wyników) są identyczne co do bajtu z repozytorium.
+
+Status: w toku.
