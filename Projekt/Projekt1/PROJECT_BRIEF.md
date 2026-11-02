@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 1.3 · 2026-11-02 · status: complete.
+Version 1.4 · 2026-11-02 · status: complete.
 
 ---
 
@@ -489,8 +489,9 @@ These are the only allowed layouts.
 ### 3.6 Chart style (matplotlib)
 
 - **Format.** Vector PDF only, with no rasterized artists. Generated at the **exact final size** it will occupy on the slide and included without scaling (`\includegraphics{...}`, no `width=`). Font sizes on charts then equal the sizes set in the code.
-  - Full width: 144 × 62 mm.
-  - Stacked pair: one figure of 144 × 68 mm with two panels and `sharex=True`, saved as `C1_C2.pdf` and `E1_E2.pdf`.
+  - Full width: 144 × 58 mm.
+  - Stacked pair: one figure of 144 × 64 mm with two panels and `sharex=True`, saved as `C1_C2.pdf` and `E1_E2.pdf` (the experiment examples `X3.pdf` and `X4.pdf` use the same size).
+  - The heights leave room for a frame title and two lines of text above the footline on a 16:9 slide (measured on the final deck).
 - **Font.** TeX Gyre Heros, loaded with `matplotlib.font_manager.fontManager.addfont` from the TeX Live path if the file exists. Otherwise fall back silently to the matplotlib default. The lecturer may run the code on Windows, so a missing font file must never crash generation.
 - **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt. Signal markers 6 pt.
 - **Required elements** (`Projekt_1.pdf` p. 7, 4.5):
@@ -854,3 +855,4 @@ Applies to every ZIP:
 | 1.1 | 2026-10-20 | Decision in 1.7: basic-part data window and use of adjusted prices | CP1 passed |
 | 1.2 | 2026-11-02 | P3 date in 1.4 and 1.7; decisions in 1.7: experiment direction (pending CP4), D1 trade, local example; stacked pairs as one figure (3.6); `rsi.py` in 4.2 | Stages 5 and 6 started; P3 is 2026-11-04 |
 | 1.3 | 2026-11-02 | 3.2 price roles for A1, D1, E1, X3, X4; 3.6 addfont API, axis-label colour rule, signal markers in D1/X3/X4 | Code review of stage 5 found docs that disagree with the code and with `Projekt_1.pdf` p. 6 D |
+| 1.4 | 2026-11-02 | 3.6 chart heights 62 to 58 mm (full width) and 68 to 64 mm (stacked pair) | The first build of the final deck overflowed by 2.1 to 2.6 mm on eight chart slides |
