@@ -47,6 +47,8 @@ def write_results(
     for name, text in macros.items():
         if not (name.isascii() and name.isalpha()):
             raise ValueError(f"macro name '{name}' must be letters only")
+        if text[:1] == "-" and text[1:2].isdigit():
+            text = "\\textminus{}" + text[1:]
         lines.append(f"\\newcommand{{\\res{name}}}{{{text}}}")
     tex_path = results_dir / f"{part}.tex"
     tex_path.write_text("\n".join(lines) + "\n", encoding="utf-8")

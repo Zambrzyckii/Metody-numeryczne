@@ -7,6 +7,7 @@ import numpy as np
 
 import config
 import data
+import experiment_charts
 import export
 import macd
 import rsi
@@ -343,6 +344,7 @@ def main() -> int:
         "instruments": records,
     }
     export.write_results("experiment", numbers, build_macros(numbers))
+    chart_files = experiment_charts.write_all(numbers)
 
     agg = numbers["aggregates"]
     print(f"instruments: {agg['count']}")
@@ -361,6 +363,7 @@ def main() -> int:
     )
     print(f"identity failures: {agg['identity_failure_count']}")
     print("written: results/experiment.json, results/experiment.tex")
+    print(f"written: {', '.join(chart_files)}")
     return 0
 
 

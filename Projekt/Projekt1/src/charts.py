@@ -24,13 +24,13 @@ def _macd_label() -> str:
     return f"MACD({n_fast},{n_slow},{n_signal})"
 
 
-def _figure(size_mm: tuple[float, float]) -> Figure:
+def new_figure(size_mm: tuple[float, float]) -> Figure:
     """Figure at the exact final size in millimetres."""
     width, height = size_mm
     return Figure(figsize=(width / 25.4, height / 25.4), layout="constrained")
 
 
-def _date_axis(ax: Axes, first: np.datetime64, last: np.datetime64) -> None:
+def date_axis(ax: Axes, first: np.datetime64, last: np.datetime64) -> None:
     """Date ticks as numbers only, independent of the locale."""
     ax.set_xlim(first, last)
     if (last - first).astype(int) > 366:
@@ -43,7 +43,7 @@ def _date_axis(ax: Axes, first: np.datetime64, last: np.datetime64) -> None:
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%d.%m.%Y"))
 
 
-def _marker_style(side: str, executed: bool = True) -> dict:
+def marker_style(side: str, executed: bool = True) -> dict:
     """Buy up-triangle and sell down-triangle, hollow when not executed."""
     color = style.BUY if side == "buy" else style.SELL
     return {
@@ -91,7 +91,7 @@ def _legend_below(fig: Figure, ax: Axes, extra: list[Axes], ncol: int) -> None:
 def chart_a1(prices: data.PriceSeries) -> Figure:
     """A1 input data, Projekt_1.pdf p. 6, 4.2."""
     dates = prices.dates
-    fig = _figure(style.FULL_SIZE_MM)
+    fig = new_figure(style.FULL_SIZE_MM)
     ax = fig.subplots()
     ax.axvspan(
         dates[0],
@@ -110,7 +110,7 @@ def chart_a1(prices: data.PriceSeries) -> Figure:
     )
     ax.set_ylabel(_price_label())
     ax.set_xlabel("Data")
-    _date_axis(ax, dates[0], dates[-1])
+    date_axis(ax, dates[0], dates[-1])
     style.decimal_comma(ax.yaxis)
     _legend_below(fig, ax, [], 2)
     return fig
@@ -162,13 +162,13 @@ def chart_b1(
 ) -> Figure:
     """B1 price and indicator, Projekt_1.pdf p. 6, 4.2."""
     dates = prices.dates
-    fig = _figure(style.FULL_SIZE_MM)
+    fig = new_figure(style.FULL_SIZE_MM)
     ax = fig.subplots()
     ax_right = _plot_price_and_macd(ax, dates, prices.close, macd, signal)
     ax.set_title(
         _title("B1", f"cena zamknięcia i {_macd_label()}")
     )
-    _date_axis(ax, dates[0], dates[-1])
+    date_axis(ax, dates[0], dates[-1])
     _legend_below(fig, ax, [ax_right], 3)
     return fig
 
@@ -197,7 +197,7 @@ def plot_c1(
         (-1, "sell", "Sygnał sprzedaży"),
     ):
         idx = indices[sides == value]
-        ax.plot(dates[idx], macd[idx], label=label, **_marker_style(side))
+        ax.plot(dates[idx], macd[idx], label=label, **marker_style(side))
     ax.set_title(_title("C1", f"{_macd_label()} i sygnały"))
     ax.set_ylabel(f"MACD, SIGNAL\n[{config.INSTRUMENT_UNIT}]")
     style.decimal_comma(ax.yaxis)
@@ -243,12 +243,12 @@ def chart_c1_c2(
 ) -> Figure:
     """C1 and C2 stacked on one shared time axis, Projekt_1.pdf p. 6."""
     dates = prices.dates
-    fig = _figure(style.PAIR_SIZE_MM)
+    fig = new_figure(style.PAIR_SIZE_MM)
     ax_top, ax_bottom = fig.subplots(2, 1, sharex=True)
     plot_c1(ax_top, dates, macd, signal, signals, result)
     plot_c2(ax_bottom, dates, hist)
     ax_bottom.set_xlabel("Data")
-    _date_axis(ax_bottom, dates[config.START_INDEX], dates[-1])
+    date_axis(ax_bottom, dates[config.START_INDEX], dates[-1])
     return fig
 
 
@@ -264,7 +264,7 @@ def chart_d1(
     last = min(sell.execution_index + config.D1_MARGIN, prices.length - 1)
     window = slice(first, last + 1)
     dates = prices.dates
-    fig = _figure(style.FULL_SIZE_MM)
+    fig = new_figure(style.FULL_SIZE_MM)
     ax = fig.subplots()
     ax_right = _plot_price_and_macd(
         ax, dates[window], prices.close[window], macd[window], signal[window]
@@ -273,7 +273,7 @@ def chart_d1(
         (buy, "buy", "kupna"),
         (sell, "sell", "sprzedaży"),
     ):
-        marker = _marker_style(side)
+        marker = marker_style(side)
         ax.axvline(
             dates[trade.signal_index],
             color=marker["color"],
@@ -284,7 +284,7 @@ def chart_d1(
             [dates[trade.signal_index]],
             [prices.close[trade.signal_index]],
             label=f"Sygnał {word} (sesja przecięcia)",
-            **_marker_style(side, executed=False),
+            **marker_style(side, executed=False),
         )
         ax.plot(
             [dates[trade.execution_index]],
@@ -295,7 +295,7 @@ def chart_d1(
     ax.set_title(
         _title("D1", f"wybrana transakcja, cena i {_macd_label()}")
     )
-    _date_axis(ax, dates[first], dates[last])
+    date_axis(ax, dates[first], dates[last])
     _legend_below(fig, ax, [ax_right], 2)
     return fig
 
@@ -327,7 +327,7 @@ def plot_e1(
             (indices[chosen_side & is_executed], True, done_word),
             (indices[chosen_side & ~is_executed], False, skipped_word),
         ):
-            marker = _marker_style(side, executed=executed)
+            marker = marker_style(side, executed=executed)
             if len(chosen):
                 ax.plot(dates[chosen], prices.close[chosen], **marker)
             handles.append(
@@ -374,12 +374,12 @@ def chart_e1_e2(
 ) -> Figure:
     """E1 and E2 stacked on one shared time axis, Projekt_1.pdf p. 6."""
     dates = prices.dates
-    fig = _figure(style.PAIR_SIZE_MM)
+    fig = new_figure(style.PAIR_SIZE_MM)
     ax_top, ax_bottom = fig.subplots(2, 1, sharex=True)
     plot_e1(ax_top, prices, signals, result)
     plot_e2(ax_bottom, prices, result)
     ax_bottom.set_xlabel("Data")
-    _date_axis(ax_bottom, dates[config.START_INDEX], dates[-1])
+    date_axis(ax_bottom, dates[config.START_INDEX], dates[-1])
     return fig
 
 
