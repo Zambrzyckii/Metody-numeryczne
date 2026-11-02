@@ -28,13 +28,12 @@
 \end{frame}
 
 \begin{frame}[b]
-  \frametitle{Filtr częściej pomagał, ale średnią zaniżyło kilka dużych spadków}
+  \frametitle{Filtr pomagał i szkodził podobnie często,\\ a średnią zaniżyły
+    skrajne spadki}
   \includegraphics{X1.pdf}\par
   \vskip1mm
   Pomógł w \resExpHelpedCount{}, zaszkodził w \resExpHurtCount{}, a
-  w \resExpSameCount{} nic nie zablokował. Średnią \resExpMeanDeltaPp{} pp
-  tworzą głównie spadki poza zakresem osi, mediana to
-  \resExpMedianDeltaPp{} pp.
+  w \resExpSameCount{} nic nie zablokował.
 \end{frame}
 
 \begin{frame}
@@ -54,7 +53,7 @@
       & \resExpModifiedMeanMaxLossPct \\
     \midrule
     Kup i trzymaj, średnia stopa zwrotu [\%]
-      & \multicolumn{2}{r}{\resExpMeanHoldPct} \\
+      & \multicolumn{2}{c@{}}{\resExpMeanHoldPct} \\
     \bottomrule
   \end{tabular*}
   \vskip3mm
@@ -109,15 +108,14 @@
   \frametitle{Próg RSI \resExpRsiThreshold{} nie odróżniał złych wejść MACD
     od dobrych}
   \begin{itemize}
-    \item Obserwacja: zablokowane transakcje wypadły nieco lepiej niż
-      przeciętne (średnia stopa zwrotu \resExpBlockedMeanPct{}\,\% wobec
-      \resExpAllTradesMeanPct{}\,\%), a średnia zmiana R to
-      \resExpMeanDeltaPp{} pp.
+    \item Obserwacja: filtr pomógł w \resExpHelpedCount{} spółkach, zaszkodził
+      w \resExpHurtCount{}, a zablokowane transakcje wypadły nieco lepiej niż
+      przeciętne (\resExpBlockedMeanPct{}\,\% wobec \resExpAllTradesMeanPct{}\,\%).
     \item Wyjaśnienie (hipoteza): RSI od \resExpRsiThreshold{} przy sygnale
       kupna MACD oznacza silny impet, który na rosnącym rynku często trwa
       dalej.
-    \item Wniosek: filtr nie dał systematycznej poprawy. Mediana zmiany R to
-      \resExpMedianDeltaPp{} pp, a średnią obniżyło kilka dużych spadków.
+    \item Wniosek: filtr nie dał systematycznej poprawy, a średnią zmianę R
+      (\resExpMeanDeltaPp{} pp) zaniżyło kilka dużych spadków.
     \item Zakres: \resExpCount{} spółek z dostarczonego zbioru i jeden próg
       RSI(\resExpRsiPeriod{}) w kodzie. Inne warianty sprawdzono tylko wstępnie
       przy wyborze kierunku.
