@@ -202,7 +202,8 @@ Chart IDs X1… are our convention, because the instruction assigns no IDs to ex
 - **Macro names** contain letters only (LaTeX does not allow digits in macro names) and are prefixed `\res`. Examples:
   - `\resInitialCapital`, `\resFinalEquity`, `\resReturnPct`,
   - `\resProfitableCount`, `\resLosingCount`, `\resWinRatePct`,
-  - `\resMaxLossPct`, `\resMaxGainPct`, `\resOpenPosition`,
+  - `\resMaxLossPct`, `\resMaxGainPct`, `\resOpenQty`, `\resOpenValue`,
+  - `\resStartIndex`, `\resFirstSignalIndex` (sample indices from `config.START_INDEX`),
   - `\resTradeBuyDate`, `\resTradeSellDate`, `\resTradeReturnPct` for D1.
 - **Formatting.** Macros hold formatted numbers without units:
   - Polish decimal comma,

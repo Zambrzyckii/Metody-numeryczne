@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 1.6 · 2026-11-02 · status: complete.
+Version 1.7 · 2026-11-02 · status: complete.
 
 ---
 
@@ -634,7 +634,8 @@ Chart IDs X1… are our convention, because the instruction assigns no IDs to ex
 - **Macro names** contain letters only (LaTeX does not allow digits in macro names) and are prefixed `\res`. Examples:
   - `\resInitialCapital`, `\resFinalEquity`, `\resReturnPct`,
   - `\resProfitableCount`, `\resLosingCount`, `\resWinRatePct`,
-  - `\resMaxLossPct`, `\resMaxGainPct`, `\resOpenPosition`,
+  - `\resMaxLossPct`, `\resMaxGainPct`, `\resOpenQty`, `\resOpenValue`,
+  - `\resStartIndex`, `\resFirstSignalIndex` (sample indices from `config.START_INDEX`),
   - `\resTradeBuyDate`, `\resTradeSellDate`, `\resTradeReturnPct` for D1.
 - **Formatting.** Macros hold formatted numbers without units:
   - Polish decimal comma,
@@ -858,3 +859,4 @@ Applies to every ZIP:
 | 1.4 | 2026-11-02 | 3.6 chart heights 62 to 58 mm (full width) and 68 to 64 mm (stacked pair) | The first build of the final deck overflowed by 2.1 to 2.6 mm on eight chart slides |
 | 1.5 | 2026-11-02 | 2.3 and 3.7: verbatim prompt quotes are exempt from the traceable-numbers rule | The final-deck review flagged the numbers inside the quoted acceptance reference |
 | 1.6 | 2026-11-02 | 3.3 plain hyphen instead of the long dash, 3.6 chart-title example | The user's CP3 decision was never carried into the brief; the final-deck review flagged the mismatch |
+| 1.7 | 2026-11-02 | 4.x macro examples: `\resOpenQty`, `\resOpenValue` instead of `\resOpenPosition`, new index macros | The code never exported `\resOpenPosition`; reported at stage 4 and again by the code review of the index macros |
