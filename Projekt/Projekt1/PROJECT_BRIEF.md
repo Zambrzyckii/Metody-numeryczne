@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 1.2 · 2026-11-02 · status: complete.
+Version 1.3 · 2026-11-02 · status: complete.
 
 ---
 
@@ -412,7 +412,7 @@ Colours are taken from the lecturer's own materials, measured from rendered page
 
 | LaTeX name | Hex | Role | Source | Contrast |
 |---|---|---|---|---|
-| `mnPrimary` | `#173D56` | frame titles, accent rule, MACD line, equity line | heading colour in `Projekt_1.pdf` | 11.4:1 |
+| `mnPrimary` | `#173D56` | frame titles, accent rule, MACD line, equity line, price line in A1 | heading colour in `Projekt_1.pdf` | 11.4:1 |
 | `mnText` | `#182A3B` | body text | text colour in `charts_pro1.pdf` | 14.7:1 |
 | `mnMuted` | `#4E6B7E` | footer, axis labels, secondary text, buy-and-hold line | secondary tone in `Projekt_1.pdf` | 5.6:1 |
 | `mnBuy` | `#00856A` | buy signals, profitable results | up candle in `charts_pro1.pdf` | 4.6:1 |
@@ -420,7 +420,7 @@ Colours are taken from the lecturer's own materials, measured from rendered page
 | `mnBuyLight` | `#6EB9AA` | histogram bars H > 0 | light up tone in `charts_pro1.pdf` | 2.3:1 (fills only) |
 | `mnSellLight` | `#DB9198` | histogram bars H < 0 | light down tone in `charts_pro1.pdf` | 2.5:1 (fills only) |
 | `mnSignal` | `#C26A1A` | SIGNAL line (dashed), modified algorithm in the experiment | orange dashed SIGNAL convention of `Projekt_1.pdf` fig. 1, darkened to reach 3:1 | 3.9:1 |
-| `mnPrice` | `#9AA5B1` | price as the light background line in B1 | own choice; B1 requires a light background line (`Projekt_1.pdf` p. 6) | 2.5:1 (deliberate exception) |
+| `mnPrice` | `#9AA5B1` | price as the light background line in B1, D1, E1, X3 and X4 | own choice; B1 requires a light background line (`Projekt_1.pdf` p. 6) | 2.5:1 (deliberate exception) |
 | `mnGrid` | `#DCE3E8` | grid lines, thin rules | own choice | — |
 
 Background is white. Copy the definitions verbatim:
@@ -491,17 +491,18 @@ These are the only allowed layouts.
 - **Format.** Vector PDF only, with no rasterized artists. Generated at the **exact final size** it will occupy on the slide and included without scaling (`\includegraphics{...}`, no `width=`). Font sizes on charts then equal the sizes set in the code.
   - Full width: 144 × 62 mm.
   - Stacked pair: one figure of 144 × 68 mm with two panels and `sharex=True`, saved as `C1_C2.pdf` and `E1_E2.pdf`.
-- **Font.** TeX Gyre Heros, loaded with `matplotlib.font_manager.addfont` from the TeX Live path if the file exists. Otherwise fall back silently to the matplotlib default. The lecturer may run the code on Windows, so a missing font file must never crash generation.
+- **Font.** TeX Gyre Heros, loaded with `matplotlib.font_manager.fontManager.addfont` from the TeX Live path if the file exists. Otherwise fall back silently to the matplotlib default. The lecturer may run the code on Windows, so a missing font file must never crash generation.
 - **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt. Signal markers 6 pt.
 - **Required elements** (`Projekt_1.pdf` p. 7, 4.5):
   - an in-figure title naming the chart ID, the quantity and the instrument, e.g. `B1 · PKO BP — cena zamknięcia i MACD(12,26,9)`,
   - both axes labelled with units, for example `Cena [PLN]` or `Indeks próbki` / dates,
   - a legend covering every line, bar and marker.
-- **Dual axis (B1).** Price on the left axis, MACD and SIGNAL on the right. Each axis label is coloured like its series, and legend entries name their axis.
+- **Dual axis (B1).** Price on the left axis, MACD and SIGNAL on the right. Each axis label is coloured like its series when that colour is allowed for text (3.2). Otherwise the price axis label is `mnMuted` and the MACD axis label `mnPrimary`. Legend entries name their axis.
 - **Axes.** Top and right spines removed, except the right spine on dual-axis charts. Horizontal grid in `mnGrid`. Legend without a frame.
 - **Signal markers.**
   - Executed signals: filled markers.
   - Signals not executed: hollow markers of the same shape and colour (`Projekt_1.pdf` p. 6, E1).
+  - D1, X3 and X4: signals and executions are both marked on the price curve (`Projekt_1.pdf` p. 6, D). Hollow markers there mark the signal session and filled markers the execution session (d = 1), as the legend states.
   - Before sample 101: no markers. The range 0–100 may be shaded in `mnGrid` and labelled as excluded (`Projekt_1.pdf` p. 6, A1).
 - **Shared x-range.** C1/C2 and E1/E2 use `sharex` with an identical x-range.
 
@@ -852,3 +853,4 @@ Applies to every ZIP:
 | 1.0 | 2026-10-20 | Section 6 (stages, checkpoints, packaging procedure); all sections complete | Brief complete; implementation can start |
 | 1.1 | 2026-10-20 | Decision in 1.7: basic-part data window and use of adjusted prices | CP1 passed |
 | 1.2 | 2026-11-02 | P3 date in 1.4 and 1.7; decisions in 1.7: experiment direction (pending CP4), D1 trade, local example; stacked pairs as one figure (3.6); `rsi.py` in 4.2 | Stages 5 and 6 started; P3 is 2026-11-04 |
+| 1.3 | 2026-11-02 | 3.2 price roles for A1, D1, E1, X3, X4; 3.6 addfont API, axis-label colour rule, signal markers in D1/X3/X4 | Code review of stage 5 found docs that disagree with the code and with `Projekt_1.pdf` p. 6 D |
