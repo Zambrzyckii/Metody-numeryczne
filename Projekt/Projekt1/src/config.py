@@ -15,3 +15,7 @@ EXPERIMENT_DATA_DIR: Path = Path(
     os.environ.get("MN_DATA_DIR")
     or str(PROJECT_ROOT / "materials" / "dane_pro1")
 )
+
+INSTRUMENT_NAME: str = "PKO BP"
+INSTRUMENT_UNIT: str = "PLN"
+D1_MARGIN: int = 30

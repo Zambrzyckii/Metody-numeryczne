@@ -2,6 +2,8 @@
 import json
 from pathlib import Path
 
+import numpy as np
+
 import config
 
 
@@ -18,6 +20,11 @@ def format_optional(value: float | None, decimals: int = 2) -> str:
     if value is None:
         return "nie dotyczy"
     return format_number(value, decimals)
+
+
+def format_date(day: np.datetime64) -> str:
+    """Date as DD.MM.YYYY for the slides, docs/presentation-style.md 3.3."""
+    return day.astype("datetime64[D]").item().strftime("%d.%m.%Y")
 
 
 def write_results(

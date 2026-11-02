@@ -1,6 +1,8 @@
 """Returns and summary statistics, per docs/requirements-code.md A.5."""
 from dataclasses import dataclass
 
+import numpy as np
+
 import config
 import simulation
 
@@ -71,3 +73,49 @@ def summarize(
             float(result.equity[-1]) if open_trade else None
         ),
     )
+
+
+def considered_signals(
+    signals: np.ndarray,
+    result: simulation.SimulationResult,
+    start_index: int = config.START_INDEX,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Signals from sample 101 and whether executed, Projekt_1.pdf p. 6, E1."""
+    indices = np.flatnonzero(signals)
+    indices = indices[indices > start_index]
+    executed_indices = {trade.signal_index for trade in result.trades}
+    executed = np.array(
+        [int(j) in executed_indices for j in indices], dtype=bool
+    )
+    return indices, signals[indices], executed
+
+
+def time_in_market_pct(
+    position_qty: np.ndarray, start_index: int = config.START_INDEX
+) -> float:
+    """Share of sessions 101...L-1 with an open position, in percent."""
+    return 100.0 * float(np.mean(position_qty[start_index + 1 :] > 0.0))
+
+
+def mean_holding_sessions(
+    pairs: list[tuple[simulation.Trade, simulation.Trade]],
+    profitable: bool,
+) -> float | None:
+    """Mean sessions held by profitable (r >= 0) or losing closed trades."""
+    held = [
+        sell.execution_index - buy.execution_index
+        for buy, sell in pairs
+        if (trade_return_pct(buy.price, sell.price) >= 0.0) == profitable
+    ]
+    return sum(held) / len(held) if held else None
+
+
+def mean_return_pct(
+    pairs: list[tuple[simulation.Trade, simulation.Trade]],
+    profitable: bool,
+) -> float | None:
+    """Mean r per formula (7) of profitable (r >= 0) or losing trades."""
+    chosen = [
+        r for r in trade_returns(pairs) if (r >= 0.0) == profitable
+    ]
+    return sum(chosen) / len(chosen) if chosen else None
