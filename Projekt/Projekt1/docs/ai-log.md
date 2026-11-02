@@ -1374,3 +1374,70 @@ Status: oczekuje na akceptację.
   - Poprawka: instalacja `texlive-pictures` przez użytkownika.
 
 Status: w toku.
+
+### 2026-11-02 · coder · RSI filter experiment computations
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania (etap 6a, wraz z dwiema rundami poprawek)</summary>
+
+```markdown
+## Task card: RSI filter experiment computations
+Goal: `python src/experiment.py` runs the basic MACD algorithm and an RSI-filtered MACD algorithm on every CSV in the experiment data directory and writes `results/experiment.json` and `results/experiment.tex`.
+
+Specification (fixed by the orchestrator, implement exactly):
+  1. New pure module `src/rsi.py`:
+     - `rsi(close, n)`. RSI = 100 − 100 / (1 + RS), RS = average gain / average loss (Murphy [1, rozdz. 10]). Smoothing is our own choice, a recursion analogous to formula (1): Δ_0 = 0, Δ_i = x_i − x_{i−1}; G_i = max(Δ_i, 0), L_i = max(−Δ_i, 0); A_0 = G_0, B_0 = L_0; A_i = α·G_i + (1−α)·A_{i−1} and B_i likewise, α = 1/n; RSI_i = 100 when B_i = 0.
+     - `filter_buy_signals(signals, rsi_values, threshold)`: every buy (+1) at sample j with `rsi_values[j] >= threshold` becomes 0. Sells are unchanged. RSI is evaluated at the signal sample j. A dropped buy is gone, there is no carry-over.
+  2. Constants in `src/experiment.py`: `RSI_PERIOD = 14`, `RSI_OVERBOUGHT = 70.0`, `SAME_TOLERANCE_PP = 1e-9`. Simulation uses `simulation.simulate` unchanged.
+  3. Per instrument, for both algorithms: R, closed/profitable/losing counts, win rate, max single-trade loss and gain, open position; ΔR [pp]; buy-and-hold [%]; dropped buy signals; blocked executed buys.
+  4. Blocked trades: verify that the modified closed trades equal the basic closed trades minus the blocked ones.
+  5. Aggregates: means and medians, helped/hurt/same with tolerance, pooled trade counts and win rates, blocked-trade statistics.
+  6. Local example, deterministic rule in code: (a) the blocked trade with the lowest r, (b) the blocked trade with the highest r.
+  7. Export via `export.write_results`, macro prefix `Exp`, dates DD.MM.YYYY.
+  8. Clear ValueError naming `MN_DATA_DIR` if the data directory is missing or empty.
+
+Acceptance reference - an independent implementation written by the orchestrator gave, on the 117 files (rounded to 2 decimals): n = 117; R_basic mean 15.65, median −0.30; ΔR mean −4.16 pp, median 0.00 pp; helped 49, hurt 43, same 25; buy-and-hold mean 43.33, median 14.95. Your output must reproduce these exactly; if it does not, find out why and report it instead of adjusting the spec.
+
+Files to touch: `src/rsi.py`, `src/experiment.py`, `results/experiment.json`, `results/experiment.tex`.
+Acceptance checklist: clean run with -W error::UserWarning; reference values reproduced exactly; two runs byte-identical; clear error for a missing MN_DATA_DIR; identity of item 4 holds or exceptions reported; Python 3.10, PEP 8, ≤ 79 characters.
+
+Fix round 1: replace rule 6 with: among instruments with exactly one blocked closed trade, help = largest ΔR, hurt = smallest ΔR; verify (1 + R_mod/100) = (1 + R_basic/100) / (1 + r/100) in code; add macros ExpSingleBlockedCount, ExpBlockedLosingSharePct, ExpBasicLosingSharePct, ExpChangedCount.
+Fix round 2 (code-reviewer findings): include open blocked buys in the identity and in the example filter; one-line docstring of rsi(); rename _pooled_win_rate to _share_pct; constants at the top.
+```
+
+</details>
+
+**Rezultat**
+
+- Nowe `src/rsi.py` i `src/experiment.py`, wygenerowane `results/experiment.json` i `results/experiment.tex`, commit `1036cb8`.
+- Wynik globalny na 117 spółkach: średnia zmiana R -4,16 pp, mediana 0,00 pp. Filtr pomógł w 49 spółkach, zaszkodził w 43, w 25 nic nie zmienił.
+- Filtr zablokował 259 transakcji. Stratnych było wśród nich 53,28 %, a wśród wszystkich transakcji algorytmu podstawowego 59,27 %. Średnie r zablokowanych transakcji to 0,52 %, a wszystkich 0,34 %.
+- Przykłady lokalne (spółki z dokładnie jedną zablokowaną transakcją): BKR, filtr pomógł o 21,14 pp (zablokowana transakcja r = -11,07 %), oraz NVDA, filtr zaszkodził o 44,81 pp (zablokowana transakcja r = +11,84 %).
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Wszystkie punkty spełnione. Wartości referencyjne odtworzone dokładnie, przebiegi deterministyczne, tożsamość zablokowanych transakcji spełniona dla 117 spółek.
+- Weryfikacja orkiestratora: niezależna implementacja RSI w pandas (`ewm(alpha=1/14, adjust=False)`) daje maksymalną różnicę 0 na wszystkich 117 plikach.
+- Werdykt code-reviewera: APPROVE. Jedno znalezisko minor i trzy nity poprawiono w drugiej rundzie bez zmiany wyników (sha256 identyczne). Nit o medianach przekazano do karty slajdów.
+
+**Błędy AI**
+
+- **Znalezisko:** Reguła wyboru przykładu lokalnego zapisana przez orkiestratora w karcie (skrajne r spośród wszystkich zablokowanych transakcji) dawała przykłady sprzeczne z wynikiem spółki. Transakcja PLTR ze stratą -23,71 % była przykładem „filtr pomógł", a cała spółka straciła na filtrze 59,89 pp.
+  - Waga: major.
+  - Wymaganie: interpretacja przykładu lokalnego z odniesieniem do całego zbioru (`Projekt_1.pdf` s. 8, 5.2).
+  - Sposób wykrycia: agent coder zgłosił rozbieżność jako otwarte pytanie w raporcie.
+  - Poprawka: przykład wybierany wśród spółek z jedną zablokowaną transakcją, gdzie zmiana R wynika wprost z tej transakcji, a tożsamość jest sprawdzana w kodzie.
+- **Znalezisko:** Pierwsza wersja kodu nie uwzględniała zablokowanego zakupu, który w algorytmie podstawowym zostałby otwartą pozycją na końcu danych. Kontrola tożsamości przeszłaby wtedy mimo zmiany R.
+  - Waga: minor (błąd utajony, na tych danych nie wystąpił).
+  - Wymaganie: otwarta pozycja wpływa na R (`Projekt_1.pdf` s. 5, 3.4).
+  - Sposób wykrycia: code-reviewer, czytanie kodu dopasowania i porównanie pól w `results/experiment.json`.
+  - Poprawka: warunek liczby zablokowanych zakupów dodany do kontroli tożsamości i do filtra przykładów.
+
+**Kandydat na slajd**
+
+- Wybrany prompt, rezultat i ocena: wynik niezależnej sondy orkiestratora jako kryterium akceptacji w karcie. Agent musiał odtworzyć wartości co do setnych i odtworzył je dokładnie.
+- Raport o błędach AI: błąd reguły przykładu lokalnego, wykryty przez agenta.
+
+Status: zaakceptowano.
