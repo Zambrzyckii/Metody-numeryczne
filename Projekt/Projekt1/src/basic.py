@@ -65,6 +65,8 @@ def build_numbers(
             if summary.open_trade
             else None
         ),
+        "start_index": start,
+        "first_signal_index": start + 1,
         "sample_count": len(result.cash),
         "execution_count": len(result.trades),
         "data_start_date": str(prices.dates[0]),
@@ -121,6 +123,10 @@ def build_macros(numbers: dict) -> dict[str, str]:
     """LaTeX macros for slides D, E and F, docs/requirements-code.md B.5."""
     trade = numbers["d1_trade"]
     return {
+        "StartIndex": export.format_number(numbers["start_index"], 0),
+        "FirstSignalIndex": export.format_number(
+            numbers["first_signal_index"], 0
+        ),
         "InitialCapital": export.format_number(numbers["initial_cash"]),
         "FinalEquity": export.format_number(numbers["final_equity"]),
         "ProfitAmount": export.format_number(numbers["profit"]),

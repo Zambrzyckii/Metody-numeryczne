@@ -154,6 +154,7 @@ def _plot_price_and_macd(
     ax_right.set_ylabel(
         f"MACD, SIGNAL [{config.INSTRUMENT_UNIT}]", color=style.PRIMARY
     )
+    ax_right.axhline(0.0, color=style.MUTED, linewidth=0.8)
     ax_right.tick_params(axis="y", colors=style.PRIMARY)
     ax_right.spines["right"].set_visible(True)
     ax_right.spines["right"].set_color(style.PRIMARY)
@@ -273,6 +274,14 @@ def chart_d1(
     ax = fig.subplots()
     ax_right = _plot_price_and_macd(
         ax, dates[window], prices.close[window], macd[window], signal[window]
+    )
+    ax.plot(
+        [],
+        [],
+        color=style.MUTED,
+        linestyle=":",
+        linewidth=1.0,
+        label="Sesja sygnału (przecięcie MACD i SIGNAL)",
     )
     for trade, side, word in (
         (buy, "buy", "kupna"),

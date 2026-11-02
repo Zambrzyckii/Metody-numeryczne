@@ -12,6 +12,8 @@
   "open_qty": null,
   "open_value": null,
   "open_trade": null,
+  "start_index": 100,
+  "first_signal_index": 101,
   "sample_count": 1001,
   "execution_count": 68,
   "data_start_date": "2022-10-19",
