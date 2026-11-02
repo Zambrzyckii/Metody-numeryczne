@@ -1585,7 +1585,7 @@ Goal: `slides/final/` holds a Beamer deck (main.tex plus content files, Makefile
 
 - Nowy katalog `slides/final/` (9 plików), commit `2a7ec61`. Talia ma 28 slajdów, o jeden więcej niż w planie. Agent dodał slajd z kryterium wyboru przykładów lokalnych, bo to uzasadnienie nie mieściło się pod wykresami X3 i X4.
 - Kompilacja nie była możliwa, bo w systemie nadal brakuje pakietu `pgf` (`texlive-pictures`). Agent sprawdził bez kompilacji, że każde z 65 użytych makr istnieje w `results/*.tex` lub `review.tex`, a dziewięć wykresów istnieje w `charts/`. Wysokość ramek oszacował na osobnym dokumencie testowym w katalogu tymczasowym.
-- Agent zgłosił odstępstwa od karty. Tytuły B1, C1_C2, D1, E1_E2, X1, X3 i X4 skrócono do jednego wiersza, w B1 i C1_C2 kosztem części tezy. Pod wykresami 144 × 68 mm został jeden wiersz tekstu. Tabela F ma dwa dodatkowe wiersze („Kup i trzymaj", „Czas w rynku") jako dowód tezy z tytułu. Wyjaśnienie we wniosku eksperymentu ma etykietę „(hipoteza)". W cytacie karty znaki ΔR i minus zapisano w ASCII, bo font maszynowy ich nie ma.
+- Agent zgłosił odstępstwa od karty. Tytuły B1, C1_C2, D1, E1_E2, X1, X3 i X4 skrócono do jednego wiersza, w B1 i C1_C2 kosztem części tezy. Pod wykresami 144 × 68 mm został jeden wiersz tekstu. Tabela F ma dwa dodatkowe wiersze („Kup i trzymaj", „Czas w rynku") jako dowód tezy z tytułu. Wyjaśnienie we wniosku eksperymentu ma etykietę „(hipoteza)". W cytacie karty znaki ΔR i minus zapisano w ASCII, bo font maszynowy ich nie ma. Orkiestrator przywrócił później oryginalne znaki przez środowisko `Verbatim` z opcją `commandchars` (commit `5df96cd`).
 
 **Ocena względem listy kontrolnej akceptacji**
 
@@ -1620,4 +1620,134 @@ Status: w toku (kompilacja czeka na `texlive-pictures`, tezy czekają na CP5).
 - Pakiet z kodem `zambrzycki_projekt1_kod.zip` zbudowano z białej listy (brief 1.5) skryptem spoza repozytorium. Zawiera 17 plików: `src/` (`basic.py`, `charts.py`, `config.py`, `data.py`, `experiment.py`, `experiment_charts.py`, `export.py`, `macd.py`, `rsi.py`, `simulation.py`, `stats.py`, `style.py`, `verify_ema.py`), `data/pko.csv`, `readme.md`, `zrodla.md`, `requirements.txt`.
 - Test pakietu według briefu 6.4. Archiwum rozpakowano do pustego katalogu i uruchomiono polecenia z `readme.md` (`basic.py`, `verify_ema.py`, `experiment.py` z ustawionym `MN_DATA_DIR`) z opcją `-W error`. Wszystkie 13 plików wynikowych (9 wykresów i 4 pliki wyników) są identyczne co do bajtu z repozytorium.
 
-Status: w toku.
+- Po instalacji `texlive-pictures` sprawdzono kpsewhich każdy z 56 pakietów, których używa talia (`mnstyle.sty`, `main.tex`, wymagania Beamera). Brakowały tylko pliki pgf. Trzy pozostałe braki (`pause`, `sansmathaccent`, `ucs`) Beamer ładuje warunkowo.
+- Pierwsza kompilacja talii końcowej dała 8 przepełnień pionowych o 6,0 do 7,3 pt na slajdach z wykresami. Ostatni wiersz tekstu pod wykresem wchodził pod stopkę. Po zmianie wysokości wykresów (niżej) talia kompiluje się bez błędów, przepełnień i ostrzeżeń, `pdffonts` pokazuje same osadzone fonty, `pdfimages -list` nie pokazuje rastrów, a stopki to „1 / 28" do „28 / 28". Orkiestrator obejrzał każdą stronę w PNG.
+- Pakiet z kodem przebudowano po każdej zmianie kodu i ponownie przetestowano według briefu 6.4. Wynik końcowy to 17 plików i 13 plików wynikowych identycznych co do bajtu z repozytorium.
+- Pakiet prezentacji `zambrzycki_projekt1_koncowa.zip` zbudowano z białej listy skryptem spoza repozytorium, który bierze tylko wykresy użyte w `\includegraphics` i bez `main.pdf` przerywa pracę. Zawiera 22 pliki: `slides/final/` (`main.pdf`, `Makefile`, `ai-errors.tex`, `ai-review.tex`, `ai-work.tex`, `experiment.tex`, `intro.tex`, `main.tex`, `results.tex`, `review.tex`), `slides/common/mnstyle.sty`, `charts/` (A1, B1, C1_C2, D1, E1_E2, X1, X2, X3, X4) i `results/` (`basic.tex`, `experiment.tex`).
+- Test pakietu prezentacji. Archiwum rozpakowano do pustego katalogu i wymuszono pełną kompilację (`make -B`), bo po rozpakowaniu `main.pdf` jest nowszy od źródeł i zwykłe `make` niczego by nie zbudowało. Kompilacja bez przepełnień, tekst PDF identyczny z archiwalnym, rendery wszystkich 28 stron identyczne. Bajty PDF różnią się wyłącznie datą utworzenia zapisywaną przez pdflatex.
+
+**Decyzje**
+
+- Wykresy są niższe o 4 mm: 144 × 58 mm (pełna szerokość) i 144 × 64 mm (para paneli), brief 1.4. Odrzucone warianty to krótszy tekst na slajdach (nie wystarczał przy parze paneli z jednym wierszem) i ciaśniejszy nagłówek oraz stopka w `mnstyle.sty` (zmiana obu talii i stopka 1 mm od krawędzi ekranu). Wariant sprawdzono najpierw na kopii projektu w katalogu tymczasowym. Wyniki liczbowe są bez zmian.
+- Cytat karty na slajdzie promptu odtwarza znaki ΔR i minus przez `Verbatim` z `commandchars`, więc jest zgodny z dziennikiem znak po znaku. Brief 1.5 zwalnia dosłowne cytaty promptów z zasady liczb.
+- Recenzja prezentacji miała dwie iteracje (7/10, potem 8/10). Ocena na slajdzie pochodzi z iteracji 2 i trafia tam przez `slides/final/review.tex`. Poprawki naniesione po iteracji 2 nie były już recenzowane.
+- Talia zostaje przy 28 slajdach, choć przewodnik stylu podaje około 20 do 25. Czterosłajdowy wstęp to decyzja użytkownika z CP3, a slajd o dwóch agentach to wymagany jeden temat opisany dokładnie (`docs/requirements-presentation.md`, wiersz 32). Użytkownik dostaje plan wystąpienia ze slajdami do omówienia skrótowo. Ostateczna decyzja należy do użytkownika w CP5.
+- Odłożone z adnotacją. Kolor linii progu RSI (nit, paleta nie ma roli progu). Wykres przecięć we wstępie (nit, przecięcia z sygnałami pokazuje C1_C2). Gęstość znaczników na E1 (rozmiar 6 pt to reguła stylu). Wzory (6) i (7) dla R i r na slajdach (nit, wielkości są podpisane w tabeli F, a wstęp ma już jeden temat na slajd).
+- Brief 1.6 przenosi do §3.3 i §3.6 decyzję użytkownika z CP3 o zwykłym łączniku zamiast pauzy. Ta decyzja nie trafiła wcześniej do briefu. Brief 1.7 poprawia przykłady makr w §4 według kodu.
+- Odstępstwo od protokołu. Ze względu na termin orkiestrator sam naniósł poprawki tekstu slajdów po obu iteracjach recenzji, poprawkę cytatu oraz zmianę dwóch stałych wysokości w `src/style.py`, zamiast delegować je agentom. Każdą zmianę sprawdzono kompilacją, renderem stron oraz porównaniem plików wynikowych co do bajtu. Zmiany kodu wymagające decyzji projektowych poszły do agenta coder z jedną rundą code-reviewera.
+
+**Błędy AI**
+
+- **Znalezisko:** Agent latex-assistant oszacował zapas wysokości slajdów z wykresami na około 2 mm. W rzeczywistości ostatni wiersz tekstu na 8 slajdach wchodził o 2,1 do 2,6 mm pod stopkę.
+  - Waga: major.
+  - Wymaganie: czytelność na pełnym ekranie (`zasady` s. 5, 6.1).
+  - Sposób wykrycia: pierwsza kompilacja orkiestratora (przepełnienia `\vbox` w logu) i render stron w PNG.
+  - Poprawka: wykresy niższe o 4 mm, brief 1.4.
+- **Znalezisko:** Szkic tez orkiestratora dla wyniku globalnego eksperymentu nie zawierał zastrzeżenia, że średnią zmianę R tworzą głównie dwie spółki. MSTR i SMCI dają 85,5 % sumy zmian, a średnia pozostałych 115 spółek to -0,61 pp.
+  - Waga: major.
+  - Wymaganie: wniosek z zakresem ważności i odniesieniem do całego zbioru (`zasady` s. 4, 5.2).
+  - Sposób wykrycia: recenzent AI prezentacji (iteracja 1) przeliczył udział z wartości podanych w notce wykresu X1. Orkiestrator potwierdził go na danych.
+  - Poprawka: tytuł slajdu X1 i wniosek eksperymentu mówią wprost o skrajnych spadkach.
+- **Znalezisko:** Trzy twierdzenia na slajdach nie miały pokrycia w danych lub w dzienniku. Tytuł B1 mówił o MACD „wokół zera", choć MACD jest dodatni w 75,9 % sesji. Slajd o dwóch agentach twierdził, że karty wymieniały pliki zakazane i że wspólnych modułów nikt nie zmieniał. Slajd o błędzie przykładu lokalnego odwracał logikę („choć transakcja była stratna").
+  - Waga: minor.
+  - Wymaganie: tytuł wynika z dowodu na slajdzie (`docs/presentation-style.md` 3.1) i zgodność z dziennikiem.
+  - Sposób wykrycia: recenzent AI prezentacji (iteracja 1) porównał slajdy z wykresem, z kartami w dzienniku i z commitami.
+  - Poprawka: tytuł B1 według danych, slajd o agentach według commitów `6a26a68` i `1036cb8` (brak wspólnych plików), poprawiona logika slajdu o przykładzie.
+- **Znalezisko:** W poprawce po iteracji 1 orkiestrator użył mediany zmiany R (0,00 pp) jako dowodu, choć przy 43 spadkach i 25 zerach mediana musi wypaść wśród zer.
+  - Waga: minor.
+  - Wymaganie: tytuł wynika z dowodu (`docs/presentation-style.md` 3.1).
+  - Sposób wykrycia: recenzent AI prezentacji (iteracja 2).
+  - Poprawka: wniosek opiera się na prawie równej liczbie spółek, którym filtr pomógł i zaszkodził, oraz na wykresie X2.
+
+**Wynik**
+
+- Artefakty: `slides/final/` z `main.pdf`, pakiety `zambrzycki_projekt1_kod.zip` i `zambrzycki_projekt1_koncowa.zip` w `~/Downloads/MN-Projekt1/`.
+- Commity kroków: `2a7ec61`, `b732e88`, `29a847d`, `5df96cd`, `aded55e`, `a94221d`, `8378fd9`, `33fedbb`, `a523ac1`, `e379929`, `01abdf3`, `622793e`, `75232ee`, `042cb32`.
+- Sumy SHA-256 pakietów policzone przez orkiestratora: `zambrzycki_projekt1_kod.zip` `69a22696d72e5d85…`, `zambrzycki_projekt1_koncowa.zip` `c0f493343dc47d86…`.
+- Status: oczekuje na użytkownika (CP2 omówienie kodu, CP4 kierunek eksperymentu, CP5 tezy slajdów i przegląd pełnoekranowy, zgoda na przesłanie pakietów).
+
+### 2026-11-02 · presentation-reviewer · Final deck, iterations 1 and 2
+
+**Karta zadania**
+
+- Prompt recenzji zaczyna się od tekstu cytowanego na slajdzie 27 (z oznaczonymi cięciami). Dalej następuje kontekst: numer iteracji, makra liczb, status tez, kryterium przykładów lokalnych, liczba slajdów oraz wynik weryfikacji orkiestratora (`make`, `pdffonts`, `pdfimages`, stopki). Iteracja 2 dostała dodatkowo listę rozstrzygnięć znalezisk z iteracji 1.
+
+**Ocena recenzenta prezentacji, iteracja 1**
+
+- Ocena liczbowa 7/10. Jedno znalezisko major (brak zastrzeżenia o skrajnych spółkach w wyniku globalnym), 13 minor, 8 nit.
+- Rozstrzygnięcia: major i większość minor poprawiono w `aded55e`, `5df96cd` i `8378fd9`. Długość talii pozostawiono z uzasadnieniem (rejestr etapu 13). Odłożone nity opisano w rejestrze.
+
+**Ocena recenzenta prezentacji, iteracja 2, końcowa**
+
+- Ocena słowna (dosłownie): „Prezentacja spełnia wszystkie warunki obowiązkowe, wyniki na slajdach pochodzą z programu, a każdy slajd z wynikami ma tezę w tytule. Wstęp prowadzi od średniej kroczącej do reguł sygnałów, a część eksperymentalna rzetelnie pokazuje, że filtr RSI nie dał systematycznej poprawy. Do poprawy pozostały drobne braki w dowodach dla kilku tytułów oraz objętość większa niż zalecana na czas wystąpienia." Ocena liczbowa: **8/10**.
+- Znaleziska: 4 minor (mediana jako dowód, brak linii zera na B1, nieopisane linie kropkowane na D1, ręcznie wpisane indeksy próbek) i 3 nit (brak wzorów R i r, wyrównanie wiersza w tabeli, łącznik zamiast pauzy). Poprawiono wszystkie minor i dwa nity w `a523ac1`, `33fedbb`, `e379929` i `01abdf3`. Nit o wzorach R i r odłożono.
+
+Status: zakończono.
+
+### 2026-11-02 · coder · Sell-signal markers and E2 ticks
+
+**Karta zadania**
+
+<details>
+<summary>Karta zadania, w skrócie</summary>
+
+```markdown
+## Task card: Chart fixes after the final-deck review
+1. E1_E2: January-only major ticks via an optional parameter of charts.date_axis (default keeps January and July).
+2. X3/X4: hollow down-triangle at the sell signal session (brief 3.6, line 506), sell signal and execution as one legend entry (HandlerTuple), so the legend does not grow; index from Trade.signal_index.
+Files to touch: src/charts.py, src/experiment_charts.py, charts/E1_E2.pdf, X3.pdf, X4.pdf. Everything else byte-identical.
+```
+
+</details>
+
+**Rezultat**
+
+- Commit `8378fd9`. Zmieniły się tylko `E1_E2.pdf`, `X3.pdf` i `X4.pdf`. Panele X3 i X4 zachowały wysokość (11,65 mm i 11,86 mm).
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Weryfikacja orkiestratora: przebiegi z `-W error` bez ostrzeżeń, ponowny przebieg identyczny co do bajtu, `results/*` bez zmian, wykresy obejrzane w PNG.
+- Werdykt code-reviewera: APPROVE. Jeden nit (skrócona data sygnału w legendzie, gdy rok jest ten sam). Pozostawiono, bo tak brzmiał przykład etykiety w karcie.
+
+**Błędy AI**
+
+- Brak.
+
+Status: zakończono.
+
+### 2026-11-02 · coder · MACD zero line, D1 legend entry and index macros
+
+**Karta zadania**
+
+<details>
+<summary>Karta zadania, w skrócie</summary>
+
+```markdown
+## Task card: Chart and macro fixes after the final review (iteration 2)
+1. B1: MACD zero line on the right axis, style as in C2 (D1 shares the helper).
+2. D1: one legend entry for the dotted signal-session lines, no extra legend row.
+3. Macros StartIndex (100) and FirstSignalIndex (101) from config.START_INDEX in results/basic.*.
+Files to touch: src/charts.py, src/basic.py, charts/B1.pdf, charts/D1.pdf, results/basic.*. Everything else byte-identical.
+```
+
+</details>
+
+**Rezultat**
+
+- Commit `e379929`. Zmieniły się `B1.pdf`, `D1.pdf` i `results/basic.*` (tylko dwa nowe wpisy). Obszar wykresu D1 bez zmian (44,66 mm). Slajdy używają nowych makr w commicie `01abdf3`.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Weryfikacja orkiestratora: przebiegi z `-W error` bez ostrzeżeń, ponowny przebieg identyczny co do bajtu, wykresy obejrzane w PNG.
+- Werdykt code-reviewera: CHANGES REQUIRED (jedno znalezisko minor i dwa nity). Wpis legendy D1 miał szary uchwyt, a opisywane linie są zielona i czerwona, przy czym szary to także kolor nowej linii zera. Runda poprawek (commit `75232ee`): uchwyt z dwóch kropkowanych odcinków w kolorach kupna i sprzedaży (`HandlerTuple`), linia zera z `zorder=1` pod liniami MACD i SIGNAL. Nit o grubości i braku wpisu legendy dla linii zera pozostawiono, bo tak samo jest narysowana linia zera na C2. Orkiestrator sprawdził rundę poprawek przebiegiem z `-W error`, porównaniem plików co do bajtu i renderem D1.
+- Recenzent wskazał też rozbieżność spoza karty, przykład makra `\resOpenPosition` w B.5, którego kod nie generuje. Poprawiono w briefie 1.7 i w `docs/requirements-code.md` (commit `622793e`).
+
+**Błędy AI**
+
+- **Znalezisko:** Karta orkiestratora dopuszczała neutralny szary uchwyt legendy dla linii, które mają kolory kupna i sprzedaży. Agent wybrał tę opcję, więc legenda opisywała linie innym kolorem niż na wykresie.
+  - Waga: minor.
+  - Wymaganie: legenda objaśnia każdą linię (`Projekt_1.pdf` s. 7, 4.5).
+  - Sposób wykrycia: code-reviewer porównał kolor uchwytu z kolorem linii w `chart_d1`.
+  - Poprawka: uchwyt w kolorach obu linii, commit `75232ee`.
+
+Status: zakończono.
