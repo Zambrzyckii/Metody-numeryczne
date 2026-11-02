@@ -133,7 +133,7 @@ The reviewer treats any occurrence as a finding of at least *minor* severity:
 - **Motion:** animations, transitions, `\pause`, overlays, `\only`/`\uncover` reveals.
 - **Decoration:** gradients, shadows, rounded or shaded boxes, 3D charts, pie charts, seaborn or other preset chart styles.
 - **Hard-coded values:** any colour or font size not defined in this section.
-- **Unsourced content:** a number on a slide that does not come from `results/`; screenshots of code, terminals or charts.
+- **Unsourced content:** a number on a slide that does not come from `results/`; screenshots of code, terminals or charts. A verbatim prompt quote is exempt: it reproduces the text logged in `docs/ai-log.md`, numbers included, with cuts marked `[...]`.
 - **Weak titles:** a topic-only title on a content slide.
 - **Writing:** marketing or hype vocabulary ("rewolucyjny", "potężny", "przełomowy"), exclamation marks, rhetorical questions, filler sentences.
 - **Unfinished work:** placeholder text, `TODO`, `???` or overfull boxes in the compiled PDF.
