@@ -1,0 +1,123 @@
+% Experimental part: RSI filter rule, charts X1-X4, comparison table and
+% conclusion. Every number is a \resExp... macro from results/experiment.tex.
+
+\begin{frame}
+  \frametitle{Filtr RSI ma odrzucać kupno na rynku wykupionym}
+  \begin{equation*}
+    \mathrm{RSI}_i = 100 - \frac{100}{1 + A_i / B_i}
+    \tag{5}
+  \end{equation*}
+  \begin{equation*}
+    A_i = \alpha\, G_i + (1 - \alpha)\, A_{i-1},\qquad
+    B_i = \alpha\, L_i + (1 - \alpha)\, B_{i-1},\qquad
+    \alpha = \frac{1}{\resExpRsiPeriod{}}
+    \tag{6}
+  \end{equation*}
+  \begin{itemize}
+    \item $G_i$, $L_i$ - wzrost i spadek ceny w sesji $i$, $A_i$ i $B_i$ - ich
+      średnie wygładzane jak EMA we wzorze (1).
+    \item Reguła: sygnał kupna z MACD wykonujemy tylko, gdy RSI w sesji
+      sygnału jest mniejszy niż \resExpRsiThreshold{}. Sprzedaż bez zmian.
+    \item Uzasadnienie: MACD reaguje z opóźnieniem, więc kupno może przyjść
+      po wzroście, a RSI od \resExpRsiThreshold{} oznacza wykupienie
+      (Murphy, rozdz. 10).
+    \item Symulacja jak w części podstawowej ($C_{100} = 1000\, x_{100}$,
+      sygnały od próbki 101, wykonanie w następnej sesji) na wszystkich
+      \resExpCount{} spółkach.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[b]
+  \frametitle{Po filtrze średnia zmiana R to \resExpMeanDeltaPp{} pp, a
+    mediana \resExpMedianDeltaPp{} pp}
+  \includegraphics{X1.pdf}\par
+  \vskip1mm
+  Filtr pomógł w \resExpHelpedCount{}, zaszkodził w \resExpHurtCount{}, a
+  w \resExpSameCount{} nic nie zablokował (razem \resExpCount{} spółek).
+\end{frame}
+
+\begin{frame}
+  \frametitle{Filtr usunął \resExpBlockedCount{} transakcji, ale nie zmniejszył
+    największych strat}
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}rr@{}}
+    \toprule
+    Wielkość (wszystkie \resExpCount{} spółek) & Algorytm podstawowy
+      & Z filtrem RSI \\
+    \midrule
+    Średnia stopa zwrotu R [\%] & \resExpMeanBasicPct & \resExpMeanModifiedPct \\
+    Liczba zamkniętych transakcji & \resExpBasicClosedCount
+      & \resExpModifiedClosedCount \\
+    Skuteczność [\%] & \resExpBasicWinRatePct & \resExpModifiedWinRatePct \\
+    Średnia największa strata [\%] & \resExpBasicMeanMaxLossPct
+      & \resExpModifiedMeanMaxLossPct \\
+    \midrule
+    Kup i trzymaj, średnia stopa zwrotu [\%]
+      & \multicolumn{2}{r}{\resExpMeanHoldPct} \\
+    \bottomrule
+  \end{tabular*}
+  \vskip3mm
+  Filtr nie zmienia stopy zwrotu pozostawionych transakcji, tylko usuwa
+  wejścia. Wartości dotyczą całego zbioru, nie pojedynczego przypadku.
+\end{frame}
+
+\begin{frame}[b]
+  \frametitle{Zablokowane wejścia nie były gorsze od przeciętnych}
+  \includegraphics{X2.pdf}\par
+  \vskip1mm
+  Stratnych było \resExpBlockedLosingSharePct{}\,\% transakcji zablokowanych
+  wobec \resExpBasicLosingSharePct{}\,\% wszystkich. Średnia stopa zwrotu
+  transakcji to \resExpBlockedMeanPct{}\,\% wobec \resExpAllTradesMeanPct{}\,\%.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Przykłady lokalne wybrano tak, by zmiana wyniku spółki wynikała
+    z jednej transakcji}
+  \begin{itemize}
+    \item Kryterium: spółki z dokładnie jedną zablokowaną transakcją, czyli
+      \resExpSingleBlockedCount{} z \resExpCount{}.
+    \item Filtr nie zmienia stopy zwrotu pozostawionych transakcji, więc
+      zmiana R takiej spółki wynika tylko z pominiętej transakcji. Kod
+      sprawdza to dla wszystkich spółek, liczba niezgodności to
+      \resExpIdentityFailureCount{}.
+    \item Przykład poprawy to największa dodatnia zmiana R w tej grupie,
+      przykład pogorszenia to największa ujemna.
+    \item Każdy przykład to jedna spółka, więc nie przesądza o wyniku całego
+      zbioru.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[b]
+  \frametitle{\resExpHelpTicker: filtr pominął stratę \resExpHelpReturnPct{}\,\%,
+    a wynik poprawił się o \resExpHelpDeltaPp{} pp}
+  \includegraphics{X3.pdf}\par
+  R bez filtra \resExpHelpBasicPct{}\,\%, z filtrem
+  \resExpHelpModifiedPct{}\,\%, największa poprawa w tej grupie.
+\end{frame}
+
+\begin{frame}[b]
+  \frametitle{\resExpHurtTicker: filtr pominął zysk \resExpHurtReturnPct{}\,\%,
+    a wynik zmienił się o \resExpHurtDeltaPp{} pp}
+  \includegraphics{X4.pdf}\par
+  R bez filtra \resExpHurtBasicPct{}\,\%, z filtrem
+  \resExpHurtModifiedPct{}\,\%, największe pogorszenie w tej grupie.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Próg RSI \resExpRsiThreshold{} nie odróżniał złych wejść MACD
+    od dobrych}
+  \begin{itemize}
+    \item Obserwacja: zablokowane transakcje wypadły nieco lepiej niż
+      przeciętne (średnia stopa zwrotu \resExpBlockedMeanPct{}\,\% wobec
+      \resExpAllTradesMeanPct{}\,\%), a średnia zmiana R to
+      \resExpMeanDeltaPp{} pp.
+    \item Wyjaśnienie (hipoteza): RSI od \resExpRsiThreshold{} przy sygnale
+      kupna MACD oznacza silny impet, który na rosnącym rynku często trwa
+      dalej.
+    \item Wniosek: ten filtr nie poprawił wyniku strategii MACD na tym
+      zbiorze.
+    \item Zakres: \resExpCount{} spółek z dostarczonego zbioru, RSI(\resExpRsiPeriod{})
+      z jednym progiem \resExpRsiThreshold{}. Inne progi i rynki nie były
+      badane.
+  \end{itemize}
+\end{frame}

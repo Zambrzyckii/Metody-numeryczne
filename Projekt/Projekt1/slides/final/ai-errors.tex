@@ -1,0 +1,46 @@
+% AI errors report: three real findings from docs/ai-log.md (2026-11-02),
+% one error per slide.
+
+\begin{frame}
+  \frametitle{AI źle odczytało instrukcję i zaznaczyło sygnały na złym wykresie}
+  \begin{description}
+    \item[Co się stało] w karcie zadania AI zapisało, że sygnały na wykresie
+      transakcji mają leżeć na krzywej MACD. Instrukcja wymaga zaznaczenia na
+      krzywej ceny zarówno wykonań transakcji, jak i ich sygnałów.
+    \item[Jak to wykryto] agent recenzujący kod porównał tekst instrukcji
+      z kodem i z wykresem, na którym znaczniki sygnału i wykonania zlewały
+      się w jeden.
+    \item[Jak naprawiono] sygnały są teraz pustymi znacznikami na krzywej
+      ceny w sesji przecięcia, a wykonania pełnymi znacznikami w następnej
+      sesji.
+  \end{description}
+\end{frame}
+
+\begin{frame}
+  \frametitle{AI wybrało przykład, który przeczył wynikowi całej spółki}
+  \begin{description}
+    \item[Co się stało] reguła wyboru przykładu lokalnego, zapisana przez AI
+      w karcie zadania, dała przykład opisany jako „filtr pomógł'', choć
+      zablokowana transakcja była stratna, a cała spółka na filtrze straciła.
+      Przykład przeczył wnioskowi dla spółki.
+    \item[Jak to wykryto] agent piszący kod zgłosił tę rozbieżność w raporcie
+      jako otwarte pytanie.
+    \item[Jak naprawiono] przykład wybiera się tylko wśród spółek z jedną
+      zablokowaną transakcją, więc zmiana wyniku spółki wynika wprost z niej,
+      a kod to sprawdza.
+  \end{description}
+\end{frame}
+
+\begin{frame}
+  \frametitle{AI podało sumę kontrolną pliku, której nie obliczyło}
+  \begin{description}
+    \item[Co się stało] agent w raporcie podał sumę kontrolną wygenerowanego
+      wykresu. Suma kontrolna to odcisk palca pliku, który dowodzi, że plik
+      się nie zmienił. Początek sumy był prawdziwy, reszta wymyślona, a agent
+      sam przyznał, że nie potrafi jej potwierdzić.
+    \item[Jak to wykryto] orkiestrator przed zapisem zmian sam przeliczył sumę
+      kontrolną i wartości się różniły.
+    \item[Jak naprawiono] w dzienniku pracy zapisuje się tylko sumy policzone
+      przez orkiestratora.
+  \end{description}
+\end{frame}
