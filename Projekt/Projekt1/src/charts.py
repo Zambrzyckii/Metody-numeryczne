@@ -30,11 +30,16 @@ def new_figure(size_mm: tuple[float, float]) -> Figure:
     return Figure(figsize=(width / 25.4, height / 25.4), layout="constrained")
 
 
-def date_axis(ax: Axes, first: np.datetime64, last: np.datetime64) -> None:
+def date_axis(
+    ax: Axes,
+    first: np.datetime64,
+    last: np.datetime64,
+    months: tuple[int, ...] = (1, 7),
+) -> None:
     """Date ticks as numbers only, independent of the locale."""
     ax.set_xlim(first, last)
     if (last - first).astype(int) > 366:
-        ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=(1, 7)))
+        ax.xaxis.set_major_locator(mdates.MonthLocator(bymonth=months))
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%m.%Y"))
     else:
         ax.xaxis.set_major_locator(
@@ -379,7 +384,7 @@ def chart_e1_e2(
     plot_e1(ax_top, prices, signals, result)
     plot_e2(ax_bottom, prices, result)
     ax_bottom.set_xlabel("Data")
-    date_axis(ax_bottom, dates[config.START_INDEX], dates[-1])
+    date_axis(ax_bottom, dates[config.START_INDEX], dates[-1], months=(1,))
     return fig
 
 

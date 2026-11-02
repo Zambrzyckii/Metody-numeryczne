@@ -2,6 +2,7 @@
 import numpy as np
 from matplotlib import ticker
 from matplotlib.figure import Figure
+from matplotlib.legend_handler import HandlerTuple
 from matplotlib.lines import Line2D
 
 import config
@@ -34,9 +35,17 @@ def _note(label: str) -> Line2D:
     return Line2D([], [], linestyle="none", label=label)
 
 
-def _figure_legend(fig: Figure, handles: list, ncol: int) -> None:
+def _figure_legend(
+    fig: Figure, handles: list, ncol: int, labels: list[str] | None = None
+) -> None:
     """One figure legend below the plot, as in charts.py."""
-    fig.legend(handles=handles, loc="outside lower center", ncol=ncol)
+    fig.legend(
+        handles=handles,
+        labels=labels,
+        loc="outside lower center",
+        ncol=ncol,
+        handler_map={tuple: HandlerTuple(ndivide=None)},
+    )
 
 
 def chart_x1(numbers: dict) -> Figure:
@@ -205,27 +214,32 @@ def _example_figure(chart_id: str, example: dict, numbers: dict) -> Figure:
     signal_label = "Sygnał kupna pominięty przez alg. zmodyfikowany"
     signal_handle = Line2D([], [], label=signal_label, **signal_style)
     ax_price.plot([dates[signal]], [prices.close[signal]], **signal_style)
-    marks = [
-        (
-            buy,
-            example["buy_price"],
-            "buy",
-            f"Kupno {format_date(dates[buy])}, wykonane przez alg."
-            " podstawowy",
-        ),
-        (
-            sell,
-            example["sell_price"],
-            "sell",
-            f"Sprzedaż {format_date(dates[sell])}, alg. podstawowy,"
-            f" r = {_num(example['return_pct'])} %",
-        ),
-    ]
-    mark_handles = []
-    for index, price, side, label in marks:
-        mark_style = marker_style(side)
-        ax_price.plot([dates[index]], [price], **mark_style)
-        mark_handles.append(Line2D([], [], label=label, **mark_style))
+    buy_style = marker_style("buy")
+    ax_price.plot([dates[buy]], [example["buy_price"]], **buy_style)
+    buy_label = (
+        f"Kupno {format_date(dates[buy])}, wykonane przez alg. podstawowy"
+    )
+    sell_signal = example["sell_signal_index"]
+    sell_signal_style = marker_style("sell", executed=False)
+    sell_style = marker_style("sell")
+    ax_price.plot(
+        [dates[sell_signal]], [prices.close[sell_signal]], **sell_signal_style
+    )
+    ax_price.plot([dates[sell]], [example["sell_price"]], **sell_style)
+    signal_day = format_date(dates[sell_signal])
+    if dates[sell_signal].astype("datetime64[Y]") == dates[sell].astype(
+        "datetime64[Y]"
+    ):
+        signal_day = signal_day[:5]
+    sell_label = (
+        f"Sprzedaż: sygnał {signal_day}, wykonanie"
+        f" {format_date(dates[sell])}, r = {_num(example['return_pct'])} %"
+    )
+    buy_handle = Line2D([], [], label=buy_label, **buy_style)
+    sell_handle = (
+        Line2D([], [], **sell_signal_style),
+        Line2D([], [], **sell_style),
+    )
     ax_price.set_title(
         f"{chart_id} · {example['ticker']} - cena zamknięcia, kupno"
         f" zablokowane przy RSI {_num(example['rsi_at_signal'])}"
@@ -255,10 +269,12 @@ def _example_figure(chart_id: str, example: dict, numbers: dict) -> Figure:
     ax_rsi.set_xlabel("Data")
     style.decimal_comma(ax_rsi.yaxis)
     date_axis(ax_rsi, dates[first], dates[last])
+    labeled = [price_line, rsi_line, threshold_line, signal_handle, buy_handle]
     _figure_legend(
         fig,
-        [price_line, rsi_line, threshold_line, signal_handle, *mark_handles],
+        [*labeled, sell_handle],
         2,
+        [handle.get_label() for handle in labeled] + [sell_label],
     )
     return fig
 
