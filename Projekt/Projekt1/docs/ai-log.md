@@ -1440,4 +1440,70 @@ Fix round 2 (code-reviewer findings): include open blocked buys in the identity 
 - Wybrany prompt, rezultat i ocena: wynik niezależnej sondy orkiestratora jako kryterium akceptacji w karcie. Agent musiał odtworzyć wartości co do setnych i odtworzył je dokładnie.
 - Raport o błędach AI: błąd reguły przykładu lokalnego, wykryty przez agenta.
 
-Status: zaakceptowano.
+Status: oczekuje na akceptację użytkownika (CP4).
+
+### 2026-11-02 · coder · Charts A1-E2, readme.md and zrodla.md
+
+**Karta zadania**
+
+<details>
+<summary>Pełna karta zadania (etap 5) i runda poprawek po recenzji</summary>
+
+```markdown
+## Task card: Charts A1-E2, readme.md and zrodla.md
+Goal: `python src/basic.py` additionally writes the vector charts A1, B1, C1+C2, D1 and E1+E2 to `charts/` and the D1/A1/E1 macros to `results/basic.*`; `readme.md` and `zrodla.md` exist in the project root.
+
+Decisions already fixed by the orchestrator:
+  1. A1 is a line chart of closes over all L samples. Shade samples 0-100 in `mnGrid` with a Polish label.
+  2. The time axis shows dates on every chart.
+  3. Stacked pairs are ONE figure per pair with two panels and `sharex=True`: `charts/C1_C2.pdf` and `charts/E1_E2.pdf`, 144 × 68 mm; x-range samples 100 … L−1. A1, B1, D1: 144 × 62 mm.
+  4. D1 shows the closed trade with the largest return r (ties: earliest). Window ±30 samples. Mark the buy and sell executions on the price curve and their signals on the MACD curve at the signal samples.
+  5. E1: every signal from sample 101 at its signal sample on the price curve; executed filled, not executed hollow. E2: equity from sample 100 plus a dashed buy-and-hold reference 1000·x_i.
+  6. C1: MACD and SIGNAL with ▲/▼ markers from sample 101. C2: histogram bars with a zero line.
+  7. Polish titles and labels, no long dashes, units in brackets, decimal comma on ticks.
+  8. TeX Gyre Heros loaded only if present, silent fallback, fonts embedded.
+  9. Byte-identical reruns.
+  10. New macros: data range, D1 trade, signal counts, buy-and-hold return; existing values unchanged.
+  11. readme.md and zrodla.md in Polish (instrument description, commands per chart ID, MN_DATA_DIR, sources).
+
+Acceptance checklist: clean run; additions-only diff of results; verify_ema passes; fonts embedded and no raster images; exact page sizes; byte-identical reruns; every chart rendered to PNG and inspected; Python 3.10, PEP 8, ≤ 79 characters; every readme command runs.
+
+Fix round (code-reviewer CHANGES REQUIRED): D1 marks executions AND their signals on the price curve (hollow = signal session, filled = execution session, dotted line at the signal date); one helper for "signals from 101 and executed"; format_date moved to export.py; new macros TimeInMarketPct, MeanWinSessions, MeanLossSessions, MeanWinPct, MeanLossPct.
+```
+
+</details>
+
+**Rezultat**
+
+- Nowe `src/style.py` i `src/charts.py`, zmienione `src/basic.py`, `src/config.py`, `src/stats.py` (nowe czyste funkcje) i `src/export.py` (`format_date`). Wykresy `charts/A1.pdf`, `B1.pdf`, `C1_C2.pdf`, `D1.pdf`, `E1_E2.pdf`, nowe makra w `results/basic.*`, plik `zrodla.md`. Commit `6a26a68`.
+- `readme.md` wejdzie do commitu etapu 6b, bo jego sekcję eksperymentu uzupełnia agent wykresów X1-X4.
+- Fakty z danych istotne dla slajdów: wszystkie 68 sygnałów od próbki 101 zostało wykonanych. Strategia MACD dała 88,62 %, a „kup i trzymaj" 382,93 %. Pozycja była otwarta przez 48,44 % sesji. Transakcje zyskowne trwały średnio 15,9 sesji, stratne 8,9 sesji.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Weryfikacja orkiestratora: przebiegi deterministyczne (sha256 zgodne z raportem agenta), fonty osadzone, brak obrazów rastrowych, wyniki części podstawowej tylko dopisane, `verify_ema.py` bez zmian. Orkiestrator obejrzał wszystkie wykresy w PNG.
+- Werdykt code-reviewera: CHANGES REQUIRED (jedno znalezisko major, jedno minor, trzy nity). Po rundzie poprawek major usunięty i sprawdzony wizualnie przez orkiestratora. Nit o nakładaniu się pary znaczników kupna na D1 odłożony, bo cena między sesją sygnału a sesją wykonania prawie się nie zmieniła, a kropkowana linia rozróżnia obie sesje.
+
+**Błędy AI**
+
+- **Znalezisko:** Orkiestrator zapisał w karcie, że sygnały D1 mają być zaznaczone na krzywej MACD. Instrukcja wymaga zaznaczenia na krzywej ceny zarówno wykonań, jak i odpowiadających im sygnałów.
+  - Waga: major.
+  - Wymaganie: `Projekt_1.pdf` s. 6, 4.2 D.
+  - Sposób wykrycia: code-reviewer porównał tekst instrukcji z kodem `chart_d1` i z wyrenderowanym wykresem, na którym znaczniki sygnału i wykonania zlewały się w jeden.
+  - Poprawka: sygnały jako puste znaczniki na cenie w sesji przecięcia, wykonania jako pełne znaczniki w następnej sesji, kropkowana linia w dniu sygnału.
+- **Znalezisko:** Brief i `docs/presentation-style.md` (napisane z pomocą AI) wskazywały funkcję `matplotlib.font_manager.addfont`, która nie istnieje.
+  - Waga: minor.
+  - Wymaganie: zasada „nie zgaduj API" (brief, sekcja 0).
+  - Sposób wykrycia: agent coder przy pierwszym uruchomieniu kodu ładującego font.
+  - Poprawka: kod używa `font_manager.fontManager.addfont`, brief i `docs/` poprawiono w commicie `4691c68`.
+- **Znalezisko:** `readme.md` zapowiadał wykresy części eksperymentalnej, których program jeszcze nie tworzył.
+  - Waga: minor.
+  - Wymaganie: kod odtwarza to, co opisuje readme (`Projekt_1.pdf` s. 9, 6.3).
+  - Sposób wykrycia: code-reviewer wyszukał w `src/experiment.py` wywołania zapisu wykresów i ich nie znalazł.
+  - Poprawka: wykresy X1-X4 i ich lista w readme powstają w etapie 6b.
+
+**Kandydat na slajd**
+
+- Raport o błędach AI: błąd specyfikacji D1, wykryty przez recenzenta AI na podstawie tekstu instrukcji.
+
+Status: oczekuje na akceptację użytkownika (CP5).
