@@ -16,8 +16,8 @@ SIGNAL_LINE = "#C26A1A"
 PRICE = "#9AA5B1"
 GRID = "#DCE3E8"
 
-FULL_SIZE_MM = (144.0, 62.0)
-PAIR_SIZE_MM = (144.0, 68.0)
+FULL_SIZE_MM = (144.0, 58.0)
+PAIR_SIZE_MM = (144.0, 64.0)
 
 FONT_DIR = Path("/usr/share/texmf-dist/fonts/opentype/public/tex-gyre")
 FONT_FILES = ("texgyreheros-regular.otf", "texgyreheros-bold.otf")
