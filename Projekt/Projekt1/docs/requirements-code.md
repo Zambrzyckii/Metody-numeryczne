@@ -118,6 +118,7 @@ Modules are flat, run from the project root and import each other directly:
 | `config.py` | constants: `MACD_PARAMS = (12, 26, 9)`, `START_INDEX = 100`, `DELAY`, paths, `MN_DATA_DIR` |
 | `data.py` | loading CSV files and validating them |
 | `macd.py` | `ema`, MACD/SIGNAL/histogram, signal detection |
+| `rsi.py` | RSI per `Projekt_1.pdf` [1, rozdz. 10] with the project's own smoothing (recursion analogous to formula (1)); buy-signal filter of the experiment |
 | `simulation.py` | portfolio simulation and the list of trades |
 | `stats.py` | R, r and the seven summary items |
 | `export.py` | writing `results/*.json` and `results/*.tex` |

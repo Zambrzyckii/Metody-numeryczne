@@ -108,7 +108,7 @@ These are the only allowed layouts.
 
 - **Format.** Vector PDF only, with no rasterized artists. Generated at the **exact final size** it will occupy on the slide and included without scaling (`\includegraphics{...}`, no `width=`). Font sizes on charts then equal the sizes set in the code.
   - Full width: 144 × 62 mm.
-  - Stacked pair: 144 × 34 mm each.
+  - Stacked pair: one figure of 144 × 68 mm with two panels and `sharex=True`, saved as `C1_C2.pdf` and `E1_E2.pdf`.
 - **Font.** TeX Gyre Heros, loaded with `matplotlib.font_manager.addfont` from the TeX Live path if the file exists. Otherwise fall back silently to the matplotlib default. The lecturer may run the code on Windows, so a missing font file must never crash generation.
 - **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt. Signal markers 6 pt.
 - **Required elements** (`Projekt_1.pdf` p. 7, 4.5):

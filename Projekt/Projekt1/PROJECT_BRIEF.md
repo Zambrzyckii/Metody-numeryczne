@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 1.1 · 2026-10-20 · status: complete.
+Version 1.2 · 2026-11-02 · status: complete.
 
 ---
 
@@ -112,7 +112,7 @@ Brak któregokolwiek z poniższych elementów oznacza niezaliczenie do czasu pop
 | Termin | Co | Kiedy |
 |---|---|---|
 | P2 | Prezentacja wstępna; ZIP ze slajdami | zajęcia 2026-10-21, 11:00–13:00; ZIP wysłany **najpóźniej o 10:00** |
-| P3 | Prezentacja końcowa; ZIP nr 1 (slajdy) + ZIP nr 2 (kod) | *do uzupełnienia* (ok. 2 tygodnie po P2); ZIP-y godzinę przed zajęciami |
+| P3 | Prezentacja końcowa; ZIP nr 1 (slajdy) + ZIP nr 2 (kod) | zajęcia 2026-11-04 (środa), 11:15-13:00, grupa `pro_gr3a` (`harmonogram_2026_v3.pdf`); ZIP-y wysłane **najpóźniej o 10:00** |
 
 Spóźnienie kosztuje 0,2 pkt za każde rozpoczęte 24 h opóźnienia ZIP-a lub za każdy dzień opóźnienia wystąpienia (`zasady` s. 3, p. 4.1).
 
@@ -146,8 +146,10 @@ Każdy z tych punktów zwiększa ryzyko slopu bez zysku punktowego:
 | Instrument części podstawowej | **PKO BP (stooq.pl), notowania dzienne, PLN** | jeden z przykładów z instrukcji (`Projekt_1.pdf` s. 4) |
 | Dane części podstawowej | **`data/pko.csv`: 1001 ostatnich sesji, 2022-10-19 … 2026-10-20; ceny skorygowane wstecznie przez stooq (ostatnia korekta 2026-08-04)** | zweryfikowane z niezależnym źródłem (CP1); korekta usuwa sztuczne spadki ceny w dniach dywidendy, które dawałyby fałszywe sygnały; precedens: zbiór prowadzącego zawiera „OHLC z korektami dostawcy" (`charts_pro1.pdf`); korekta opisana w `readme.md` (`Projekt_1.pdf` s. 4) |
 | Opóźnienie wykonania d | **d = 1**: transakcja w próbce i + 1 po cenie x₍ᵢ₊₁₎ | wariant sugerowany, bliższy praktyce (`Projekt_1.pdf` s. 3–4) |
-| Kierunek eksperymentu | *otwarta*; rekomendacja: RSI jako dodatkowy warunek decyzji | kierunek zalecany (`Projekt_1.pdf` s. 7) |
-| Data P3 | *otwarta* | uzupełnić |
+| Kierunek eksperymentu | **RSI(14) jako filtr kupna: sygnał kupna MACD wykonywany tylko, gdy RSI w próbce sygnału jest mniejszy niż 70; sprzedaż bez zmian.** Założenie orkiestratora z 2026-11-02, czeka na akceptację w CP4 | kierunek zalecany (`Projekt_1.pdf` s. 7); klasyczny próg wykupienia [1, rozdz. 10]; spośród czterech wariantów sprawdzonych na całym zbiorze wybrany dla interpretowalności, nie dla wyniku (średnia zmiana R jest ujemna) |
+| Transakcja D1 | **zamknięta transakcja o największej stopie zwrotu r; przy remisie najwcześniejsza** | deterministyczna reguła wyboru, spójna z największym zyskiem na slajdzie F (`Projekt_1.pdf` s. 6) |
+| Przykład lokalny eksperymentu | **zablokowana przez filtr transakcja o najniższym r (filtr pomógł najbardziej) i o najwyższym r (pogorszenie)** | instrukcja prosi o kryterium wyboru i o przypadek pogorszenia (`Projekt_1.pdf` s. 8, 5.2) |
+| Data P3 | **2026-11-04, 11:15-13:00; ZIP-y do 10:00** | `harmonogram_2026_v3.pdf`, grupa `pro_gr3a` |
 
 ---
 
@@ -488,7 +490,7 @@ These are the only allowed layouts.
 
 - **Format.** Vector PDF only, with no rasterized artists. Generated at the **exact final size** it will occupy on the slide and included without scaling (`\includegraphics{...}`, no `width=`). Font sizes on charts then equal the sizes set in the code.
   - Full width: 144 × 62 mm.
-  - Stacked pair: 144 × 34 mm each.
+  - Stacked pair: one figure of 144 × 68 mm with two panels and `sharex=True`, saved as `C1_C2.pdf` and `E1_E2.pdf`.
 - **Font.** TeX Gyre Heros, loaded with `matplotlib.font_manager.addfont` from the TeX Live path if the file exists. Otherwise fall back silently to the matplotlib default. The lecturer may run the code on Windows, so a missing font file must never crash generation.
 - **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt. Signal markers 6 pt.
 - **Required elements** (`Projekt_1.pdf` p. 7, 4.5):
@@ -546,6 +548,7 @@ Modules are flat, run from the project root and import each other directly:
 | `config.py` | constants: `MACD_PARAMS = (12, 26, 9)`, `START_INDEX = 100`, `DELAY`, paths, `MN_DATA_DIR` |
 | `data.py` | loading CSV files and validating them |
 | `macd.py` | `ema`, MACD/SIGNAL/histogram, signal detection |
+| `rsi.py` | RSI per `Projekt_1.pdf` [1, rozdz. 10] with the project's own smoothing (recursion analogous to formula (1)); buy-signal filter of the experiment |
 | `simulation.py` | portfolio simulation and the list of trades |
 | `stats.py` | R, r and the seven summary items |
 | `export.py` | writing `results/*.json` and `results/*.tex` |
@@ -848,3 +851,4 @@ Applies to every ZIP:
 | 0.5 | 2026-10-20 | Section 5 (documentation protocol); decisions in 1.7: author, PKO BP, d = 1; P2 time 11:00–13:00, ZIP by 10:00 | User decisions recorded; documentation flow defined before implementation |
 | 1.0 | 2026-10-20 | Section 6 (stages, checkpoints, packaging procedure); all sections complete | Brief complete; implementation can start |
 | 1.1 | 2026-10-20 | Decision in 1.7: basic-part data window and use of adjusted prices | CP1 passed |
+| 1.2 | 2026-11-02 | P3 date in 1.4 and 1.7; decisions in 1.7: experiment direction (pending CP4), D1 trade, local example; stacked pairs as one figure (3.6); `rsi.py` in 4.2 | Stages 5 and 6 started; P3 is 2026-11-04 |
