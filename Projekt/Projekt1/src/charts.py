@@ -5,6 +5,7 @@ import matplotlib.dates as mdates
 import numpy as np
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from matplotlib.legend_handler import HandlerTuple
 from matplotlib.lines import Line2D
 
 import config
@@ -16,6 +17,7 @@ from export import format_date
 
 MARKER_SIZE = 6
 LEGEND_ANCHOR = (1.01, 1.0)
+SESSION_LINE = {"linestyle": ":", "linewidth": 1.0}
 
 
 def _macd_label() -> str:
@@ -83,14 +85,33 @@ def _legend_right(ax: Axes, handles: list | None = None) -> None:
     )
 
 
-def _legend_below(fig: Figure, ax: Axes, extra: list[Axes], ncol: int) -> None:
-    """One figure legend below the plot for lines of several axes."""
+def _legend_below(
+    fig: Figure,
+    ax: Axes,
+    extra: list[Axes],
+    ncol: int,
+    entries: list[tuple[object, str]] | None = None,
+) -> None:
+    """One figure legend below the plot for lines of several axes.
+
+    entries are extra (handle, label) pairs, a tuple handle is drawn as
+    its artists side by side.
+    """
     handles, labels = [], []
     for each in [ax, *extra]:
         axis_handles, axis_labels = each.get_legend_handles_labels()
         handles += axis_handles
         labels += axis_labels
-    fig.legend(handles, labels, loc="outside lower center", ncol=ncol)
+    for handle, label in entries or []:
+        handles.append(handle)
+        labels.append(label)
+    fig.legend(
+        handles,
+        labels,
+        loc="outside lower center",
+        ncol=ncol,
+        handler_map={tuple: HandlerTuple(ndivide=None)},
+    )
 
 
 def chart_a1(prices: data.PriceSeries) -> Figure:
@@ -154,7 +175,7 @@ def _plot_price_and_macd(
     ax_right.set_ylabel(
         f"MACD, SIGNAL [{config.INSTRUMENT_UNIT}]", color=style.PRIMARY
     )
-    ax_right.axhline(0.0, color=style.MUTED, linewidth=0.8)
+    ax_right.axhline(0.0, color=style.MUTED, linewidth=0.8, zorder=1)
     ax_right.tick_params(axis="y", colors=style.PRIMARY)
     ax_right.spines["right"].set_visible(True)
     ax_right.spines["right"].set_color(style.PRIMARY)
@@ -275,14 +296,6 @@ def chart_d1(
     ax_right = _plot_price_and_macd(
         ax, dates[window], prices.close[window], macd[window], signal[window]
     )
-    ax.plot(
-        [],
-        [],
-        color=style.MUTED,
-        linestyle=":",
-        linewidth=1.0,
-        label="Sesja sygnału (przecięcie MACD i SIGNAL)",
-    )
     for trade, side, word in (
         (buy, "buy", "kupna"),
         (sell, "sell", "sprzedaży"),
@@ -291,8 +304,8 @@ def chart_d1(
         ax.axvline(
             dates[trade.signal_index],
             color=marker["color"],
-            linestyle=":",
-            linewidth=1.0,
+            linestyle=SESSION_LINE["linestyle"],
+            linewidth=SESSION_LINE["linewidth"],
         )
         ax.plot(
             [dates[trade.signal_index]],
@@ -310,7 +323,17 @@ def chart_d1(
         _title("D1", f"wybrana transakcja, cena i {_macd_label()}")
     )
     date_axis(ax, dates[first], dates[last])
-    _legend_below(fig, ax, [ax_right], 2)
+    session_handle = tuple(
+        Line2D([], [], color=marker_style(side)["color"], **SESSION_LINE)
+        for side in ("buy", "sell")
+    )
+    _legend_below(
+        fig,
+        ax,
+        [ax_right],
+        2,
+        [(session_handle, "Sesja sygnału (przecięcie MACD i SIGNAL)")],
+    )
     return fig
 
 
