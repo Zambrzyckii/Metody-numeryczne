@@ -76,7 +76,7 @@ Rules:
   | Footer and source notes | `\footnotesize` (smallest allowed) |
   | `\scriptsize`, `\tiny` | not allowed |
 
-- Polish typography: quotation marks „…", the long dash for ranges and asides, a decimal comma in running text. Numbers inserted from `results/` follow the same convention, which is the generator's responsibility.
+- Polish typography: quotation marks „…", a plain hyphen for ranges and symbol legends instead of a long dash (user decision at CP3, docs/ai-log.md), a decimal comma in running text. Numbers inserted from `results/` follow the same convention, which is the generator's responsibility.
 
 ### 3.4 Slide layout
 
@@ -113,7 +113,7 @@ These are the only allowed layouts.
 - **Font.** TeX Gyre Heros, loaded with `matplotlib.font_manager.fontManager.addfont` from the TeX Live path if the file exists. Otherwise fall back silently to the matplotlib default. The lecturer may run the code on Windows, so a missing font file must never crash generation.
 - **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt. Signal markers 6 pt.
 - **Required elements** (`Projekt_1.pdf` p. 7, 4.5):
-  - an in-figure title naming the chart ID, the quantity and the instrument, e.g. `B1 · PKO BP — cena zamknięcia i MACD(12,26,9)`,
+  - an in-figure title naming the chart ID, the quantity and the instrument, e.g. `B1 · PKO BP - cena zamknięcia i MACD(12,26,9)`,
   - both axes labelled with units, for example `Cena [PLN]` or `Indeks próbki` / dates,
   - a legend covering every line, bar and marker.
 - **Dual axis (B1).** Price on the left axis, MACD and SIGNAL on the right. Each axis label is coloured like its series when that colour is allowed for text (3.2). Otherwise the price axis label is `mnMuted` and the MACD axis label `mnPrimary`. Legend entries name their axis.

@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 1.5 · 2026-11-02 · status: complete.
+Version 1.6 · 2026-11-02 · status: complete.
 
 ---
 
@@ -458,7 +458,7 @@ Rules:
   | Footer and source notes | `\footnotesize` (smallest allowed) |
   | `\scriptsize`, `\tiny` | not allowed |
 
-- Polish typography: quotation marks „…", the long dash for ranges and asides, a decimal comma in running text. Numbers inserted from `results/` follow the same convention, which is the generator's responsibility.
+- Polish typography: quotation marks „…", a plain hyphen for ranges and symbol legends instead of a long dash (user decision at CP3, docs/ai-log.md), a decimal comma in running text. Numbers inserted from `results/` follow the same convention, which is the generator's responsibility.
 
 ### 3.4 Slide layout
 
@@ -495,7 +495,7 @@ These are the only allowed layouts.
 - **Font.** TeX Gyre Heros, loaded with `matplotlib.font_manager.fontManager.addfont` from the TeX Live path if the file exists. Otherwise fall back silently to the matplotlib default. The lecturer may run the code on Windows, so a missing font file must never crash generation.
 - **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt. Signal markers 6 pt.
 - **Required elements** (`Projekt_1.pdf` p. 7, 4.5):
-  - an in-figure title naming the chart ID, the quantity and the instrument, e.g. `B1 · PKO BP — cena zamknięcia i MACD(12,26,9)`,
+  - an in-figure title naming the chart ID, the quantity and the instrument, e.g. `B1 · PKO BP - cena zamknięcia i MACD(12,26,9)`,
   - both axes labelled with units, for example `Cena [PLN]` or `Indeks próbki` / dates,
   - a legend covering every line, bar and marker.
 - **Dual axis (B1).** Price on the left axis, MACD and SIGNAL on the right. Each axis label is coloured like its series when that colour is allowed for text (3.2). Otherwise the price axis label is `mnMuted` and the MACD axis label `mnPrimary`. Legend entries name their axis.
@@ -857,3 +857,4 @@ Applies to every ZIP:
 | 1.3 | 2026-11-02 | 3.2 price roles for A1, D1, E1, X3, X4; 3.6 addfont API, axis-label colour rule, signal markers in D1/X3/X4 | Code review of stage 5 found docs that disagree with the code and with `Projekt_1.pdf` p. 6 D |
 | 1.4 | 2026-11-02 | 3.6 chart heights 62 to 58 mm (full width) and 68 to 64 mm (stacked pair) | The first build of the final deck overflowed by 2.1 to 2.6 mm on eight chart slides |
 | 1.5 | 2026-11-02 | 2.3 and 3.7: verbatim prompt quotes are exempt from the traceable-numbers rule | The final-deck review flagged the numbers inside the quoted acceptance reference |
+| 1.6 | 2026-11-02 | 3.3 plain hyphen instead of the long dash, 3.6 chart-title example | The user's CP3 decision was never carried into the brief; the final-deck review flagged the mismatch |
