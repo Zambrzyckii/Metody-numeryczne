@@ -1,20 +1,12 @@
-% Introduction: moving averages, EMA, MACD/SIGNAL, buy and sell signals.
+% Introduction: EMA with the idea of a moving average, MACD/SIGNAL, buy and sell
+% signals.
 
 \begin{frame}
-  \frametitle{Średnia krocząca wygładza ceny, a EMA mocniej waży ostatnie sesje}
-  \begin{itemize}
-    \item Pojedyncze notowania skaczą z sesji na sesję, dlatego patrzy się
-      na średnią z ostatnich $N$ sesji.
-    \item Zwykła średnia traktuje wszystkie $N$ sesji jednakowo, więc
-      reaguje z większym opóźnieniem niż EMA.
-    \item EMA nadaje sesjom wagi malejące wykładniczo: najnowsza cena
-      znaczy najwięcej.
-    \item Krótki okres $N$ daje szybką EMA, długi okres wolną EMA.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{EMA wyznacza się rekurencyjnie ze współczynnika wygładzania}
+  \frametitle{EMA to średnia krocząca, która najmocniej waży ostatnie sesje}
+  Pojedyncze notowania skaczą z sesji na sesję, dlatego patrzy się na średnią
+  z ostatnich $N$ sesji. EMA nadaje sesjom wagi malejące wykładniczo, więc
+  najnowsza cena znaczy najwięcej, a wskaźnik reaguje szybciej niż zwykła
+  średnia.
   \begin{equation*}
     \alpha_N = \frac{2}{N+1},\qquad
     E_0^{(N)} = x_0,\qquad
@@ -27,7 +19,7 @@
     \item $x_i$ - cena zamknięcia z sesji numer $i$
     \item $E_i^{(N)}$ - wartość EMA o okresie $N$ po sesji $i$
     \item $\alpha_N$ - waga najnowszej ceny, tym większa, im krótszy
-      okres $N$
+      okres $N$ (krótki okres daje szybką EMA, długi wolną)
   \end{itemize}
 \end{frame}
 

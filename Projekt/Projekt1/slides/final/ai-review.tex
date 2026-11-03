@@ -1,26 +1,18 @@
-% AI review of the final deck: reviewer setup, review prompt, resulting grade.
+% AI review of the final deck: reviewer setup with the review prompt on one
+% frame, then the grade with the iteration history.
 % Grade macros (\resReviewScore, \resReviewVerbal) come from review.tex,
 % maintained by the orchestrator.
 \input{review.tex}
 
-\begin{frame}
-  \frametitle{Prezentację ocenia osobny agent z trzema źródłami kryteriów}
+\begin{frame}[fragile]
+  \frametitle{Recenzent ocenia talię według trzech źródeł kryteriów z promptu}
   \begin{itemize}
     \item Agent presentation-reviewer czyta skompilowany PDF i źródła LaTeX.
       Definicja roli daje mu tylko narzędzia odczytu, a przy tej talii
       pilnowało tego polecenie.
-    \item Źródła kryteriów: zasady zaliczenia, instrukcja projektu (treść
-      prezentacji końcowej), przewodnik stylu prezentacji.
-    \item Ocenia elementy obowiązkowe (brak to blocker), czytelność na pełnym
-      ekranie, poprawność wzorów i wykresów, zgodność wniosków z dowodami,
-      objętość względem 8 minut.
     \item Każda iteracja recenzji daje znaleziska z wagami oraz ocenę słowną
-      i liczbową. Ocena jest doradcza i nie przesądza o punktach.
+      i liczbową. Ocena jest doradcza.
   \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]
-  \frametitle{Recenzję uruchamia prompt wskazujący źródła kryteriów i skalę ocen}
   {\footnotesize
 \begin{verbatim}
 [...]
@@ -34,16 +26,16 @@ with severity and a suggested fix. End with a verbal grade
 and a score 1-10.
 [...]
 \end{verbatim}}
-  \vskip1mm
-  Wynik: kolejne iteracje dały \resReviewFirstScore{}\,/\,10,
-  \resReviewSecondScore{}\,/\,10 i \resReviewScore{}\,/\,10.\\
-  Ocena: porównanie z dziennikiem i danymi wykryło nieścisłości, których
-  kompilacja nie pokazuje.
 \end{frame}
 
 \begin{frame}
   \frametitle{Recenzent AI ocenił prezentację końcową na \resReviewScore{}\,/\,10}
   „\resReviewVerbal''
+  \vskip3mm
+  Kolejne iteracje dały \resReviewFirstScore{}\,/\,10,
+  \resReviewSecondScore{}\,/\,10, \resReviewThirdScore{}\,/\,10
+  i \resReviewScore{}\,/\,10. Porównanie z dziennikiem i danymi wykryło
+  nieścisłości, których kompilacja nie pokazuje.
   \vskip3mm
   {\footnotesize\color{mnMuted}
     Ocena pochodzi z końcowej iteracji recenzji. Przebieg iteracji
