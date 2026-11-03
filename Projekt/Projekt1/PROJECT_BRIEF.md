@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 1.9 · 2026-11-03 · status: complete.
+Version 1.10 · 2026-11-03 · status: complete.
 
 ---
 
@@ -150,6 +150,7 @@ Każdy z tych punktów zwiększa ryzyko slopu bez zysku punktowego:
 | Transakcja D1 | **zamknięta transakcja o największej stopie zwrotu r; przy remisie najwcześniejsza** | deterministyczna reguła wyboru, spójna z największym zyskiem na slajdzie F (`Projekt_1.pdf` s. 6) |
 | Przykład lokalny eksperymentu | **spółki z dokładnie jedną zablokowaną transakcją, X3 to największa poprawa R, X4 największe pogorszenie. Na slajdzie jest tylko X4 (NVDA), a X3 powstaje, ale nie jest pokazywany** | instrukcja prosi o kryterium wyboru i zaleca przypadek pogorszenia (`Projekt_1.pdf` s. 8, 5.2). Reguła z rundy poprawek etapu 6a, ograniczenie do X4 to decyzja użytkownika w CP5 |
 | Część eksperymentalna prezentacji końcowej | **trzy slajdy: reguła z uzasadnieniem, wynik globalny (X1) i przykład lokalny (X4)** | trzy punktowane elementy z tabeli 2 (`Projekt_1.pdf` s. 9). Decyzja użytkownika w CP5, bo osiem slajdów nie mieściło się w czasie wystąpienia |
+| Układ prezentacji końcowej | **20 slajdów. Wstęp ma trzy slajdy (średnia krocząca razem z EMA), współpraca z AI dwa (konfiguracja i wybrany prompt), błędy AI trzy, recenzja dwa (recenzent z promptem oraz ocena z przebiegiem iteracji). Slajd F nie ma zdania o średniej długości transakcji** | każdy slajd odpowiada elementowi tabeli 2 albo grupie obowiązkowej (`Projekt_1.pdf` s. 6, p. 4.3 i s. 9). Wystąpienie skupia się na jednym doświadczeniu z AI, a pozostałe slajdy dokumentują szczegóły (`zasady` p. 6.1). Decyzja użytkownika w drugiej rundzie CP5, żeby skrócić talię |
 | Data P3 | **2026-11-04, 11:15-13:00; ZIP-y do 10:00** | `harmonogram_2026_v3.pdf`, grupa `pro_gr3a` |
 
 ---
@@ -863,3 +864,4 @@ Applies to every ZIP:
 | 1.7 | 2026-11-02 | 4.x macro examples: `\resOpenQty`, `\resOpenValue` instead of `\resOpenPosition`, new index macros | The code never exported `\resOpenPosition`; reported at stage 4 and again by the code review of the index macros |
 | 1.8 | 2026-11-03 | 1.7 author row, local-example rule and three-slide experimental part; 3.4 footline with the page number only; 3.6 thinner B1 lines, smaller C1/E1 markers, legend lists drawn marker kinds only | User review at CP5; the local-example row still described the rule replaced at stage 6a |
 | 1.9 | 2026-11-03 | 2.2 how the agents actually ran for the final deck; 2.3 and 3.7 method constants are definitions | Review iteration 3 found the read-only claim on the slides stronger than what ran, and flagged MACD(12, 26, 9) on the intro |
+| 1.10 | 2026-11-03 | 1.7 layout of the final deck, 20 slides | User review at CP5, round 2: the deck was too long for an 8-minute talk |
