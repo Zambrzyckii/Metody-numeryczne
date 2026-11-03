@@ -1,6 +1,6 @@
 # Presentation visual style
 
-> Extract of `PROJECT_BRIEF.md` v1.0, section 3. Edit the brief first, then regenerate this file (brief §5.2).
+> Extract of `PROJECT_BRIEF.md` v1.8, section 3. Edit the brief first, then regenerate this file (brief §5.2).
 
 This section is the visual contract for:
 

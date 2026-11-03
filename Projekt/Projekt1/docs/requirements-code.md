@@ -1,6 +1,6 @@
 # Requirements: code
 
-> Part A is extracted from `materials/Projekt_1.pdf`. Part B is extracted from `PROJECT_BRIEF.md` v1.0, section 4. On conflict the PDF wins (brief §0). This file is the `code-reviewer` checklist.
+> Part A is extracted from `materials/Projekt_1.pdf`. Part B is extracted from `PROJECT_BRIEF.md` v1.8, section 4. On conflict the PDF wins (brief §0). This file is the `code-reviewer` checklist.
 
 ## Part A — Requirements from the instruction
 
