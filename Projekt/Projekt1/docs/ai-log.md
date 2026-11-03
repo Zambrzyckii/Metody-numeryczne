@@ -2061,3 +2061,24 @@ Status: zakończono.
 
 - Commity kroków: `03cb4d0`, `7c9ad89`, `4f7bd2d`.
 - Status: oczekuje na dalsze uwagi użytkownika w CP5 oraz na CP2, CP4 i zgodę na przesłanie pakietów.
+
+### Etap 16 · CP5, trzecia runda uwag użytkownika (2026-11-03)
+
+**Polecenia**
+
+- Usunąć z ostatniego slajdu przypis „Ocena pochodzi z końcowej iteracji recenzji. Przebieg iteracji dokumentuje dziennik pracy z AI. Poprawki wskazane w tej ocenie wprowadzono po recenzji.", bo źle wygląda.
+
+**Decyzje**
+
+- Przypis usunięty ze slajdu 20, commit `509136c`. Orkiestrator zwrócił uwagę, że cytowana ocena słowna wymienia braki poprawione po iteracji 4, więc bez przypisu slajd tego nie mówi. Plan wystąpienia przy slajdzie 20 mówi to teraz na głos. Przebieg iteracji nadal dokumentuje ten dziennik.
+
+**Weryfikacja**
+
+- `make -B`: kod 0, 0 przepełnień, 0 ostrzeżeń, 20 stron, wszystkie fonty osadzone, brak rastrów. Strona 20 obejrzana w PNG.
+- Pakiet prezentacji: 20 plików, test z `make -B` w pustym katalogu, tekst i rendery 20 stron identyczne, PDF w pakiecie identyczny z repozytorium. SHA-256 policzone przez orkiestratora: `zambrzycki_projekt1_koncowa.zip` `acbe1a6665adeafd…`. Pakiet z kodem bez zmian (`44ef297f2dae1e3e…`).
+
+**Błędy AI**
+
+- Brak.
+
+Status: oczekuje na CP2, CP4 i zgodę na przesłanie pakietów.
