@@ -1,6 +1,6 @@
 # Presentation visual style
 
-> Extract of `PROJECT_BRIEF.md` v1.8, section 3. Edit the brief first, then regenerate this file (brief §5.2).
+> Extract of `PROJECT_BRIEF.md` v1.9, section 3. Edit the brief first, then regenerate this file (brief §5.2).
 
 This section is the visual contract for:
 
@@ -132,7 +132,7 @@ The reviewer treats any occurrence as a finding of at least *minor* severity:
 - **Motion:** animations, transitions, `\pause`, overlays, `\only`/`\uncover` reveals.
 - **Decoration:** gradients, shadows, rounded or shaded boxes, 3D charts, pie charts, seaborn or other preset chart styles.
 - **Hard-coded values:** any colour or font size not defined in this section.
-- **Unsourced content:** a number on a slide that does not come from `results/`; screenshots of code, terminals or charts. A verbatim prompt quote is exempt: it reproduces the text logged in `docs/ai-log.md`, numbers included, with cuts marked `[...]`.
+- **Unsourced content:** a number on a slide that does not come from `results/`; screenshots of code, terminals or charts. A verbatim prompt quote is exempt: it reproduces the text logged in `docs/ai-log.md`, numbers included, with cuts marked `[...]`. Method constants quoted from `Projekt_1.pdf` (MACD(12, 26, 9), C₁₀₀ = 1000·x₁₀₀, equation numbers) are definitions, not results.
 - **Weak titles:** a topic-only title on a content slide.
 - **Writing:** marketing or hype vocabulary ("rewolucyjny", "potężny", "przełomowy"), exclamation marks, rhetorical questions, filler sentences.
 - **Unfinished work:** placeholder text, `TODO`, `???` or overfull boxes in the compiled PDF.

@@ -86,7 +86,7 @@ Further rules:
 | Term | Package | Deadline |
 |---|---|---|
 | P2 — 2026-10-21, 11:00–13:00 | ZIP: preliminary PDF, LaTeX sources, `Makefile`, files needed to compile | **2026-10-21, 10:00** |
-| P3 — date to be set | ZIP 1: final PDF, sources, `Makefile`, files needed to compile; ZIP 2: code (brief 1.5) | one hour before the class |
+| P3 — 2026-11-04, 11:15–13:00, group `pro_gr3a` | ZIP 1: final PDF, sources, `Makefile`, files needed to compile; ZIP 2: code (brief 1.5) | **2026-11-04, 10:00** (brief 1.4) |
 
 - A late ZIP costs 0.2 points for each started 24 hours.
 - Packaging follows the whitelist in brief 1.5 and the test procedure in brief 6.4.
