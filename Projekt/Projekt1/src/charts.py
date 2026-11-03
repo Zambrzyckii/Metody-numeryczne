@@ -16,6 +16,8 @@ import style
 from export import format_date
 
 MARKER_SIZE = 6
+FULL_PERIOD_MARKER_SIZE = 3.5
+FULL_PERIOD_MACD_WIDTH = 0.8
 LEGEND_ANCHOR = (1.01, 1.0)
 SESSION_LINE = {"linestyle": ":", "linewidth": 1.0}
 
@@ -50,16 +52,18 @@ def date_axis(
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%d.%m.%Y"))
 
 
-def marker_style(side: str, executed: bool = True) -> dict:
+def marker_style(
+    side: str, executed: bool = True, size: float = MARKER_SIZE
+) -> dict:
     """Buy up-triangle and sell down-triangle, hollow when not executed."""
     color = style.BUY if side == "buy" else style.SELL
     return {
         "linestyle": "none",
         "marker": "^" if side == "buy" else "v",
-        "markersize": MARKER_SIZE,
+        "markersize": size,
         "color": color,
         "markerfacecolor": color if executed else "white",
-        "markeredgewidth": 1.2,
+        "markeredgewidth": 1.2 if size >= MARKER_SIZE else 0.8,
         "clip_on": False,
     }
 
@@ -148,8 +152,10 @@ def _plot_price_and_macd(
     close: np.ndarray,
     macd: np.ndarray,
     signal: np.ndarray,
+    indicator_width: float | None = None,
 ) -> Axes:
     """Light price on the left axis, MACD and SIGNAL on the right axis."""
+    width = {} if indicator_width is None else {"linewidth": indicator_width}
     ax.plot(
         dates,
         close,
@@ -163,7 +169,7 @@ def _plot_price_and_macd(
 
     ax_right = ax.twinx()
     ax_right.plot(
-        dates, macd, color=style.PRIMARY, label="MACD (prawa oś)"
+        dates, macd, color=style.PRIMARY, label="MACD (prawa oś)", **width
     )
     ax_right.plot(
         dates,
@@ -171,6 +177,7 @@ def _plot_price_and_macd(
         color=style.SIGNAL_LINE,
         linestyle="--",
         label="SIGNAL (prawa oś)",
+        **width,
     )
     ax_right.set_ylabel(
         f"MACD, SIGNAL [{config.INSTRUMENT_UNIT}]", color=style.PRIMARY
@@ -191,7 +198,9 @@ def chart_b1(
     dates = prices.dates
     fig = new_figure(style.FULL_SIZE_MM)
     ax = fig.subplots()
-    ax_right = _plot_price_and_macd(ax, dates, prices.close, macd, signal)
+    ax_right = _plot_price_and_macd(
+        ax, dates, prices.close, macd, signal, FULL_PERIOD_MACD_WIDTH
+    )
     ax.set_title(
         _title("B1", f"cena zamknięcia i {_macd_label()}")
     )
@@ -224,7 +233,12 @@ def plot_c1(
         (-1, "sell", "Sygnał sprzedaży"),
     ):
         idx = indices[sides == value]
-        ax.plot(dates[idx], macd[idx], label=label, **marker_style(side))
+        ax.plot(
+            dates[idx],
+            macd[idx],
+            label=label,
+            **marker_style(side, size=FULL_PERIOD_MARKER_SIZE),
+        )
     ax.set_title(_title("C1", f"{_macd_label()} i sygnały"))
     ax.set_ylabel(f"MACD, SIGNAL\n[{config.INSTRUMENT_UNIT}]")
     style.decimal_comma(ax.yaxis)
@@ -364,9 +378,12 @@ def plot_e1(
             (indices[chosen_side & is_executed], True, done_word),
             (indices[chosen_side & ~is_executed], False, skipped_word),
         ):
-            marker = marker_style(side, executed=executed)
-            if len(chosen):
-                ax.plot(dates[chosen], prices.close[chosen], **marker)
+            if not len(chosen):
+                continue
+            marker = marker_style(
+                side, executed=executed, size=FULL_PERIOD_MARKER_SIZE
+            )
+            ax.plot(dates[chosen], prices.close[chosen], **marker)
             handles.append(
                 Line2D([], [], label=f"{noun} {word}", **marker)
             )
