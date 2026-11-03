@@ -3,17 +3,18 @@
 % The prompt excerpt quotes the real stage 6a task card (ai-log 2026-11-02).
 
 \begin{frame}
-  \frametitle{Orkiestrator delegował zadania czterem rolom agentów}
+  \frametitle{Każdą pracę agenta sprawdzał recenzent i orkiestrator}
   \begin{itemize}
-    \item Claude Code: sesja główna jest orkiestratorem i deleguje zadania
-      agentom.
-    \item Role tworzące to coder i latex-assistant. Definicje ról code-reviewer
-      i presentation-reviewer dają tylko narzędzia odczytu, ale przy tej talii
-      ograniczenie wynikało z polecenia.
-    \item Karta zadania zawiera cel, wycinek wymagań z referencjami, listę
-      plików i kryteria akceptacji.
-    \item Decyzje projektowe i interpretacje wyników pozostają po stronie
-      autora.
+    \item Sesja główna Claude Code jest orkiestratorem i deleguje zadania
+      kartami z celem, wycinkiem wymagań z referencjami, listą plików
+      i kryteriami akceptacji.
+    \item Pracę coder sprawdza code-reviewer, a pracę latex-assistant
+      presentation-reviewer. Definicje ról recenzentów dają tylko narzędzia
+      odczytu, ale przy tej talii ograniczenie wynikało z polecenia.
+    \item Kompilację, kontrolę czcionek i niezależne obliczenia kontrolne
+      uruchamia sam orkiestrator i przekazuje ich wynik recenzentom.
+    \item AI proponuje decyzje i tezy slajdów, a autor zatwierdza je
+      w punktach kontrolnych.
   \end{itemize}
 \end{frame}
 
@@ -30,6 +31,6 @@ and report it instead of adjusting the spec.
 [...]
 \end{Verbatim}
   \vskip1mm
-  Wynik: agent odtworzył wszystkie wartości dokładnie.\\
+  Wynik: agent coder w obliczeniach eksperymentu odtworzył wszystkie wartości dokładnie.\\
   Ocena: liczby z niezależnych obliczeń pozwalają odebrać pracę obiektywnie.
 \end{frame}

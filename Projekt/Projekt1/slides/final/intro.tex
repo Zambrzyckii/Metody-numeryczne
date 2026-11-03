@@ -3,10 +3,8 @@
 
 \begin{frame}
   \frametitle{EMA to średnia krocząca, która najmocniej waży ostatnie sesje}
-  Pojedyncze notowania skaczą z sesji na sesję, dlatego patrzy się na średnią
-  z ostatnich $N$ sesji. EMA nadaje sesjom wagi malejące wykładniczo, więc
-  najnowsza cena znaczy najwięcej, a wskaźnik reaguje szybciej niż zwykła
-  średnia.
+  EMA wygładza ceny. Uwzględnia wszystkie wcześniejsze sesje, ale ich wagi
+  maleją wykładniczo, więc najnowsza cena znaczy najwięcej.
   \begin{equation*}
     \alpha_N = \frac{2}{N+1},\qquad
     E_0^{(N)} = x_0,\qquad
@@ -50,17 +48,19 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Zmiana znaku histogramu wyznacza momenty kupna i sprzedaży}
+  \frametitle{Zmiana znaku histogramu wyznacza sygnały kupna i sprzedaży}
   \begin{equation*}
     H_i = M_i - S_i
     \tag{4}
   \end{equation*}
   \vskip2mm
   \begin{itemize}
-    \item Kupno w sesji $i$, gdy histogram przechodzi z wartości ujemnej
-      lub zera na dodatnią ($H_{i-1} \le 0$ i $H_i > 0$).
-    \item Sprzedaż, gdy histogram przechodzi z wartości dodatniej lub zera
-      na ujemną ($H_{i-1} \ge 0$ i $H_i < 0$).
+    \item Sygnał kupna w sesji $i$, gdy MACD przecina SIGNAL od dołu, czyli
+      histogram przechodzi z wartości ujemnej lub zera na dodatnią
+      ($H_{i-1} \le 0$ i $H_i > 0$).
+    \item Sygnał sprzedaży w sesji $i$, gdy MACD przecina SIGNAL od góry,
+      czyli histogram przechodzi z wartości dodatniej lub zera na ujemną
+      ($H_{i-1} \ge 0$ i $H_i < 0$).
     \item Transakcja zapada w sesji po sygnale, kupuje się za cały kapitał
       i sprzedaje całą pozycję. Kapitał początkowy to
       $C_{100} = 1000 \cdot x_{100}$, a sygnały liczy się od próbki
