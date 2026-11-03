@@ -16,14 +16,16 @@
   \end{equation*}
   \begin{itemize}
     \item $G_i$, $L_i$ - wzrost i spadek ceny w sesji $i$, $A_i$ i $B_i$ - ich
-      średnie wygładzane jak EMA we wzorze (1).
+      średnie wygładzane jak EMA we wzorze (1), a $\mathrm{RSI}_i = 100$,
+      gdy $B_i = 0$.
     \item Reguła: sygnał kupna z MACD wykonujemy tylko, gdy RSI w sesji
       sygnału jest mniejszy niż \resExpRsiThreshold{}. Sprzedaż bez zmian.
     \item Uzasadnienie: MACD reaguje z opóźnieniem, więc kupno może przyjść
       po wzroście, a RSI od \resExpRsiThreshold{} oznacza wykupienie
       (Murphy, rozdz. 10).
-    \item Symulacja jak w części podstawowej, na wszystkich \resExpCount{}
-      spółkach, z jednym progiem RSI.
+    \item Symulacja jak w części podstawowej (transakcja w sesji po sygnale,
+      sygnały od próbki \resFirstSignalIndex{}), na wszystkich
+      \resExpCount{} spółkach, z jednym progiem RSI.
   \end{itemize}
 \end{frame}
 
@@ -41,6 +43,6 @@
   \frametitle{\resExpHurtTicker: mimo RSI \resExpHurtRsi{} wzrost trwał dalej,
     więc filtr zaszkodził}
   \includegraphics{X4.pdf}\par
-  Największy spadek R wśród spółek z jedną blokadą, z
-  \resExpHurtBasicPct{}\,\% na \resExpHurtModifiedPct{}\,\%.
+  Największy spadek R (\resExpHurtDeltaPp{} pp) wśród
+  \resExpSingleBlockedCount{} ze \resExpCount{} spółek z jedną blokadą.
 \end{frame}
