@@ -2012,3 +2012,52 @@ Acceptance: make -B clean, 20 pages, pages 2, 4, 14, 15, 19, 20 rendered and vie
 - Brak.
 
 Status: zakończono.
+
+### Etap 15 · CP5, druga runda uwag użytkownika (2026-11-03)
+
+**Polecenia**
+
+- Ocenić, czy slajdy 9-11 są potrzebne, i wskazać, co jeszcze można wyciąć z talii w duchu „minimum, ale wszystko, co potrzeba", w tym w części o błędach AI i na slajdach 21-22.
+- Po analizie użytkownik polecił wykonać cztery cięcia z tabeli orkiestratora.
+
+**Decyzje**
+
+- Slajdy 9-11 zostają, bo to wymagane slajdy D, E i F (`Projekt_1.pdf` s. 6, p. 4.2), warte 2,5 z 8 punktów (s. 9, tab. 2). Slajdy 21 i 22 to dwa z trzech wymaganych elementów recenzji (`zasady` p. 6.3), więc można je było tylko połączyć. Część o błędach AI ma wymagane około trzech slajdów (`zasady` p. 5.3) i zostaje bez zmian.
+- Cztery cięcia: slajd o średniej kroczącej połączony ze slajdem EMA, slajd F bez zdania o średniej długości transakcji, usunięty slajd o pracy równoległej agentów, połączone slajdy recenzenta i promptu recenzji. Talia ma 20 slajdów, zapis w briefie 1.10.
+- Długość wystąpienia skraca przede wszystkim plan mówienia (`zasady` p. 6.1). Plan na 20 slajdów trwa około 6 minut. Opowiada jedno doświadczenie z AI (błąd wykryty przez recenzenta kodu), a pozostałe slajdy z błędami tylko pokazuje. Plan nie jest częścią repozytorium.
+- Po zmianie układu orkiestrator uruchomił czwartą iterację recenzji, żeby ocena na slajdzie dotyczyła talii w nowym układzie. Poprawki po iteracji 4 nie były już recenzowane.
+
+**Weryfikacja**
+
+- `make -B`: kod 0, 0 przepełnień, 0 ostrzeżeń, 20 stron, wszystkie fonty osadzone, brak rastrów. Zmienione strony obejrzane w PNG.
+- Pakiet prezentacji: 20 plików, ten sam skład co w etapie 14. Test z `make -B` w pustym katalogu: tekst i rendery 20 stron identyczne, PDF w pakiecie identyczny z repozytorium.
+- Pakiet z kodem bez zmian, bo od `eda5499` nie zmieniły się `src/`, `charts/`, `results/`, `readme.md` ani `zrodla.md`.
+- Sumy SHA-256 policzone przez orkiestratora: `zambrzycki_projekt1_koncowa.zip` `2ed303f8930be040…`, `zambrzycki_projekt1_kod.zip` `44ef297f2dae1e3e…`.
+
+**Błędy AI**
+
+- **Znalezisko:** Karta cięcia 1 napisana przez orkiestratora przeniosła do ramki EMA zdanie „patrzy się na średnią z ostatnich N sesji". W nowym miejscu opisywało ono EMA, a EMA nie odrzuca starszych obserwacji.
+  - Waga: minor.
+  - Wymaganie: `Projekt_1.pdf` s. 2, p. 2.1 („a nie odrzucanie obserwacji starszych niż N próbek").
+  - Sposób wykrycia: recenzent AI prezentacji (iteracja 4).
+  - Poprawka: nowe zdanie wstępu na slajdzie 2, commit `4f7bd2d`.
+- **Znalezisko:** Karta cięcia 4 ograniczyła połączony slajd recenzji do dwóch punktów i pominęła kryteria recenzenta.
+  - Waga: minor.
+  - Wymaganie: `zasady` p. 6.3 (krótki opis recenzenta i jego najważniejszych kryteriów).
+  - Sposób wykrycia: recenzent AI prezentacji (iteracja 4).
+  - Poprawka: punkt z kryteriami na slajdzie 19, commit `4f7bd2d`.
+- **Znalezisko:** Slajd o konfiguracji AI od etapu 7 twierdził, że decyzje projektowe i interpretacje wyników pozostają po stronie autora. Dziennik pokazuje, że AI proponowało kierunek eksperymentu i tezy slajdów, a autor je zatwierdzał.
+  - Waga: minor.
+  - Wymaganie: brief 2.3 (uczciwe raporty) i `zasady` p. 5.2.
+  - Sposób wykrycia: recenzent AI prezentacji (iteracja 4) porównał slajd z dziennikiem.
+  - Poprawka: punkt „AI proponuje decyzje i tezy slajdów, a autor zatwierdza je w punktach kontrolnych", commit `4f7bd2d`.
+- **Znalezisko:** W planie wystąpienia orkiestrator napisał, że malejące słupki zapowiadają „nadchodzący sygnał". To samo nadmierne twierdzenie recenzent usunął z tytułu slajdu w iteracji 3.
+  - Waga: minor.
+  - Wymaganie: `Projekt_1.pdf` s. 3 (histogram pokazuje zbliżanie się MACD i SIGNAL).
+  - Sposób wykrycia: orkiestrator przy ponownym czytaniu planu.
+  - Poprawka: plan mówi, że sygnał pojawia się dopiero przy zmianie znaku słupka.
+
+**Wynik**
+
+- Commity kroków: `03cb4d0`, `7c9ad89`, `4f7bd2d`.
+- Status: oczekuje na dalsze uwagi użytkownika w CP5 oraz na CP2, CP4 i zgodę na przesłanie pakietów.
