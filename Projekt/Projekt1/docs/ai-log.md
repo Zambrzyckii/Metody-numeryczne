@@ -2082,3 +2082,26 @@ Status: zakończono.
 - Brak.
 
 Status: oczekuje na CP2, CP4 i zgodę na przesłanie pakietów.
+
+### Etap 17 · Przesłanie pakietów P3 (2026-11-03)
+
+**Polecenia**
+
+- Złożyć ZIP i wysłać go na eNauczanie do prezentacji końcowej projektu 1.
+
+**Decyzje**
+
+- Wysłano oba pakiety, bo zasady każą przesłać kod osobnym ZIP-em w to samo miejsce co prezentację końcową (`zasady` s. 2, p. 1), a bez kodu ocena z prezentacji przepada (`Projekt_1.pdf` p. 6.3). Polecenie użytkownika mówiło o jednym ZIP-ie.
+- Zadanie P1K nie ma wersji roboczej, więc zapis od razu oddaje pracę do oceny. Orkiestrator pokazał opis zmiany z narzędzia, a użytkownik odpowiedział „Tak, wyślij oba". Orkiestrator uprzedził, że wysłanie zamyka CP4, czyli akceptuje filtr RSI jako kierunek eksperymentu. Zapis w briefie 1.11.
+
+**Weryfikacja**
+
+- Przed wysłaniem zawartość obu ZIP-ów porównano plik po pliku z repozytorium w `57852d0`: 20 i 17 plików, bez różnic.
+- eNauczanie: zadanie P1K (kurs 8051, `assignment_id` 27571), stan „submitted" o 22:41.
+- Oba pliki pobrano z eNauczania z powrotem. Sumy SHA-256 są identyczne z lokalnymi: `zambrzycki_projekt1_koncowa.zip` `acbe1a6665adeafd…`, `zambrzycki_projekt1_kod.zip` `44ef297f2dae1e3e…`. Termin to 2026-11-04, 10:15 (godzina przed zajęciami).
+
+**Błędy AI**
+
+- Brak.
+
+Status: pakiety P3 przesłane. Oczekuje na CP2 (omówienie kodu) i wystąpienie 2026-11-04.
