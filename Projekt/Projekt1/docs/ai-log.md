@@ -1928,3 +1928,87 @@ Acceptance: make -B clean, 20 pages, pages 2, 10, 14, 19, 20 rendered and viewed
 - Brak.
 
 Status: zakończono.
+
+### 2026-11-03 · presentation-reviewer · Final deck, iteration 4
+
+**Prompt**
+
+<details>
+<summary>Pełny prompt iteracji 4 (dosłownie)</summary>
+
+```text
+You act as the project's presentation-reviewer. First read your role definition at /home/bob/Metody-numeryczne/Projekt/Projekt1/.claude/agents/presentation-reviewer.md and follow it exactly, including its output format. You are strictly read-only: use only Read, Glob and Grep. Do not edit, write or run anything.
+
+Review slides/final/main.pdf and its .tex sources
+against: (1) materials/zasady_zaliczenia_projektu_v1.pdf, mandatory
+conditions and slide groups; (2) materials/Projekt_1.pdf
+p. 6-9, final deck content, slides A-F, experiment 5.2,
+table 2; (3) docs/presentation-style.md, assertion-evidence
+titles, budgets, palette, banned elements. Report findings
+with severity and a suggested fix. End with a verbal grade
+and a score 1-10.
+
+Context (working directory /home/bob/Metody-numeryczne/Projekt/Projekt1, all paths relative to it):
+- FINAL deck for P3 (2026-11-04), iteration 4. Iterations 1, 2 and 3 scored 7/10, 8/10 and 8/10; their findings and resolutions are in docs/ai-log.md (entries "Final deck, iterations 1 and 2", "Final deck, iteration 3" and the stage 13 and 14 registers).
+- Since iteration 3 the AUTHOR reviewed the deck again (checkpoint CP5, round 2) and decided four cuts, recorded in PROJECT_BRIEF.md 1.10 (section 1.7, row "Układ prezentacji końcowej"):
+  1. the moving-average slide was merged into the EMA slide, so the intro has three slides (2-4);
+  2. slide F lost its closing sentence on the mean session counts of winning and losing trades;
+  3. the AI-work slide on two agents running in parallel was removed, leaving the configuration slide and the selected-prompt slide;
+  4. the reviewer slide and the review-prompt slide were merged into one (slide 19), and the iteration history moved to the grade slide (20).
+  The deck now has 20 slides. The author's reason: a compact talk. zasady 6.1 lets detail slides be covered briefly and asks the AI part of the talk to focus on one experience and the key review observation.
+  Judge whether the deck still covers every mandatory slide group and every scored element of Projekt_1.pdf table 2 (including the table 1 elements it refers to: way of working and AI configuration, selected prompt with result and evaluation, AI errors report, reviewer with prompt and final grade). If a cut weakens a scored element, say which one and how much. Do not recommend restoring removed slides unless a scored or mandatory element is actually missing.
+- Slide numbers now: intro 2-4, basic part 5-10, experiment 11-13, AI work 14-15, AI errors 16-18, AI review 19-20. Slides 14-18 quote or summarise docs/ai-log.md entries; check they match the log.
+- The verbal grade on slide 20 and the last score in its iteration line will be replaced with the result of this review. Do not report them.
+- Brief 2.3: a verbatim prompt quote copied from docs/ai-log.md is exempt from the numbers rule, and method constants quoted from Projekt_1.pdf are definitions. Charts are vector PDFs at native size (144 x 58 mm, pair 144 x 64 mm).
+
+Orchestrator verification output (current main.pdf, commit 7c9ad89): make -B exit 0, 0 overfull/underfull boxes, 0 LaTeX warnings, 20 pages, all fonts embedded (pdffonts), no raster images (pdfimages -list); pages 2, 10, 19 and 20 viewed at 80 dpi with no clipping and no text touching the footline.
+
+Return the findings and the grade in the role's format, most severe first.
+```
+
+</details>
+
+**Ocena recenzenta prezentacji, iteracja 4, końcowa**
+
+- Ocena słowna (dosłownie): „Prezentacja spełnia wszystkie warunki obowiązkowe i po skróceniu do zwartej formy nadal obejmuje każdy oceniany element, od wstępu przez wykresy części podstawowej po eksperyment z wynikiem globalnym i przykładem lokalnym. Wykresy są czytelne, tezy w tytułach wynikają z pokazanych danych, a slajdy o błędach AI zgadzają się z dziennikiem pracy. Do poprawy pozostają zdanie wstępu sugerujące, że EMA uśrednia tylko ostatnie sesje, oraz zbyt ogólny opis sposobu pracy z AI i kryteriów recenzenta." Ocena liczbowa: **8/10**.
+- Ocena cięć: żadnej grupie obowiązkowej ani punktowanemu elementowi nic nie brakuje i żaden slajd nie wymaga przywrócenia. Usunięcie slajdu o pracy równoległej osłabiło nieco element „sposób pracy i konfiguracja AI", a połączenie slajdów recenzji usunęło opis kryteriów recenzenta.
+- Znaleziska: 4 minor (zdanie wstępu o średniej z ostatnich N sesji, brak kryteriów recenzenta na slajdzie 19, ogólnikowy slajd 14, abstrakcyjna obserwacja z recenzji na slajdzie 20), 2 nit (slajd 15 nie mówi, czyją pracę przyjęto, slajd 4 nazywa sesję sygnału sesją kupna).
+- Kontrola dziennika: slajdy 14-18 i cytat promptu na slajdzie 19 zgadzają się z wpisami dziennika.
+- Rozstrzygnięcia: wszystkie znaleziska poprawiono w `4f7bd2d`. Poprawki po iteracji 4 nie były już recenzowane, co mówi przypis na slajdzie 20.
+
+Status: zakończono.
+
+### 2026-11-03 · latex-assistant · Fixes after review iteration 4
+
+**Karta zadania**
+
+<details>
+<summary>Karta zadania, w skrócie</summary>
+
+```markdown
+## Task card: Fixes after review iteration 4 of the final deck
+Goal: the six findings of presentation-reviewer iteration 4 are fixed on the 20-slide deck, with no overflow and the slide count unchanged.
+Fixes: slide 2 lead without "average of the last N sessions"; slide 4 signal bullets tied to MACD crossing SIGNAL; slide 14 as the producer, reviewer and orchestrator loop with author approval at checkpoints; slide 15 result line names the coder task; slide 19 names the reviewer criteria; slide 20 names the key review observation and says fixes followed the review.
+Files to touch: slides/final/intro.tex, ai-work.tex, ai-review.tex and build outputs.
+Files NOT to touch: review.tex, main.tex, results.tex, experiment.tex, ai-errors.tex, slides/common/, src/, charts/, results/, docs/.
+Acceptance: make -B clean, 20 pages, pages 2, 4, 14, 15, 19, 20 rendered and viewed, no hand-typed numbers, writing rules.
+```
+
+</details>
+
+**Rezultat**
+
+- Commit `4f7bd2d`. Nowe tytuły to „Zmiana znaku histogramu wyznacza sygnały kupna i sprzedaży" i „Każdą pracę agenta sprawdzał recenzent i orkiestrator".
+- Na slajdzie 19 agent skrócił punkt o kryteriach względem karty, bo dłuższa wersja dawała przepełnienie `\vbox` o 3 pt. Cytat promptu bez zmian.
+- Orkiestrator dodał twardą spację w „8~minut", bo liczba oddzielała się od jednostki na końcu wiersza.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Weryfikacja orkiestratora: `make -B` z kodem 0, w logu 0 przepełnień i 0 ostrzeżeń, 20 stron, wszystkie fonty osadzone, brak rastrów. Strony 2, 4, 14, 19 i 20 obejrzane w PNG. Slajd 19 jest ciasny, ale tekst nie dotyka stopki. W dodanych wierszach źródeł nie ma długich myślników, średników ani strzałek.
+- Agent zapisał wynik `make` do `/tmp/make.out` zamiast do katalogu roboczego zadania. Bez skutków w plikach projektu.
+
+**Błędy AI**
+
+- Brak.
+
+Status: zakończono.
