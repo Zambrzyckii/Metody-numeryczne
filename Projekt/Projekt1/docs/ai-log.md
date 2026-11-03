@@ -1671,7 +1671,7 @@ Status: w toku (kompilacja czeka na `texlive-pictures`, tezy czekają na CP5).
 
 **Karta zadania**
 
-- Prompt recenzji zaczyna się od tekstu cytowanego na slajdzie 27 (z oznaczonymi cięciami). Dalej następuje kontekst: numer iteracji, makra liczb, status tez, kryterium przykładów lokalnych, liczba slajdów oraz wynik weryfikacji orkiestratora (`make`, `pdffonts`, `pdfimages`, stopki). Iteracja 2 dostała dodatkowo listę rozstrzygnięć znalezisk z iteracji 1.
+- Prompt recenzji zaczyna się od tekstu cytowanego na slajdzie 27 (od 2026-11-03 slajd 22, z oznaczonymi cięciami). Pełny tekst promptu iteracji 3 jest we wpisie z 2026-11-03. Dalej następuje kontekst: numer iteracji, makra liczb, status tez, kryterium przykładów lokalnych, liczba slajdów oraz wynik weryfikacji orkiestratora (`make`, `pdffonts`, `pdfimages`, stopki). Iteracja 2 dostała dodatkowo listę rozstrzygnięć znalezisk z iteracji 1.
 
 **Ocena recenzenta prezentacji, iteracja 1**
 
@@ -1750,5 +1750,141 @@ Files to touch: src/charts.py, src/basic.py, charts/B1.pdf, charts/D1.pdf, resul
   - Wymaganie: legenda objaśnia każdą linię (`Projekt_1.pdf` s. 7, 4.5).
   - Sposób wykrycia: code-reviewer porównał kolor uchwytu z kolorem linii w `chart_d1`.
   - Poprawka: uchwyt w kolorach obu linii, commit `75232ee`.
+
+Status: zakończono.
+
+### Etap 14 · CP5, pierwsza runda uwag użytkownika (2026-11-03)
+
+**Polecenia**
+
+- Usunąć ze stopki „Bartosz Zambrzycki · Projekt 1: MACD" i zostawić samą numerację stron.
+- Slajd 7: słabo widoczne przecięcia MACD i SIGNAL na B1.
+- Slajdy 8 i 10: znaczniki sygnałów na C1 i E1 nakładają się tak, że nie da się ich odczytać.
+- Znacząco skrócić część z filtrem RSI (slajdy 12-19), bo 28 slajdów to za dużo na czas wystąpienia i dla uwagi słuchaczy.
+
+**Decyzje**
+
+- Stopka pokazuje tylko „n / N", nazwisko zostaje na slajdzie tytułowym. Zmiana we wspólnym `mnstyle.sty`, oddany pakiet P2 ma własną kopię stylu.
+- B1: przecięć na całym okresie nie da się w pełni odczytać (jedna sesja to około 0,16 mm), dlatego pokazuje je D1 jako powiększenie (`Projekt_1.pdf` s. 6, D). Linie MACD i SIGNAL na B1 są cieńsze (0,8 pt), żeby się rozdzielały.
+- C1 i E1: znaczniki 3,5 pt zamiast 6 pt, a legenda E1 pokazuje tylko rodzaje obecne na wykresie (wszystkie 68 sygnałów wykonano). Wariant z legendą pod wykresem orkiestrator sprawdził na kopii projektu i odrzucił, bo panele stawały się płaskie.
+- Część eksperymentalna ma trzy slajdy: reguła z uzasadnieniem, wynik globalny (X1) i przykład lokalny NVDA (X4), czyli przypadek pogorszenia z kryterium wyboru. Wariant wybrał użytkownik spośród trzech zaproponowanych (trzy slajdy z NVDA, cztery slajdy z NVDA i BKR, trzy slajdy ze wspólnym wykresem obu spółek). Talia ma 23 slajdy. X2 i X3 nadal powstają w kodzie, ale nie trafiają na slajdy ani do pakietu prezentacji.
+- Po tak dużej zmianie talii orkiestrator uruchomił trzecią iterację recenzji, żeby ocena na slajdzie dotyczyła oddawanej wersji. Poprawki po iteracji 3 nie były już recenzowane.
+- Brief 1.8 i 1.9 zapisują te decyzje oraz uczciwy opis uruchamiania agentów (§2.2). Nagłówki `docs/` wskazują wersję briefu, z którą są zgodne.
+
+**Weryfikacja**
+
+- `make`: 0 błędów, 0 przepełnień, 0 ostrzeżeń, 23 strony. `pdffonts`: wszystkie fonty osadzone. `pdfimages -list`: brak rastrów. Stopki „1 / 23" do „23 / 23", nazwisko tylko na slajdzie tytułowym. Każda zmieniona strona obejrzana w PNG.
+- Pakiet z kodem: 17 plików, test według briefu 6.4, 13 z 13 plików wynikowych identycznych co do bajtu.
+- Pakiet prezentacji: 20 plików, czyli `slides/final/` (`main.pdf`, `Makefile`, `ai-errors.tex`, `ai-review.tex`, `ai-work.tex`, `experiment.tex`, `intro.tex`, `main.tex`, `results.tex`, `review.tex`), `slides/common/mnstyle.sty`, `charts/` (A1, B1, C1_C2, D1, E1_E2, X1, X4) i `results/` (`basic.tex`, `experiment.tex`). Test z `make -B` w pustym katalogu: tekst i rendery 23 stron identyczne, PDF w pakiecie identyczny z repozytorium.
+- Sumy SHA-256 policzone przez orkiestratora: `zambrzycki_projekt1_kod.zip` `44ef297f2dae1e3e…`, `zambrzycki_projekt1_koncowa.zip` `ff827159364327f0…`.
+
+**Błędy AI**
+
+- **Znalezisko:** Wykresy C1 i E1 miały znaczniki 6 pt na całym okresie, przez co sąsiednie trójkąty zlewały się w plamy.
+  - Waga: major.
+  - Wymaganie: wielkość znaczników czytelna na slajdzie (`Projekt_1.pdf` s. 7, 4.5).
+  - Sposób wykrycia: przegląd prezentacji przez użytkownika w CP5. Żaden z recenzentów AI tego nie zgłosił jako problemu czytelności.
+  - Poprawka: znaczniki 3,5 pt na wykresach całego okresu, commit `52bb73f`.
+- **Znalezisko:** Orkiestrator zostawił 28 slajdów wbrew przewodnikowi stylu (około 20 do 25) i zaleceniu recenzenta z iteracji 1.
+  - Waga: minor.
+  - Wymaganie: około 8 minut wystąpienia (`zasady` s. 4, 6.1).
+  - Sposób wykrycia: użytkownik w CP5.
+  - Poprawka: część eksperymentalna skrócona do trzech slajdów, commit `b04447d`.
+- **Znalezisko:** Slajdy o konfiguracji AI twierdziły, że recenzenci mają wyłącznie narzędzia odczytu. Przy talii końcowej ograniczenie wynikało tylko z polecenia. Orkiestrator zapisał to 2026-11-02 w dzienniku, ale nie poprawił slajdów.
+  - Waga: major.
+  - Wymaganie: brief 2.2 (granice wymuszone i umowne opisane uczciwie na slajdzie).
+  - Sposób wykrycia: recenzent AI prezentacji (iteracja 3) porównał slajdy z dziennikiem.
+  - Poprawka: slajdy 15 i 21 oraz brief 2.2, commity `337a4e8` i `a4b7ce1`.
+- **Znalezisko:** Tytuł slajdu C1/C2 twierdził, że malejące słupki „zapowiadają" przecięcie, a instrukcja mówi tylko o zbliżaniu się MACD i SIGNAL.
+  - Waga: minor.
+  - Wymaganie: tytuł wynika z dowodu (`docs/presentation-style.md` 3.1) i `Projekt_1.pdf` s. 3.
+  - Sposób wykrycia: recenzent AI prezentacji (iteracja 3).
+  - Poprawka: tytuł „Malejące słupki pokazują zbliżanie się MACD do SIGNAL", commit `337a4e8`.
+- **Znalezisko:** Wiersz briefu o przykładzie lokalnym nadal opisywał regułę zastąpioną w rundzie poprawek etapu 6a.
+  - Waga: minor.
+  - Wymaganie: brief jako źródło prawdy dla `docs/` (brief 5.2).
+  - Sposób wykrycia: orkiestrator przy edycji briefu 1.8.
+  - Poprawka: brief 1.8, commit `2e23e27`.
+
+**Wynik**
+
+- Commity kroków: `2e23e27`, `52bb73f`, `b04447d`, `988acb7`, `a4b7ce1`, `337a4e8`.
+- Status: oczekuje na dalsze uwagi użytkownika w CP5 oraz na CP2, CP4 i zgodę na przesłanie pakietów.
+
+### 2026-11-03 · coder · Readability of the full-period charts
+
+**Karta zadania**
+
+<details>
+<summary>Karta zadania, w skrócie</summary>
+
+```markdown
+## Task card: Readability of the full-period charts (CP5, user review)
+1. marker_style gets an optional size (default MARKER_SIZE); 3.5 pt only in plot_c1 and plot_e1; edge width 0.8 for small markers; D1, X3, X4 byte-identical.
+2. plot_e1 adds a legend handle only for marker kinds that are drawn.
+3. B1 draws MACD and SIGNAL at 0.8 pt through an optional parameter of _plot_price_and_macd; D1 byte-identical.
+Files to touch: src/charts.py, charts/B1.pdf, C1_C2.pdf, E1_E2.pdf. Everything else byte-identical.
+```
+
+</details>
+
+**Rezultat**
+
+- Commit `52bb73f`. Zmieniły się tylko B1, C1_C2 i E1_E2. Wysokość paneli bez zmian (22,4 mm, B1 44,66 mm). Legenda E1 ma trzy wpisy.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Weryfikacja orkiestratora: przebiegi z `-W error` bez ostrzeżeń, ponowny przebieg identyczny co do bajtu, wykresy obejrzane na skompilowanej talii.
+- Werdykt code-reviewera: APPROVE. Dwa nity spoza karty. `plot_c1` dodałby pusty wpis legendy, gdyby jednej ze stron sygnałów nie było (na danych PKO BP nie występuje, zgłoszone użytkownikowi do decyzji). Nagłówek `docs/presentation-style.md` podawał brief v1.0, poprawione w `988acb7`.
+
+**Błędy AI**
+
+- Brak.
+
+Status: zakończono.
+
+### 2026-11-03 · presentation-reviewer · Final deck, iteration 3
+
+**Karta zadania**
+
+<details>
+<summary>Pełny prompt iteracji 3 (dosłownie)</summary>
+
+```text
+You act as the project's presentation-reviewer. First read your role definition at /home/bob/Metody-numeryczne/Projekt/Projekt1/.claude/agents/presentation-reviewer.md and follow it exactly, including its output format. You are strictly read-only: use only Read, Glob and Grep. Do not edit, write or run anything.
+
+Review slides/final/main.pdf and its .tex sources
+against: (1) materials/zasady_zaliczenia_projektu_v1.pdf, mandatory
+conditions and slide groups; (2) materials/Projekt_1.pdf
+p. 6-9, final deck content, slides A-F, experiment 5.2,
+table 2; (3) docs/presentation-style.md, assertion-evidence
+titles, budgets, palette, banned elements. Report findings
+with severity and a suggested fix. End with a verbal grade
+and a score 1-10.
+
+Context (working directory /home/bob/Metody-numeryczne/Projekt/Projekt1, all paths relative to it):
+- FINAL deck for P3 (2026-11-04), iteration 3. Iterations 1 and 2 scored 7/10 and 8/10; their findings and resolutions are in docs/ai-log.md (entry "2026-11-02 · presentation-reviewer · Final deck, iterations 1 and 2" and the stage 13 register).
+- Since iteration 2 the AUTHOR reviewed the deck (checkpoint CP5) and decided, recorded in PROJECT_BRIEF.md 1.8 (sections 1.7, 3.4, 3.6):
+  1. the footline shows only the page number n / N, the author's name stays on the title slide;
+  2. B1 draws MACD and SIGNAL thinner (0.8 pt), because crossings were unreadable over the whole period (crossings are shown in the D1 zoom);
+  3. C1 and E1 use smaller markers (3.5 pt) and E1's legend lists only drawn marker kinds (all 68 signals are executed);
+  4. the experimental part was cut from 8 slides to 3: rule with justification (slide 12), global result with X1 (13), local example X4 NVDA as the deterioration case with its selection criterion (14). The comparison table, X2, the criterion slide, X3 BKR and the separate conclusion slide were removed; their key numbers moved into captions. The deck now has 23 slides.
+  Judge whether these changes still cover every scored element of Projekt_1.pdf table 2 and 5.2 (rule and justification, global result with comparison, local example with criterion and reference to the whole set). Do not recommend restoring removed slides unless a scored or mandatory element is actually missing.
+- Slide numbers now: intro 2-5, basic part 6-11, experiment 12-14, AI work 15-17, AI errors 18-20, AI review 21-23. Slides 15-20 quote or summarise docs/ai-log.md 2026-11-02 entries; check they match the log.
+- The grade slide (23) and the "Wynik"/"Ocena" lines on slide 22 will be updated after this review to include iteration 3. Do not report them.
+- Brief 1.5: a verbatim prompt quote copied from docs/ai-log.md is exempt from the numbers rule. Charts are vector PDFs at native size (144 x 58 mm, pair 144 x 64 mm).
+
+Orchestrator verification output (current main.pdf): make 0 errors, 0 overfull/underfull boxes, 0 LaTeX warnings, 23 pages; every changed page viewed at 80 dpi with no clipping. pdffonts and pdfimages are rerun after this review.
+
+Return the findings and the grade in the role's format, most severe first.
+```
+
+</details>
+
+**Ocena recenzenta prezentacji, iteracja 3, końcowa**
+
+- Ocena słowna (dosłownie): „Prezentacja spełnia wszystkie warunki obowiązkowe, a po skróceniu części eksperymentalnej nadal obejmuje każdy oceniany element, czyli regułę z uzasadnieniem, wynik globalny z porównaniem oraz przykład lokalny z kryterium wyboru. Wykresy są czytelne, liczby pochodzą z programu, a długość talii mieści się w zalecanym zakresie. Do poprawy pozostają opis narzędzi recenzentów, który nie zgadza się z dziennikiem pracy, oraz słabe odniesienie przykładu lokalnego do całego zbioru." Ocena liczbowa: **8/10**.
+- Znaleziska: 1 major (opis narzędzi recenzentów), 3 minor (odniesienie przykładu do całego zbioru, tytuł slajdu C1/C2, brak pełnego promptu w dzienniku), 5 nit (opóźnienie i próbka startowa na slajdzie reguły, RSI przy B = 0, stałe MACD(12, 26, 9), powtórzony czas w rynku na slajdzie E, termin P3 w `docs/requirements-presentation.md`).
+- Rozstrzygnięcia: major, wszystkie minor i cztery nity poprawiono w `337a4e8`, `a4b7ce1` i w tym wpisie. Nit o stałych MACD rozstrzygnięto zapisem w briefie 1.9 (stałe metody cytowane z instrukcji to definicje, nie wyniki).
 
 Status: zakończono.
