@@ -82,9 +82,7 @@ Rules:
 
 - **Base.** The default Beamer theme stripped of decoration, with a custom style file `slides/common/mnstyle.sty` shared by both decks. No external Beamer theme, so `zrodla.md` needs no entry for it.
 - **Frame title.** Left-aligned, `mnPrimary`, with a thin rule in `mnGrid` under it, full text width.
-- **Footline.**
-  - Left: `Bartosz Zambrzycki · Projekt 1: MACD`, in `mnMuted` and `\footnotesize`.
-  - Right: `\insertframenumber\,/\,\inserttotalframenumber`. This "n/N" number is a mandatory element (`zasady` p. 2).
+- **Footline.** Only `\insertframenumber\,/\,\inserttotalframenumber` on the right, in `mnMuted` and `\footnotesize`. This "n/N" number is a mandatory element (`zasady` p. 2). The author's name appears on the title slide only (user decision at CP5).
 - **Margins.** 8 mm left and right. Navigation symbols are off.
 - **Title slide.** Topic, author, *„Prezentacja wstępna"* or *„Prezentacja końcowa"* (`Projekt_1.pdf` p. 5, 4.1), course name and date. No logo and no background image.
 - **No overhead slides.** No agenda slide, section-divider slides or "Dziękuję"/"Pytania?" slide. Every slide carries content.
@@ -111,7 +109,7 @@ These are the only allowed layouts.
   - Stacked pair: one figure of 144 × 64 mm with two panels and `sharex=True`, saved as `C1_C2.pdf` and `E1_E2.pdf` (the experiment examples `X3.pdf` and `X4.pdf` use the same size).
   - The heights leave room for a frame title and two lines of text above the footline on a 16:9 slide (measured on the final deck).
 - **Font.** TeX Gyre Heros, loaded with `matplotlib.font_manager.fontManager.addfont` from the TeX Live path if the file exists. Otherwise fall back silently to the matplotlib default. The lecturer may run the code on Windows, so a missing font file must never crash generation.
-- **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt. Signal markers 6 pt.
+- **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt, except MACD and SIGNAL on B1 at 0.8 pt, so the two lines stay apart over the whole period. Signal markers 6 pt, except the full-period charts C1 and E1 at 3.5 pt, so neighbouring markers do not overlap (user decision at CP5).
 - **Required elements** (`Projekt_1.pdf` p. 7, 4.5):
   - an in-figure title naming the chart ID, the quantity and the instrument, e.g. `B1 · PKO BP - cena zamknięcia i MACD(12,26,9)`,
   - both axes labelled with units, for example `Cena [PLN]` or `Indeks próbki` / dates,
@@ -121,6 +119,7 @@ These are the only allowed layouts.
 - **Signal markers.**
   - Executed signals: filled markers.
   - Signals not executed: hollow markers of the same shape and colour (`Projekt_1.pdf` p. 6, E1).
+  - The legend lists only the marker kinds that appear on the chart.
   - D1, X3 and X4: signals and executions are both marked on the price curve (`Projekt_1.pdf` p. 6, D). Hollow markers there mark the signal session and filled markers the execution session (d = 1), as the legend states.
   - Before sample 101: no markers. The range 0–100 may be shaded in `mnGrid` and labelled as excluded (`Projekt_1.pdf` p. 6, A1).
 - **Shared x-range.** C1/C2 and E1/E2 use `sharex` with an identical x-range.

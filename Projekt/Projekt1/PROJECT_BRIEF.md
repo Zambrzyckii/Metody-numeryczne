@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 1.7 · 2026-11-02 · status: complete.
+Version 1.8 · 2026-11-03 · status: complete.
 
 ---
 
@@ -142,13 +142,14 @@ Każdy z tych punktów zwiększa ryzyko slopu bez zysku punktowego:
 
 | Decyzja | Stan | Uzasadnienie |
 |---|---|---|
-| Autor | **Bartosz Zambrzycki** | slajd tytułowy i stopka |
+| Autor | **Bartosz Zambrzycki** | slajd tytułowy |
 | Instrument części podstawowej | **PKO BP (stooq.pl), notowania dzienne, PLN** | jeden z przykładów z instrukcji (`Projekt_1.pdf` s. 4) |
 | Dane części podstawowej | **`data/pko.csv`: 1001 ostatnich sesji, 2022-10-19 … 2026-10-20; ceny skorygowane wstecznie przez stooq (ostatnia korekta 2026-08-04)** | zweryfikowane z niezależnym źródłem (CP1); korekta usuwa sztuczne spadki ceny w dniach dywidendy, które dawałyby fałszywe sygnały; precedens: zbiór prowadzącego zawiera „OHLC z korektami dostawcy" (`charts_pro1.pdf`); korekta opisana w `readme.md` (`Projekt_1.pdf` s. 4) |
 | Opóźnienie wykonania d | **d = 1**: transakcja w próbce i + 1 po cenie x₍ᵢ₊₁₎ | wariant sugerowany, bliższy praktyce (`Projekt_1.pdf` s. 3–4) |
 | Kierunek eksperymentu | **RSI(14) jako filtr kupna: sygnał kupna MACD wykonywany tylko, gdy RSI w próbce sygnału jest mniejszy niż 70; sprzedaż bez zmian.** Założenie orkiestratora z 2026-11-02, czeka na akceptację w CP4 | kierunek zalecany (`Projekt_1.pdf` s. 7); klasyczny próg wykupienia [1, rozdz. 10]; spośród czterech wariantów sprawdzonych na całym zbiorze wybrany dla interpretowalności, nie dla wyniku (średnia zmiana R jest ujemna) |
 | Transakcja D1 | **zamknięta transakcja o największej stopie zwrotu r; przy remisie najwcześniejsza** | deterministyczna reguła wyboru, spójna z największym zyskiem na slajdzie F (`Projekt_1.pdf` s. 6) |
-| Przykład lokalny eksperymentu | **zablokowana przez filtr transakcja o najniższym r (filtr pomógł najbardziej) i o najwyższym r (pogorszenie)** | instrukcja prosi o kryterium wyboru i o przypadek pogorszenia (`Projekt_1.pdf` s. 8, 5.2) |
+| Przykład lokalny eksperymentu | **spółki z dokładnie jedną zablokowaną transakcją, X3 to największa poprawa R, X4 największe pogorszenie. Na slajdzie jest tylko X4 (NVDA), a X3 powstaje, ale nie jest pokazywany** | instrukcja prosi o kryterium wyboru i zaleca przypadek pogorszenia (`Projekt_1.pdf` s. 8, 5.2). Reguła z rundy poprawek etapu 6a, ograniczenie do X4 to decyzja użytkownika w CP5 |
+| Część eksperymentalna prezentacji końcowej | **trzy slajdy: reguła z uzasadnieniem, wynik globalny (X1) i przykład lokalny (X4)** | trzy punktowane elementy z tabeli 2 (`Projekt_1.pdf` s. 9). Decyzja użytkownika w CP5, bo osiem slajdów nie mieściło się w czasie wystąpienia |
 | Data P3 | **2026-11-04, 11:15-13:00; ZIP-y do 10:00** | `harmonogram_2026_v3.pdf`, grupa `pro_gr3a` |
 
 ---
@@ -464,9 +465,7 @@ Rules:
 
 - **Base.** The default Beamer theme stripped of decoration, with a custom style file `slides/common/mnstyle.sty` shared by both decks. No external Beamer theme, so `zrodla.md` needs no entry for it.
 - **Frame title.** Left-aligned, `mnPrimary`, with a thin rule in `mnGrid` under it, full text width.
-- **Footline.**
-  - Left: `Bartosz Zambrzycki · Projekt 1: MACD`, in `mnMuted` and `\footnotesize`.
-  - Right: `\insertframenumber\,/\,\inserttotalframenumber`. This "n/N" number is a mandatory element (`zasady` p. 2).
+- **Footline.** Only `\insertframenumber\,/\,\inserttotalframenumber` on the right, in `mnMuted` and `\footnotesize`. This "n/N" number is a mandatory element (`zasady` p. 2). The author's name appears on the title slide only (user decision at CP5).
 - **Margins.** 8 mm left and right. Navigation symbols are off.
 - **Title slide.** Topic, author, *„Prezentacja wstępna"* or *„Prezentacja końcowa"* (`Projekt_1.pdf` p. 5, 4.1), course name and date. No logo and no background image.
 - **No overhead slides.** No agenda slide, section-divider slides or "Dziękuję"/"Pytania?" slide. Every slide carries content.
@@ -493,7 +492,7 @@ These are the only allowed layouts.
   - Stacked pair: one figure of 144 × 64 mm with two panels and `sharex=True`, saved as `C1_C2.pdf` and `E1_E2.pdf` (the experiment examples `X3.pdf` and `X4.pdf` use the same size).
   - The heights leave room for a frame title and two lines of text above the footline on a 16:9 slide (measured on the final deck).
 - **Font.** TeX Gyre Heros, loaded with `matplotlib.font_manager.fontManager.addfont` from the TeX Live path if the file exists. Otherwise fall back silently to the matplotlib default. The lecturer may run the code on Windows, so a missing font file must never crash generation.
-- **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt. Signal markers 6 pt.
+- **Sizes.** Tick labels 8 pt, axis labels 9 pt, chart title 9 pt bold. Line width 1.2–1.6 pt, except MACD and SIGNAL on B1 at 0.8 pt, so the two lines stay apart over the whole period. Signal markers 6 pt, except the full-period charts C1 and E1 at 3.5 pt, so neighbouring markers do not overlap (user decision at CP5).
 - **Required elements** (`Projekt_1.pdf` p. 7, 4.5):
   - an in-figure title naming the chart ID, the quantity and the instrument, e.g. `B1 · PKO BP - cena zamknięcia i MACD(12,26,9)`,
   - both axes labelled with units, for example `Cena [PLN]` or `Indeks próbki` / dates,
@@ -503,6 +502,7 @@ These are the only allowed layouts.
 - **Signal markers.**
   - Executed signals: filled markers.
   - Signals not executed: hollow markers of the same shape and colour (`Projekt_1.pdf` p. 6, E1).
+  - The legend lists only the marker kinds that appear on the chart.
   - D1, X3 and X4: signals and executions are both marked on the price curve (`Projekt_1.pdf` p. 6, D). Hollow markers there mark the signal session and filled markers the execution session (d = 1), as the legend states.
   - Before sample 101: no markers. The range 0–100 may be shaded in `mnGrid` and labelled as excluded (`Projekt_1.pdf` p. 6, A1).
 - **Shared x-range.** C1/C2 and E1/E2 use `sharex` with an identical x-range.
@@ -860,3 +860,4 @@ Applies to every ZIP:
 | 1.5 | 2026-11-02 | 2.3 and 3.7: verbatim prompt quotes are exempt from the traceable-numbers rule | The final-deck review flagged the numbers inside the quoted acceptance reference |
 | 1.6 | 2026-11-02 | 3.3 plain hyphen instead of the long dash, 3.6 chart-title example | The user's CP3 decision was never carried into the brief; the final-deck review flagged the mismatch |
 | 1.7 | 2026-11-02 | 4.x macro examples: `\resOpenQty`, `\resOpenValue` instead of `\resOpenPosition`, new index macros | The code never exported `\resOpenPosition`; reported at stage 4 and again by the code review of the index macros |
+| 1.8 | 2026-11-03 | 1.7 author row, local-example rule and three-slide experimental part; 3.4 footline with the page number only; 3.6 thinner B1 lines, smaller C1/E1 markers, legend lists drawn marker kinds only | User review at CP5; the local-example row still described the rule replaced at stage 6a |
