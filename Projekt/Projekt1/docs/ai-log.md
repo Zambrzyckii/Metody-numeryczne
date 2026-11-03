@@ -1888,3 +1888,43 @@ Return the findings and the grade in the role's format, most severe first.
 - Rozstrzygnięcia: major, wszystkie minor i cztery nity poprawiono w `337a4e8`, `a4b7ce1` i w tym wpisie. Nit o stałych MACD rozstrzygnięto zapisem w briefie 1.9 (stałe metody cytowane z instrukcji to definicje, nie wyniki).
 
 Status: zakończono.
+
+### 2026-11-03 · latex-assistant · Final deck cut to 20 slides
+
+**Karta zadania**
+
+<details>
+<summary>Karta zadania, w skrócie</summary>
+
+```markdown
+## Task card: Cut the final deck from 23 to 20 slides
+Goal: slides/final/main.pdf has 20 slides after the four cuts the author decided at checkpoint CP5 round 2 (PROJECT_BRIEF.md 1.10, section 1.7).
+The four changes:
+1. intro.tex: merge the moving-average frame into the EMA frame, keep equation (1) and its symbol bullets.
+2. results.tex, frame F: delete the sentence on mean session counts of winning and losing trades.
+3. ai-work.tex: delete the parallel-agents frame.
+4. ai-review.tex: merge the reviewer frame and the prompt frame, keep the prompt block verbatim, move the iteration history to the grade frame.
+Files NOT to touch: review.tex, main.tex, experiment.tex, ai-errors.tex, slides/common/, src/, charts/, results/, docs/.
+Acceptance: make -B clean, 20 pages, pages 2, 10, 14, 19, 20 rendered and viewed, no hand-typed numbers, writing rules.
+```
+
+</details>
+
+**Rezultat**
+
+- Commit `7c9ad89`. Talia ma 20 stron. Wstęp to slajdy 2-4, część podstawowa 5-10, eksperyment 11-13, współpraca z AI 14-15, błędy AI 16-18, recenzja 19-20.
+- Nowe tytuły to „EMA to średnia krocząca, która najmocniej waży ostatnie sesje" i „Recenzent ocenia talię według trzech źródeł kryteriów z promptu". Agent skrócił drugi tytuł względem karty, bo ostatnie słowo przechodziło do drugiego wiersza.
+- Cytat promptu recenzji jest identyczny znak w znak z poprzednią wersją, bez cięć.
+- Agent pominął w punkcie o ocenie dopisek „i nie przesądza o punktach" ze względu na długość i zgłosił to w raporcie. Zostało zdanie „Ocena jest doradcza."
+- Przed zadaniem orkiestrator dodał w `review.tex` makro `\resReviewThirdScore` na wynik iteracji 3.
+
+**Ocena względem listy kontrolnej akceptacji**
+
+- Weryfikacja orkiestratora: `make -B` z kodem 0, w logu 0 przepełnień i 0 ostrzeżeń, 20 stron, wszystkie fonty osadzone, brak rastrów. Strony 2, 10, 19 i 20 obejrzane w PNG, tekst nie dotyka stopki. `git status` pokazał wyłącznie pliki z karty oraz `review.tex` zmieniony przez orkiestratora.
+- Slajd z oceną nadal pokazuje ocenę z iteracji 3, a ostatnie miejsce w historii iteracji zajmuje jej wynik. Obie wartości zastąpi wynik iteracji 4.
+
+**Błędy AI**
+
+- Brak.
+
+Status: zakończono.
