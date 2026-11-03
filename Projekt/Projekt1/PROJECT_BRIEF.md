@@ -1,6 +1,6 @@
 # PROJECT_BRIEF — Projekt 1 (MACD), Metody Numeryczne
 
-Version 1.10 · 2026-11-03 · status: complete.
+Version 1.11 · 2026-11-03 · status: complete.
 
 ---
 
@@ -146,7 +146,7 @@ Każdy z tych punktów zwiększa ryzyko slopu bez zysku punktowego:
 | Instrument części podstawowej | **PKO BP (stooq.pl), notowania dzienne, PLN** | jeden z przykładów z instrukcji (`Projekt_1.pdf` s. 4) |
 | Dane części podstawowej | **`data/pko.csv`: 1001 ostatnich sesji, 2022-10-19 … 2026-10-20; ceny skorygowane wstecznie przez stooq (ostatnia korekta 2026-08-04)** | zweryfikowane z niezależnym źródłem (CP1); korekta usuwa sztuczne spadki ceny w dniach dywidendy, które dawałyby fałszywe sygnały; precedens: zbiór prowadzącego zawiera „OHLC z korektami dostawcy" (`charts_pro1.pdf`); korekta opisana w `readme.md` (`Projekt_1.pdf` s. 4) |
 | Opóźnienie wykonania d | **d = 1**: transakcja w próbce i + 1 po cenie x₍ᵢ₊₁₎ | wariant sugerowany, bliższy praktyce (`Projekt_1.pdf` s. 3–4) |
-| Kierunek eksperymentu | **RSI(14) jako filtr kupna: sygnał kupna MACD wykonywany tylko, gdy RSI w próbce sygnału jest mniejszy niż 70; sprzedaż bez zmian.** Założenie orkiestratora z 2026-11-02, czeka na akceptację w CP4 | kierunek zalecany (`Projekt_1.pdf` s. 7); klasyczny próg wykupienia [1, rozdz. 10]; spośród czterech wariantów sprawdzonych na całym zbiorze wybrany dla interpretowalności, nie dla wyniku (średnia zmiana R jest ujemna) |
+| Kierunek eksperymentu | **RSI(14) jako filtr kupna: sygnał kupna MACD wykonywany tylko, gdy RSI w próbce sygnału jest mniejszy niż 70; sprzedaż bez zmian.** Założenie orkiestratora z 2026-11-02. Użytkownik zamknął CP4 2026-11-03, zatwierdzając wysłanie pakietów P3 z tym kierunkiem | kierunek zalecany (`Projekt_1.pdf` s. 7); klasyczny próg wykupienia [1, rozdz. 10]; spośród czterech wariantów sprawdzonych na całym zbiorze wybrany dla interpretowalności, nie dla wyniku (średnia zmiana R jest ujemna) |
 | Transakcja D1 | **zamknięta transakcja o największej stopie zwrotu r; przy remisie najwcześniejsza** | deterministyczna reguła wyboru, spójna z największym zyskiem na slajdzie F (`Projekt_1.pdf` s. 6) |
 | Przykład lokalny eksperymentu | **spółki z dokładnie jedną zablokowaną transakcją, X3 to największa poprawa R, X4 największe pogorszenie. Na slajdzie jest tylko X4 (NVDA), a X3 powstaje, ale nie jest pokazywany** | instrukcja prosi o kryterium wyboru i zaleca przypadek pogorszenia (`Projekt_1.pdf` s. 8, 5.2). Reguła z rundy poprawek etapu 6a, ograniczenie do X4 to decyzja użytkownika w CP5 |
 | Część eksperymentalna prezentacji końcowej | **trzy slajdy: reguła z uzasadnieniem, wynik globalny (X1) i przykład lokalny (X4)** | trzy punktowane elementy z tabeli 2 (`Projekt_1.pdf` s. 9). Decyzja użytkownika w CP5, bo osiem slajdów nie mieściło się w czasie wystąpienia |
@@ -865,3 +865,4 @@ Applies to every ZIP:
 | 1.8 | 2026-11-03 | 1.7 author row, local-example rule and three-slide experimental part; 3.4 footline with the page number only; 3.6 thinner B1 lines, smaller C1/E1 markers, legend lists drawn marker kinds only | User review at CP5; the local-example row still described the rule replaced at stage 6a |
 | 1.9 | 2026-11-03 | 2.2 how the agents actually ran for the final deck; 2.3 and 3.7 method constants are definitions | Review iteration 3 found the read-only claim on the slides stronger than what ran, and flagged MACD(12, 26, 9) on the intro |
 | 1.10 | 2026-11-03 | 1.7 layout of the final deck, 20 slides | User review at CP5, round 2: the deck was too long for an 8-minute talk |
+| 1.11 | 2026-11-03 | 1.7 experiment direction accepted (CP4 closed) | The user approved submitting the P3 packages with the RSI filter as the experiment |
