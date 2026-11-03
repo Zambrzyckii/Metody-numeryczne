@@ -1,8 +1,8 @@
-% Experimental part: RSI filter rule, charts X1-X4, comparison table and
-% conclusion. Every number is a \resExp... macro from results/experiment.tex.
+% Experimental part: RSI filter rule, global result (X1) and the local
+% example (X4). Every number is a \resExp... macro from results/experiment.tex.
 
 \begin{frame}
-  \frametitle{Filtr RSI ma odrzucać kupno na rynku wykupionym}
+  \frametitle{Filtr RSI odrzuca kupno, gdy rynek jest wykupiony}
   \begin{equation*}
     \mathrm{RSI}_i = 100 - \frac{100}{1 + A_i / B_i}
     \tag{8}
@@ -23,101 +23,24 @@
       po wzroście, a RSI od \resExpRsiThreshold{} oznacza wykupienie
       (Murphy, rozdz. 10).
     \item Symulacja jak w części podstawowej, na wszystkich \resExpCount{}
-      spółkach.
+      spółkach, z jednym progiem RSI.
   \end{itemize}
 \end{frame}
 
 \begin{frame}[b]
-  \frametitle{Filtr pomagał i szkodził podobnie często,\\ a średnią zaniżyły
-    skrajne spadki}
+  \frametitle{Filtr nie dał poprawy, pomagał i szkodził podobnie często}
   \includegraphics{X1.pdf}\par
   \vskip1mm
-  Pomógł w \resExpHelpedCount{}, zaszkodził w \resExpHurtCount{}, a
-  w \resExpSameCount{} nic nie zablokował.
-\end{frame}
-
-\begin{frame}
-  \frametitle{Filtr usunął \resExpBlockedCount{} transakcji, ale prawie nie zmienił
-    największych strat}
-  \renewcommand{\arraystretch}{1.25}
-  \begin{tabular*}{\textwidth}{@{}l@{\extracolsep{\fill}}rr@{}}
-    \toprule
-    Wielkość (wszystkie \resExpCount{} spółek) & Algorytm podstawowy
-      & Z filtrem RSI \\
-    \midrule
-    Średnia stopa zwrotu R [\%] & \resExpMeanBasicPct & \resExpMeanModifiedPct \\
-    Liczba zamkniętych transakcji & \resExpBasicClosedCount
-      & \resExpModifiedClosedCount \\
-    Skuteczność [\%] & \resExpBasicWinRatePct & \resExpModifiedWinRatePct \\
-    Średnia największa strata [\%] & \resExpBasicMeanMaxLossPct
-      & \resExpModifiedMeanMaxLossPct \\
-    \midrule
-    Kup i trzymaj, średnia stopa zwrotu [\%]
-      & \multicolumn{2}{c@{}}{\resExpMeanHoldPct} \\
-    \bottomrule
-  \end{tabular*}
-  \vskip3mm
-  Filtr nie zmienia stopy zwrotu pozostawionych transakcji, tylko usuwa
-  wejścia. Wartości dotyczą całego zbioru, nie pojedynczego przypadku.
-\end{frame}
-
-\begin{frame}[b]
-  \frametitle{Zablokowane wejścia nie były gorsze od przeciętnych}
-  \includegraphics{X2.pdf}\par
-  \vskip1mm
-  Stratnych było \resExpBlockedLosingSharePct{}\,\% transakcji zablokowanych
-  wobec \resExpBasicLosingSharePct{}\,\% wszystkich. Średnia stopa zwrotu
-  transakcji to \resExpBlockedMeanPct{}\,\% wobec \resExpAllTradesMeanPct{}\,\%.
-\end{frame}
-
-\begin{frame}
-  \frametitle{Przykłady lokalne wybrano tak, by zmiana wyniku spółki wynikała
-    z jednej transakcji}
-  \begin{itemize}
-    \item Kryterium: spółki z dokładnie jedną zablokowaną transakcją, czyli
-      \resExpSingleBlockedCount{} z \resExpCount{}. To inna grupa niż spółki
-      bez zmian z wykresu X1.
-    \item Filtr nie zmienia stopy zwrotu pozostawionych transakcji, więc
-      zmiana R takiej spółki wynika tylko z pominiętej transakcji. Kod
-      sprawdza to dla wszystkich spółek, liczba niezgodności to
-      \resExpIdentityFailureCount{}.
-    \item Przykład poprawy to największa dodatnia zmiana R w tej grupie,
-      przykład pogorszenia to największa ujemna.
-    \item Każdy przykład to jedna spółka, więc nie przesądza o wyniku całego
-      zbioru.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}[b]
-  \frametitle{\resExpHelpTicker: po kupnie przy RSI \resExpHelpRsi{} cena spadła,
-    więc filtr pomógł}
-  \includegraphics{X3.pdf}\par
-  Bez transakcji z r = \resExpHelpReturnPct{}\,\% R spółki wzrosło
-  z \resExpHelpBasicPct{}\,\% do \resExpHelpModifiedPct{}\,\%.
+  Średnia R spadła z \resExpMeanBasicPct{}\,\% do \resExpMeanModifiedPct{}\,\%,
+  głównie przez spółki spoza zakresu osi. Zablokowane wejścia nie były gorsze
+  od przeciętnych (\resExpBlockedMeanPct{}\,\% wobec
+  \resExpAllTradesMeanPct{}\,\%).
 \end{frame}
 
 \begin{frame}[b]
   \frametitle{\resExpHurtTicker: mimo RSI \resExpHurtRsi{} wzrost trwał dalej,
     więc filtr zaszkodził}
   \includegraphics{X4.pdf}\par
-  Bez transakcji z r = \resExpHurtReturnPct{}\,\% R spółki spadło
-  z \resExpHurtBasicPct{}\,\% do \resExpHurtModifiedPct{}\,\%.
-\end{frame}
-
-\begin{frame}
-  \frametitle{Próg RSI \resExpRsiThreshold{} nie odróżniał złych wejść MACD
-    od dobrych}
-  \begin{itemize}
-    \item Obserwacja: filtr pomógł w \resExpHelpedCount{} spółkach, zaszkodził
-      w \resExpHurtCount{}, a zablokowane transakcje wypadły nieco lepiej niż
-      przeciętne (\resExpBlockedMeanPct{}\,\% wobec \resExpAllTradesMeanPct{}\,\%).
-    \item Wyjaśnienie (hipoteza): RSI od \resExpRsiThreshold{} przy sygnale
-      kupna MACD oznacza silny impet, który na rosnącym rynku często trwa
-      dalej.
-    \item Wniosek: filtr nie dał systematycznej poprawy, a średnią zmianę R
-      (\resExpMeanDeltaPp{} pp) zaniżyło kilka dużych spadków.
-    \item Zakres: \resExpCount{} spółek z dostarczonego zbioru i jeden próg
-      RSI(\resExpRsiPeriod{}) w kodzie. Inne warianty sprawdzono tylko wstępnie
-      przy wyborze kierunku.
-  \end{itemize}
+  Największy spadek R wśród spółek z jedną blokadą, z
+  \resExpHurtBasicPct{}\,\% na \resExpHurtModifiedPct{}\,\%.
 \end{frame}
