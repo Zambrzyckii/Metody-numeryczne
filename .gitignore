@@ -8,3 +8,5 @@ __pycache__/
 *.snm
 *.toc
 *.vrb
+*.asv
+*.mat
