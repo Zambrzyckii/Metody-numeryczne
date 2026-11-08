@@ -24,7 +24,7 @@ function [Edges, B, A, b, r] = pagerank()
 % Każdy węzeł 1:N ma mieć co najmniej jedno wejście i jedno wyjście.
 %===============================================================================
 % UZUPEŁNIJ: zdefiniuj sieć. N = max(max(Edges)).
-Edges = [];
+Edges = [1 2 3 4 5 6 7 8 9 10 1 2 3 4 5; 2 3 4 5 6 7 8 9 10 1 5 6 7 8 9];
 %===============================================================================
 % Dostarczone wywołania generatora i rozwiązania A*r=b.
 validate_network(Edges);
@@ -56,9 +56,12 @@ N = max(max(Edges));
 
 %===============================================================================
 % UZUPEŁNIJ: wyznacz kolejno B, A oraz b.
-B = [];
-A = [];
-b = [];
+B = sparse(Edges(2,:), Edges(1,:), 1, N, N);
+deg = full(sum(B, 1));
+D = spdiags(1 ./ deg(:), 0, N, N);
+H = B * D;
+A = speye(N) - 0.85 * H;
+b = (1 - 0.85) / N * ones(N, 1);
 %===============================================================================
 end
 
