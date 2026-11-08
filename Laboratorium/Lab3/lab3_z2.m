@@ -51,12 +51,11 @@ function [x, L, U, P, Q, res_norm] = solve_direct(A, b)
 % Nie wyznaczaj macierzy odwrotnej. Zwróć też normę 2 residuum A*x-b.
 %===============================================================================
 % UZUPEŁNIJ: rozwiąż układ przez LU i oceń residuum.
-x = [];
-L = [];
-U = [];
-P = [];
-Q = [];
-res_norm = [];
+[L, U, P, Q] = lu(A);
+y = L \ (P * b);
+z = U \ y;
+x = Q * z;
+res_norm = norm(A * x - b);
 %===============================================================================
 end
 
@@ -78,9 +77,12 @@ N = max(max(Edges));
 
 %===============================================================================
 % UZUPEŁNIJ: wyznacz kolejno B, A oraz b.
-B = [];
-A = [];
-b = [];
+B = sparse(Edges(2,:), Edges(1,:), 1, N, N);
+deg = full(sum(B, 1));
+D = spdiags(1 ./ deg(:), 0, N, N);
+H = B * D;
+A = speye(N) - d * H;
+b = (1 - d) / N * ones(N, 1);
 %===============================================================================
 end
 
