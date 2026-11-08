@@ -200,8 +200,12 @@ N = max(max(Edges));
 
 %===============================================================================
 % UZUPEŁNIJ: wyznacz kolejno B, A oraz b.
-    error('lab3:MissingImplementation', ...
-        'Uzupełnij funkcję generate_matrix na końcu pliku.');
+B = sparse(Edges(2,:), Edges(1,:), 1, N, N);   % B(i,j)=1 dla j -> i
+deg = full(sum(B, 1));                          % stopnie wyjściowe (kolumny)
+D = spdiags(1 ./ deg(:), 0, N, N);              % skalowanie kolumn
+H = B * D;
+A = speye(N) - d * H;
+b = (1 - d) / N * ones(N, 1);
 %===============================================================================
 end
 
@@ -212,8 +216,10 @@ function [elapsed,x] = measure_direct(A,b)
 % Uruchom tic przed lu, a toc po direct_core. Nie buduj tutaj sieci.
 %===============================================================================
 % UZUPEŁNIJ: napisz measure_direct.
-    error('lab3:MissingImplementation', ...
-        'Uzupełnij funkcję measure_direct na końcu pliku.');
+    timer = tic;
+    [L,U,P,Q] = lu(A);              % P*A*Q = L*U, wszystkie macierze sparse
+    x = direct_core(L,U,P,Q,b);
+    elapsed = toc(timer);
 %===============================================================================
 end
 
@@ -223,8 +229,9 @@ function x = direct_core(L,U,P,Q,b)
 % Zwróć pełną kolumnę x. Ta funkcja nie mierzy czasu.
 %===============================================================================
 % UZUPEŁNIJ: napisz direct_core.
-    error('lab3:MissingImplementation', ...
-        'Uzupełnij funkcję direct_core na końcu pliku.');
+    y = L \ (P*b);                  % L*y = P*b
+    z = U \ y;                      % U*z = y
+    x = full(Q*z);                  % x = Q*z, pierwotna kolejność niewiadomych
 %===============================================================================
 end
 
@@ -240,8 +247,21 @@ function [x,res_history,iterations] = ...
 % Możesz dostosować własny kod z zadania 3. Nie mierz tutaj czasu.
 %===============================================================================
 % UZUPEŁNIJ: napisz jacobi_core.
-    error('lab3:MissingImplementation', ...
-        'Uzupełnij funkcję jacobi_core na końcu pliku.');
+    d = full(diag(D));              % przekątna jako zwykły wektor
+    normb = norm(b, 2);
+    x = x0;
+    Tx = T*x;                       % T*x służy i do residuum, i do kolejnego kroku
+    res_history = zeros(max_iter + 1, 1);
+    res_history(1) = norm(d.*x + Tx - b, 2);   % A*x = D*x + T*x
+    iterations = 0;
+    % ~(norma <= próg): NaN w historii nie kończy iteracji przed limitem.
+    while iterations < max_iter && ~(res_history(iterations + 1) <= tol*normb)
+        x = (b - Tx) ./ d;          % wszystkie składowe z poprzedniego x
+        Tx = T*x;
+        iterations = iterations + 1;
+        res_history(iterations + 1) = norm(d.*x + Tx - b, 2);
+    end
+    res_history = res_history(1:iterations + 1);
 %===============================================================================
 end
 
@@ -253,8 +273,12 @@ function [elapsed,x,res_history,iterations] = ...
 % Wywołaj gauss_seidel_core. Zwróć czas [s] i trzy wyniki iteratora.
 %===============================================================================
 % UZUPEŁNIJ: napisz measure_gauss_seidel.
-    error('lab3:MissingImplementation', ...
-        'Uzupełnij funkcję measure_gauss_seidel na końcu pliku.');
+    [D,L,U] = prepare_data(A);
+    M = D + L;                      % dolnotrójkątna część układu
+    timer = tic;
+    [x,res_history,iterations] = ...
+        gauss_seidel_core(M,U,b,x0,tol,max_iter);
+    elapsed = toc(timer);
 %===============================================================================
 end
 
@@ -269,8 +293,20 @@ function [x,res_history,iterations] = ...
 % Możesz dostosować własny kod z zadania 4. Nie mierz tutaj czasu.
 %===============================================================================
 % UZUPEŁNIJ: napisz gauss_seidel_core.
-    error('lab3:MissingImplementation', ...
-        'Uzupełnij funkcję gauss_seidel_core na końcu pliku.');
+    normb = norm(b, 2);
+    x = x0;
+    Ux = U*x;                       % U*x służy i do residuum, i do kolejnego kroku
+    res_history = zeros(max_iter + 1, 1);
+    res_history(1) = norm(M*x + Ux - b, 2);    % A*x = M*x + U*x
+    iterations = 0;
+    % ~(norma <= próg): NaN w historii nie kończy iteracji przed limitem.
+    while iterations < max_iter && ~(res_history(iterations + 1) <= tol*normb)
+        x = M \ (b - Ux);           % M*x_new = b - U*x_old, bez macierzy odwrotnej
+        Ux = U*x;
+        iterations = iterations + 1;
+        res_history(iterations + 1) = norm(M*x + Ux - b, 2);
+    end
+    res_history = res_history(1:iterations + 1);
 %===============================================================================
 end
 
