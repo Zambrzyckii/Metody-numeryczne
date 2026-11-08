@@ -60,8 +60,25 @@ function [x, res_history, iterations] = ...
 % Historia: k aktualizacji daje k+1 norm, pierwsza jest dla x0.
 % res_history(k+1) odpowiada k aktualizacjom. iterations to ich liczba,
 % czyli liczba zapisanych norm minus jedna. Skróć niewykorzystany bufor.
-error('lab3:MissingSolver', ...
-    'Uzupełnij lokalną funkcję solve_jacobi.');
+d = full(diag(A));          % przekątna D jako zwykły wektor (bez macierzy odwrotnej)
+L = tril(A, -1);
+U = triu(A, 1);
+T = L + U;                  % A = D + T
+
+normb = norm(b, 2);
+x = x0;
+res_history = zeros(max_iter + 1, 1);   % bufor, na końcu zostanie skrócony
+res_history(1) = norm(A*x - b, 2);      % norma dla x0, przed pierwszą aktualizacją
+iterations = 0;
+
+% Stop: norm <= tol*norm(b) albo limit max_iter. Warunek jest zapisany jako
+% ~(norma <= próg), żeby NaN w historii nie kończył iteracji przed limitem.
+while iterations < max_iter && ~(res_history(iterations + 1) <= tol*normb)
+    x = (b - T*x) ./ d;                 % x(k+1) = D^-1 (b - (L+U) x(k))
+    iterations = iterations + 1;
+    res_history(iterations + 1) = norm(A*x - b, 2);
+end
+res_history = res_history(1:iterations + 1);
 %===============================================================================
 end
 
@@ -84,9 +101,12 @@ N = max(max(Edges));
 
 %===============================================================================
 % UZUPEŁNIJ: wyznacz kolejno B, A oraz b.
-B = [];
-A = [];
-b = [];
+B = sparse(Edges(2,:), Edges(1,:), 1, N, N);
+deg = full(sum(B, 1));
+D = spdiags(1 ./ deg(:), 0, N, N);
+H = B * D;
+A = speye(N) - 0.85 * H;
+b = (1 - 0.85) / N * ones(N, 1);
 %===============================================================================
 end
 
