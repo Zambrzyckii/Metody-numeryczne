@@ -46,6 +46,7 @@ function result = lab3_z6()
 
     % Oblicz result.direct.res_norm z A, b i result.direct.x.
     % Nie wpisuj przewidywanej normy jako stałej.
+    result.direct.res_norm = norm(A*result.direct.x - b, 2);
 
     % Wywołaj lokalne solvery z zadań 3 i 4 dla tych samych A, b, x0
     % oraz tolerancji i limitu z result. Zapisz x, res_history i iterations
@@ -53,6 +54,12 @@ function result = lab3_z6()
     % Przypisz wyniki w kolejności: x, res_history, iterations.
     % Nie zmieniaj historii zwróconych przez solvery.
     % Sam wzrost normy nie zatrzymuje iteracji.
+    [result.jacobi.x, result.jacobi.res_history, ...
+        result.jacobi.iterations] = solve_jacobi(A, b, x0, ...
+        result.tol, result.max_iter);
+    [result.gauss_seidel.x, result.gauss_seidel.res_history, ...
+        result.gauss_seidel.iterations] = solve_gauss_seidel(A, b, x0, ...
+        result.tol, result.max_iter);
 
 % Koniec części do napisania. Dalszy kod sam rysuje wyniki obliczeń.
 %===============================================================================
@@ -185,9 +192,23 @@ function [x, res_history, iterations] = ...
 % UZUPEŁNIJ: wstaw solver z zadania 3, bez budowy danych i wykresów.
 % Historia: od x0 do ostatniego x, także końcowe NaN/Inf.
 % iterations = numel(res_history)-1.
-    x = [];
-    res_history = [];
-    iterations = [];
+d = full(diag(A));          % przekątna D jako zwykły wektor
+L = tril(A, -1);
+U = triu(A, 1);
+T = L + U;                  % A = D + T
+
+normb = norm(b, 2);
+x = x0;
+res_history = zeros(max_iter + 1, 1);
+res_history(1) = norm(A*x - b, 2);
+iterations = 0;
+% ~(norma <= próg): NaN/Inf w historii nie kończy iteracji przed limitem.
+while iterations < max_iter && ~(res_history(iterations + 1) <= tol*normb)
+    x = (b - T*x) ./ d;
+    iterations = iterations + 1;
+    res_history(iterations + 1) = norm(A*x - b, 2);
+end
+res_history = res_history(1:iterations + 1);
 %===============================================================================
 end
 
@@ -197,8 +218,20 @@ function [x, res_history, iterations] = ...
 % UZUPEŁNIJ: wstaw solver z zadania 4, bez budowy danych i wykresów.
 % Historia: od x0 do ostatniego x, także końcowe NaN/Inf.
 % iterations = numel(res_history)-1.
-    x = [];
-    res_history = [];
-    iterations = [];
+M = tril(A);                % D + L
+U = triu(A, 1);             % A = M + U
+
+normb = norm(b, 2);
+x = x0;
+res_history = zeros(max_iter + 1, 1);
+res_history(1) = norm(A*x - b, 2);
+iterations = 0;
+% ~(norma <= próg): NaN/Inf w historii nie kończy iteracji przed limitem.
+while iterations < max_iter && ~(res_history(iterations + 1) <= tol*normb)
+    x = M \ (b - U*x);
+    iterations = iterations + 1;
+    res_history(iterations + 1) = norm(A*x - b, 2);
+end
+res_history = res_history(1:iterations + 1);
 %===============================================================================
 end
