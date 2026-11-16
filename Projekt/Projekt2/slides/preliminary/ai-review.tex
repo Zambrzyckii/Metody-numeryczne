@@ -1,17 +1,17 @@
 \input{review.tex}
 
-\begin{frame}{Recenzent AI ocenia talię według trzech źródeł kryteriów tym samym promptem w~każdej iteracji}
+\begin{frame}{Recenzent AI ocenia talię według trzech źródeł kryteriów z~tym samym rdzeniem promptu w~każdej iteracji}
   \begin{itemize}
     \item Agent presentation-reviewer (opus, effort high) czyta PDF, źródła .tex, strony PNG i~wyniki poleceń sprawdzających.
     \item Kryteria pochodzą z~zasad zaliczenia, instrukcji projektu 2 i~przewodnika stylu prezentacji.
     \item Ocenia elementy obowiązkowe, poprawność wzorów, czytelność, zgodność twierdzeń o~AI z~dziennikiem i~objętość względem 8~minut.
-    \item Instrukcja zabrania mu zmian i~uruchamiania poleceń, ale narzędzie tego nie wymusza. W~iteracji 1 uruchomił jedno polecenie odczytu.
+    \item Instrukcja zabrania mu zmian i~uruchamiania poleceń, ale narzędzie tego nie wymusza. W~iteracjach 1 i~2 uruchomił po jednym poleceniu odczytu.
   \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{Prompt recenzji wskazuje trzy źródła kryteriów i~kończy się oceną słowną i~liczbową}
   \begin{itemize}
-    \item Rdzeń promptu jest ten sam w~każdej iteracji. Zmienia się tylko akapit ze ścieżkami plików i~numerem iteracji.
+    \item Rdzeń promptu jest ten sam w~każdej iteracji. Drugi akapit podaje ścieżki plików, numer iteracji i~to, co pokazuje slajd z~oceną.
   \end{itemize}
 \begin{Verbatim}[commandchars=\\\{\},fontsize=\footnotesize]
 Review slides/preliminary/main.pdf and its .tex sources against three sources

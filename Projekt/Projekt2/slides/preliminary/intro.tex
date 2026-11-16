@@ -10,7 +10,7 @@
   \begin{equation}
     \mathbf{r}^{(j)} = \mathbf{b} - \mathbf{A}\mathbf{x}^{(j)}, \qquad \eta_j = \frac{\|\mathbf{r}^{(j)}\|_2}{\|\mathbf{b}\|_2}, \qquad \eta_j \le \varepsilon, \quad \varepsilon = 10^{-8} \ \text{(wartość zalecana)}
   \end{equation}
-  \vspace{1mm}
+  \par\vspace{1mm}
   {\footnotesize
   $\mathbf{A}$ - znana rzadka macierz układu, $\mathbf{b}$ - znany wektor prawej strony\\
   $\mathbf{x}$ - szukany wektor, $N$ - liczba niewiadomych, nie liczba trójkątów siatki\\
@@ -41,9 +41,9 @@
     \end{column}
   \end{columns}
   \begin{itemize}
-    \item Wzory obok pomijają wybór elementu głównego. Dla macierzy nieosobliwej rozkład bez wyboru istnieje wtedy i~tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe, a~z~wyborem zawsze.
+    \item Dla macierzy nieosobliwej rozkład bez wyboru elementu głównego (wzory obok) istnieje wtedy i~tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe, a~z~wyborem zawsze.
     \item Dla macierzy gęstej faktoryzacja kosztuje około $\frac{2}{3}N^3$ operacji, a~para podstawień $O(N^2)$. Jedna faktoryzacja obsługuje więc wiele prawych stron.
-    \item W~macierzy rzadkiej eliminacja tworzy niezerowe elementy w~miejscu zer (fill-in). Przestawienie wierszy i~kolumn go zmniejsza.
+    \item W~macierzy rzadkiej eliminacja tworzy niezerowe elementy w~miejscu zer (fill-in). Odpowiednie przestawienie wierszy i~kolumn może go zmniejszyć.
   \end{itemize}
   \src{Źródło: Vandenberghe, EE133A, wykład 7. Saad, p.~3.6 i~przykład 3.3.}
 \end{frame}
@@ -53,7 +53,7 @@
   \[ \mathbf{A} = \mathbf{D} - \mathbf{E} - \mathbf{F} \]
   \[ x_i^{(j+1)} = \frac{1}{a_{ii}} \Bigl( b_i - \sum_{l \ne i} a_{il} \, x_l^{(j)} \Bigr), \qquad i = 1, \dots, N \]
   \[ \mathbf{x}^{(j+1)} = \mathbf{D}^{-1} (\mathbf{E} + \mathbf{F}) \, \mathbf{x}^{(j)} + \mathbf{D}^{-1} \mathbf{b}, \qquad \mathbf{G}_{JA} = \mathbf{I} - \mathbf{D}^{-1} \mathbf{A} \]
-  \vspace{1mm}
+  \par\vspace{1mm}
   {\footnotesize
   $\mathbf{D}$ - przekątna $\mathbf{A}$, zakładamy $a_{ii} \ne 0$\\
   $-\mathbf{E}$, $-\mathbf{F}$ - ściśle dolna i~ściśle górna część $\mathbf{A}$\\
@@ -71,7 +71,7 @@
   \tightdisplays\eqtop
   \[ x_i^{(j+1)} = \frac{1}{a_{ii}} \Bigl( b_i - \sum_{l < i} a_{il} \, x_l^{(j+1)} - \sum_{l > i} a_{il} \, x_l^{(j)} \Bigr), \qquad i = 1, \dots, N \]
   \[ (\mathbf{D} - \mathbf{E}) \, \mathbf{x}^{(j+1)} = \mathbf{F} \, \mathbf{x}^{(j)} + \mathbf{b}, \qquad \mathbf{G}_{GS} = \mathbf{I} - (\mathbf{D} - \mathbf{E})^{-1} \mathbf{A} \]
-  \vspace{1mm}
+  \par\vspace{1mm}
   {\footnotesize
   $l < i$ - składowe już obliczone w~iteracji $j+1$\\
   $l > i$ - składowe z~poprzedniej iteracji $j$\\
