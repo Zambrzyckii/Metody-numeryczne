@@ -1,6 +1,6 @@
 # Dziennik pracy z AI, Projekt 2 (układy równań liniowych)
 
-Status: etap 3 (pętla recenzji) zakończony, ocena końcowa 9 / 10, commit `985058b`. Następny jest etap 4, pakowanie, plan wystąpienia i przystanek przed wysłaniem.
+Status: etap 4 wstrzymany na przystanku przed wysłaniem. ZIP przetestowany, SHA-256 e84d064e…2621. Następne jest wysłanie po wyraźnym „tak” autora.
 
 Dziennik ma dwie warstwy.
 
@@ -125,6 +125,34 @@ Narzędzie to Claude Code. Repozytorium `~/Metody-numeryczne`, katalog projektu 
 - Talia ma 13 slajdów. Trzy slajdy błędów AI (dwa z fazy pisania briefu, jeden z tej sesji) i trzy slajdy recenzji.
 - Commity `f199941`, `6126f6b` (poprawki), `985058b` (ocena końcowa i poprawki po iteracji 3), `2c0f151` (brief v1.2).
 - Status: zaakceptowano, kryteria wyjścia etapu 3 spełnione.
+
+### Etap 4 · Pakiet, przystanek, wysłanie (2026-11-16)
+
+**Polecenie**
+
+- Brief 6.2, etap 4. Czysta przebudowa, ZIP z białej listy, test ZIP-a, plan wystąpienia, przygotowanie wysłania bez `confirm`, jeden przystanek.
+
+**Weryfikacja**
+
+- `make clean && make` bez błędów. Kontrole 3.8 czyste, 13 stron, stopki od 1 / 13 do 13 / 13. Rendery 80 dpi bajtowo identyczne z obejrzanymi po karcie E. Przebudowany `main.pdf` różni się od poprzedniego tylko znacznikiem czasu, commit `e0c4a48`.
+- `get_recent_changes` (14 dni), wpisy kursu 8051 (Mninf). 10.11 zmiany zadania L4, ćwiczeń z4.1 do z4.7, plików `lab4.zip`, „Laboratorium 4” i „Wykład 4”. Bez daty zmiany ocen z3.1 do z3.6, L3 i P1K oraz zmiany zgłoszeń w P2W i P2K. Brak ogłoszenia i brak zmiany harmonogramu, więc termin P4 (18.11, 11:15) i ZIP-a (10:15) bez zmian.
+
+**Pakiet**
+
+- `~/Downloads/MN-Projekt2/zambrzycki_projekt2_wstepna.zip`, zbudowany poleceniem `zip -X` z jawnej listy dziewięciu plików z briefu 1.5, uruchomionym w `Projekt/Projekt2/`.
+- Zawartość (`unzip -l`). `slides/preliminary/main.pdf` (317677 B), `Makefile`, `main.tex`, `intro.tex`, `ai-work.tex`, `ai-errors.tex`, `ai-review.tex`, `review.tex` oraz `slides/common/mnstyle.sty`. Brak `docs/`, `.claude/`, `materials/`, `CLAUDE.md`, plików `*.md` i plików pomocniczych.
+- SHA-256 `e84d064ea8b66eb1d07e8c7c8e0a39e7ed4033f276a8df3c18fada9ef1892621`.
+- Test ZIP-a (brief 6.4) w nowym katalogu. `main.pdf` z ZIP-a identyczny (`cmp`) z repo. `make -B` po rozpakowaniu bez błędów i z 0 ostrzeżeń. `pdftotext` identyczny, 13 stron w obu, rendery 50 dpi identyczne strona po stronie. ZIP przyjęty.
+- `~/Downloads/MN-Projekt2/plan_wystapienia.md`, 13 wierszy, około 6 minut, z listą pięciu poprawek po ostatniej recenzji.
+
+**eNauczanie**
+
+- `get_assignment_status(27573)` zwraca `status: new`, `can_submit: false`, `grading_status: notgraded`. Znaczenie `can_submit: false` nadal nieznane.
+- `save_assignment_submission(course_id=8051, assignment_id=27573, file_paths=[ZIP])` bez `confirm` odrzucił klasyfikator uprawnień Claude Code („Destructive or Unwanted Actions”), zanim wywołanie dotarło do serwera. Opis zmiany z narzędzia nie jest więc znany. Orkiestrator nie obchodził blokady. Zgłoszone na przystanku zgodnie z briefem 6.5.
+
+**Status**
+
+- Wstrzymano na przystanku przed wysłaniem. Czeka na wyraźne „tak” autora.
 
 ---
 
