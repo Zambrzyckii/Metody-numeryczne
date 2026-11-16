@@ -1,6 +1,6 @@
 # Dziennik pracy z AI, Projekt 2 (układy równań liniowych)
 
-Status: etap 2 (talia wstępna) zakończony. Ostatni zweryfikowany krok to talia z 11 slajdami, commit `df29a84`. Następny jest etap 3, iteracja 1 recenzji.
+Status: etap 3 w toku. Ostatni zweryfikowany krok to poprawki po iteracji 1, commit `f199941`. Następna jest iteracja 2 recenzji.
 
 Dziennik ma dwie warstwy.
 
@@ -87,6 +87,32 @@ Narzędzie to Claude Code. Repozytorium `~/Metody-numeryczne`, katalog projektu 
 - Talia ma 11 slajdów. Wstęp to slajdy 1 do 5, praca z AI slajdy 6 i 7, błędy AI slajdy 8 i 9, recenzja AI slajdy 10 i 11.
 - Commity `dd70825` (karta A) i `df29a84` (karta B). Kontrole 3.8 przechodzą po każdej karcie, wszystkie strony obejrzane.
 - Status: zaakceptowano, kryteria wyjścia etapu 2 spełnione.
+
+### Etap 3 · Pętla recenzji (2026-11-16)
+
+**Polecenie**
+
+- Brief 6.2, etap 3. Do trzech iteracji `presentation-reviewer` (opus, effort high) z identycznym rdzeniem promptu, poprawki przez karty `latex-assistant`, ocena na slajdzie wyłącznie z makr w `review.tex`.
+
+**Decyzje**
+
+- Decyzja orkiestratora, zatwierdzona przez autora na przystanku przed wysłaniem.
+  Pytanie: który błąd dostaje trzeci slajd błędu AI po iteracji 1.
+  Opcje: przesadzona ocena na slajdzie 7 (major), fałszywy warunek istnienia LU (minor), pominięte założenia SPD (minor), polecenie uruchomione przez recenzenta (minor), znalezisko nit z karty A.
+  Wybór i powód: przesadzona ocena na slajdzie 7. Ma wagę major i nową drogę wykrycia (recenzent AI porównujący slajd z dziennikiem). Błędy LU i SPD mają tę samą drogę wykrycia, a pozostałe mają niższą wagę. Wszystkie zostają w dzienniku.
+  Źródło: brief 5.4
+- Decyzja orkiestratora, zatwierdzona przez autora na przystanku przed wysłaniem.
+  Pytanie: czy dzielić slajd recenzenta na dwa.
+  Opcje: jeden slajd z definicją i promptem albo podział na slajd definicji z kryteriami i slajd promptu.
+  Wybór i powód: podział. Po dodaniu kryteriów z pliku roli (znalezisko 7) slajd nie mieści się bez `\scriptsize`, a brief 1.7 dopuszcza wtedy podział. Talia ma 13 slajdów.
+  Źródło: brief 1.7
+- Decyzja orkiestratora, zatwierdzona przez autora na przystanku przed wysłaniem.
+  Pytanie: jak rozwiązać znalezisko o legendach w `\footnotesize`.
+  Opcje: zmiana stylu 3.3 w briefie, legendy w `\normalsize` z podziałem gęstych slajdów, legendy w `\small`.
+  Wybór i powód: zmiana stylu 3.3 w briefie v1.2. Plik roli `latex-assistant` (brief 2.7) już dopuszcza `\footnotesize`, więc zmiana usuwa sprzeczność dwóch sekcji briefu. `\small` jest zakazany w pliku roli. Legendy w `\normalsize` wymagałyby podziału slajdów 4 i 5, co przy 13 slajdach przekroczyłoby górną granicę 14.
+  Źródło: brief 2.7, 3.3, 1.7
+- Brief v1.2 (commit `2c0f151`). Twierdzenie o LU w 1.8 zawężone do macierzy nieosobliwych, legendy w 3.3. `docs/presentation-style.md` wygenerowany od nowa skryptem, `docs/requirements-presentation.md` poprawiony w punkcie 5.3. Pliki ról bez zmian (`cmp`).
+- Odrzucona część znaleziska 7 (więcej slajdów recenzji i osobny slajd obserwacji) z powodu „brief 1.7, decyzja użytkownika”, reguła 4(a). Pokazane na przystanku.
 
 ---
 
@@ -391,6 +417,370 @@ Report format: what was done · files changed · what was NOT done and why · op
 - Wszystkie punkty spełnione. Orkiestrator przebudował talię (`make -B`) i powtórzył kontrole 3.8. Log ma 0 wpisów Overfull, Underfull i Warning, wszystkie fonty osadzone, brak obrazów rastrowych, 11 stron i stopki od 1 / 11 do 11 / 11. Obejrzane wszystkie strony PNG.
 - Cytat na slajdzie 7 sprawdzony skryptem. Po normalizacji białych znaków każdy fragment między znacznikami [...] występuje w kolejności w karcie A zapisanej w tym dzienniku.
 - Agent nie obejrzał strony 9 i nie sprawdził cytatu. Zrobił to orkiestrator.
+
+**Błędy AI**
+
+- Brak.
+
+**Kandydat na slajd**
+
+- -
+
+### 2026-11-16 · presentation-reviewer · Review iteration 1
+
+- Goal: recenzja talii z 11 slajdami według trzech źródeł kryteriów, ze znaleziskami, oceną słowną i liczbową.
+- Launch: `general-purpose` czytający plik roli `.claude/agents/presentation-reviewer.md`, opus / high.
+- Prompt / brief: polecenie uruchomienia i pełny prompt recenzji poniżej, dosłownie. Pierwsze siedem linii promptu to rdzeń z briefu 6.2 (etap 3), sprawdzony poleceniem `cmp` z blokiem w briefie.
+
+<details>
+<summary>Polecenie uruchomienia agenta</summary>
+
+```text
+Read /home/bob/Metody-numeryczne/Projekt/Projekt2/.claude/agents/presentation-reviewer.md and follow it as your role definition. Your working directory is /home/bob/Metody-numeryczne/Projekt/Projekt2 and relative paths are relative to it. Your review prompt is the file /home/bob/.claude/jobs/458e5e91/tmp/cards/review-1.md. Read it in full and carry it out. Return the whole review as your final message.
+```
+
+</details>
+
+<details>
+<summary>Pełny prompt recenzji, iteracja 1</summary>
+
+```text
+Review slides/preliminary/main.pdf and its .tex sources against three sources
+of criteria. (1) materials/zasady_zaliczenia_projektu_v1.pdf, the mandatory
+conditions and slide groups. (2) materials/Projekt_2.pdf, section 4 on page 3,
+the content of the preliminary deck. (3) docs/presentation-style.md,
+assertion-evidence titles, text budget, palette, banned elements. Report
+findings with severity and a suggested fix. End with a verbal grade and a
+score 1-10.
+
+This is iteration 1 of the review. The PDF is slides/preliminary/main.pdf with 11 pages. The sources are slides/preliminary/main.tex, intro.tex, ai-work.tex, ai-errors.tex, ai-review.tex, review.tex and Makefile, plus slides/common/mnstyle.sty. The pages rendered at 80 dpi are /home/bob/.claude/jobs/458e5e91/tmp/verify/b1/p-01.png to p-11.png. The compile log of the final pass is /home/bob/.claude/jobs/458e5e91/tmp/verify/b1/main.log. The pdffonts output is /home/bob/.claude/jobs/458e5e91/tmp/verify/b1/pdffonts.txt and the pdfimages -list output is /home/bob/.claude/jobs/458e5e91/tmp/verify/b1/pdfimages.txt. The AI work log is docs/ai-log.md and the verified theory extract is docs/requirements-presentation.md. Slide 11 shows a provisional grade (score 0, verbal grade "brak oceny, trwa pierwsza iteracja", history "brak") because no review has finished yet. Judge the layout of that slide, not its values.
+```
+
+</details>
+
+<details>
+<summary>Pełna odpowiedź recenzenta, iteracja 1</summary>
+
+```markdown
+- Finding: Slide 7's evaluation line says the orchestrator checked every checklist item with a command or a comparison and nothing by eye. The log does not support that for every item.
+  Severity: major
+  Requirement: docs/presentation-style.md 3.7 (Overclaiming), role file (AI claims must match docs/ai-log.md)
+  Detected by: Slide 7, the line „Ocena: orkiestrator sprawdził każdy punkt listy poleceniem albo porównaniem, bez oceny na oko”. In docs/ai-log.md:259-262 the commands cover the build log, fonts, images and the formulas. No command is logged for the checklist items on titles, writing rules, the n/N footer and unsourced claims, and the only evidence logged there is viewing the PNG pages.
+  Suggested fix: Reword the line to say which items were checked by command and which by viewing the pages, or log a command for each item. This error could also become the third AI-error slide, since it was found by a new route (the AI reviewer).
+
+- Finding: The AI-error group has two slides, but the rule says a report of about three slides is required.
+  Severity: major
+  Requirement: zasady s. 4, p. 5.3 („Wymagane jest zamieszczenie w prezentacji około trzech slajdów”)
+  Detected by: Slides 8 and 9 are the only error slides. docs/ai-log.md:77 keeps the third slot open for a real error found by a third route.
+  Suggested fix: Add a third error slide. The slide 7 overclaim found in this review fits, or the card A nit from docs/ai-log.md:266-270, which the orchestrator found with git check-ignore.
+
+- Finding: On slide 3, the statement that LU without pivoting exists if and only if all leading principal minors are nonzero is false for singular matrices.
+  Severity: minor
+  Requirement: Projekt_2 s. 3, p. 4 (idea of LU factorization). Role file (intro mathematics must be correct)
+  Detected by: Slide 3, bullet 1, second sentence. A counterexample is [[0,1],[0,1]] = [[1,0],[1,1]]·[[0,1],[0,0]], which has an LU factorization although its first minor is zero.
+  Suggested fix: Write „Dla macierzy nieosobliwej bez wyboru istnieje wtedy i tylko wtedy, gdy…”.
+
+- Finding: Slide 2 says A is SPD for the heat model with no conditions, but the instruction says this holds only for positive conductivity, a correct mesh and the boundary conditions of A.1.
+  Severity: minor
+  Requirement: Projekt_2 s. 3, p. 5.1 and s. 8, A.2. docs/requirements-presentation.md:81 („under the assumptions of appendix A”)
+  Detected by: Slide 2, the title („ma rzadką macierz SPD”) and the bullet both drop the assumptions of appendix A.
+  Suggested fix: Add „przy założeniach z dodatku A” to the bullet.
+
+- Finding: Slide 5's first bullet says faster convergence follows from overwriting values in place. It follows from using the updated components.
+  Severity: minor
+  Requirement: Projekt_2 s. 3, p. 4 (Gauss-Seidel, use of updated values). Role file (correctness of method slides)
+  Detected by: Slide 5, bullet 1 („nadpisują stare w miejscu, więc metoda potrzebuje mniej pamięci i zwykle zbiega szybciej”).
+  Suggested fix: Split it into two causes, in-place overwriting saves memory and immediate use of new components usually speeds up convergence.
+
+- Finding: On slide 5, the symbols SOR and ω are used but not explained.
+  Severity: minor
+  Requirement: Projekt_2 s. 3, p. 4 („Wyjaśnij znaczenie symboli”)
+  Detected by: Slide 5, bullet 3. The legend covers l, D, E, F and G_GS only.
+  Suggested fix: Add one legend line, „SOR - metoda nadrelaksacji, ω - parametr relaksacji”, or drop the SOR argument and cite only the SPD result.
+
+- Finding: The AI-review group has two slides instead of the recommended four, and no slide gives the main observation from the review.
+  Severity: minor
+  Requirement: zasady s. 5, p. 6.3 (about four slides recommended) and s. 4, p. 6.1 (focus on the most important observation from the review)
+  Detected by: Slides 10 and 11. Slide 10 puts the reviewer definition, the criteria and the prompt on one slide. The criteria in the role file are not shown, namely compliance, correctness of the method slides, legibility, AI claims against the log, cut markers and volume.
+  Suggested fix: Split slide 10 into a definition and criteria slide and a prompt slide, and add one slide with the main finding of the review and what changed because of it.
+
+- Finding: The legends on slides 2 to 5 are set in \footnotesize, which style 3.3 allows only for the footer, source lines and verbatim blocks. Their sub- and superscripts drop to 6 pt.
+  Severity: minor
+  Requirement: docs/presentation-style.md 3.3. zasady s. 5, p. 6.1 (text and formulas legible from the seats)
+  Detected by: Slides 2 to 5, the legend lines with a_ii, r^(j), x^(j) and G_JA. pdffonts.txt lists LMRoman6-Regular and LMMathItalic6-Regular. The legends also sit directly under the last equation with no gap.
+  Suggested fix: Either record \footnotesize for legends in style 3.3, or raise the legends to \small and add a small gap above them.
+
+- Finding: Slide 10's prompt quote and the „opus, effort high” for the reviewer are not backed by any entry in docs/ai-log.md yet.
+  Severity: minor
+  Requirement: docs/presentation-style.md 3.7 (Unsourced content, a verbatim quote must reproduce text logged in docs/ai-log.md)
+  Detected by: Slide 10. docs/ai-log.md ends at the card B entry (lines 276-401), so no review launch, prompt or model is logged. The leading „[...]” also marks a cut, but the prompt file itself starts with „Review”.
+  Suggested fix: Log the review launch command, the prompt and the model and effort for each iteration. Keep the leading „[...]” only if the logged prompt includes the launch line before it.
+
+- Finding: Slide 6's title says the deck was made by the orchestrator with two agents, while slides 8 and 9 name two other agents, the writer agent and the independent check agent.
+  Severity: minor
+  Requirement: Role file (AI claims match docs/ai-log.md). docs/ai-log.md:104 and 136
+  Detected by: The title of slide 6 compared with „Agent piszący brief” on slide 8 and „Niezależny agent sprawdzający brief” on slide 9.
+  Suggested fix: Limit the title to this session, for example „W tej sesji talię przygotował orkiestrator z dwoma agentami…”, or mention the agents from the brief phase in one bullet.
+
+- Finding: The fields on slides 8 and 9 and the bullets on slide 6 are three- or four-line blocks of several sentences, close to the paragraphs the style bans.
+  Severity: minor
+  Requirement: docs/presentation-style.md 3.1 (Text budget, „No paragraphs anywhere”)
+  Detected by: Slide 8 „Co się stało” has three sentences on three lines. Slide 9 „Co się stało” runs four lines. Slide 6 bullets 2 and 3 run three lines each.
+  Suggested fix: Cut each field to one sentence of at most two lines, and keep the details in the log and the talk.
+
+- Finding: On slide 11 the iteration-history line floats in the middle of the page and the lower half is empty.
+  Severity: minor
+  Requirement: docs/presentation-style.md 3.5 (AI review, grade with the iteration line). zasady s. 5, p. 6.1 (layout checked full screen)
+  Detected by: Slide 11. „Przebieg iteracji: brak” sits at about 55 percent of the page height, because \vfill does not stretch in a top-aligned frame (docs/ai-log.md:387).
+  Suggested fix: Use a [c] frame for slide 11, or put the grade and the history line in a fixed-height minipage, so the history line sits right above the footer.
+
+- Finding: Slide 3 shows Ly = b next to a bullet about PA = LU, which needs Ly = Pb. The three left-column equations are also unevenly aligned.
+  Severity: nit
+  Requirement: Role file (correctness and comprehensibility of method slides). zasady s. 5, p. 6.1 (layout)
+  Detected by: Slide 3. The first display is A = LU and bullet 1 uses PA = LU. In the compiled PDF A = LU is centred while the other two equations are shifted left.
+  Suggested fix: Mark the equations as the case without pivoting, or write Ly = Pb, and align the three equations on the equals sign.
+
+- Finding: On slide 5 the condition ρ(G_GS) < 1 lacks „dla każdego x(0)”, and the component formula lacks i = 1, …, N, which fixes the sweep order.
+  Severity: nit
+  Requirement: Role file (convergence conditions stated precisely)
+  Detected by: Slide 5, bullet 2 and the first displayed equation. Slide 4 states both details for Jacobi.
+  Suggested fix: Add „dla każdego x(0)” to bullet 2 and „i = 1, …, N” to the formula.
+
+- Finding: The bottom margin on slide 10 is tight, with the last verbatim line just above the footer.
+  Severity: nit
+  Requirement: zasady s. 5, p. 6.1 (margins)
+  Detected by: Slide 10 in the compiled PDF. The final „[...]” ends a few millimetres above „10 / 11”.
+  Suggested fix: This resolves itself if slide 10 is split as proposed above.
+
+- Finding: The result and evaluation on slide 7 take three rendered lines, while the style allows two.
+  Severity: nit
+  Requirement: docs/presentation-style.md 3.5 (Prompt, result and evaluation in two lines)
+  Detected by: Slide 7. The „Ocena” line wraps.
+  Suggested fix: Shorten the evaluation line so it fits on one line.
+
+- Finding: Slide 9 names SHA-256, but the log entry for that error only says the file is hashed.
+  Severity: nit
+  Requirement: Role file (AI claims match docs/ai-log.md). docs/ai-log.md:137
+  Detected by: Slide 9, „Jak naprawiono”.
+  Suggested fix: Add „SHA-256” to the log entry, or drop the algorithm name from the slide.
+
+- Finding: Slide 2's title makes two claims, an SPD matrix and the residual criterion.
+  Severity: nit
+  Requirement: docs/presentation-style.md 3.1 (One message per slide)
+  Detected by: The title of slide 2.
+  Suggested fix: Keep one claim in the title, for example „Rozwiązanie układu z modelu ciepła oceniamy względnym residuum”, and leave SPD in the bullet.
+
+- Verbal grade: Prezentacja spełnia wszystkie warunki obowiązkowe, a slajdy o metodach LU, Jacobiego i Gaussa-Seidla są w większości poprawne i podają warunki zbieżności bez przesady. Najsłabsze są część o błędach AI i część o recenzji, które mają po dwa slajdy, oraz slajd z kartą zadania, który twierdzi więcej, niż potwierdza dziennik. Warto też doprecyzować założenia przy macierzy SPD i istnieniu rozkładu LU.
+- Score: 7 / 10. Every mandatory element is present, the build is clean and the method slides are sound, but the error and review groups are short, one AI claim goes beyond the log and two mathematical statements need qualifiers.
+- Top 3 improvements, ordered by impact:
+  1. Make the AI-error group three slides, using the slide 7 overclaim as the third error (new detection route, the AI reviewer).
+  2. Grow the review group to about four slides, with definition and criteria, prompt, the main review finding with its fix, and the grade. Log the review prompt and model for each iteration.
+  3. Fix the intro mathematics. Add the appendix A assumptions to the SPD claim, add „dla macierzy nieosobliwej” to the LU iff, separate the two causes on slide 5 and explain SOR and ω.
+
+Verified: All mandatory elements are present. The PDF was compiled from LaTeX by a Makefile with two pdflatex runs. The n/N footer reads 1 / 11 to 11 / 11. The format is 16:9. The three groups are on slides 2-5, 8-9 and 10-11. I read the whole main.log and it has no Overfull, Underfull or Warning lines, only Info messages. pdffonts shows emb yes on every row and pdfimages lists no images. 11 slides fit 8 minutes. The slide 7 quote matches card A in docs/ai-log.md:162-247 in order, with every cut marked.
+
+Disclosure for the log: Early on I ran one Bash command, a read-only `ls -R` and `wc -l` over slides/, docs/ and materials/. My role file says not to run anything. It changed and wrote nothing. That Bash call worked while Grep was unavailable, which shows the role file's tool list (Read, Glob, Grep) was not applied. This confirms slide 10's wording that the reviewer is read-only by instruction only.
+```
+
+</details>
+
+**Rezultat**
+
+- Ocena 7 / 10. 18 znalezisk, 2 major, 10 minor, 6 nit. Ocena słowna wpisana dosłownie do `slides/preliminary/review.tex` (bez znaków specjalnych LaTeX-a, nic nie trzeba było zmieniać).
+- Recenzent sam zgłosił, że uruchomił jedno polecenie `ls -R slides docs materials | head -80; wc -l ...`, choć plik roli zabrania uruchamiania czegokolwiek. Orkiestrator znalazł tekst tego polecenia w transkrypcie agenta. `git status` po recenzji był czysty, więc recenzent niczego nie zmienił.
+
+**Rozstrzygnięcia znalezisk**
+
+1. Slajd 7, ocena twierdzi więcej niż dziennik (major). Naprawione w karcie C, nowy tytuł i linia oceny. Część znaleziska jest błędna. Liczbę stron i stopki n/N sprawdził skrypt kontrolny (`pdfinfo`, `pdftotext`), a wynik jest zapisany we wpisie karty A. Bez polecenia sprawdzono tytuły i zasady pisowni (przegląd stron PNG) oraz brak twierdzeń spoza karty (porównanie źródła z kartą).
+2. Dwa slajdy błędów zamiast około trzech (major). Naprawione. Znalezisko 1 dostaje trzeci slajd błędu.
+3. Warunek istnienia LU bez wyboru elementu głównego jest fałszywy dla macierzy osobliwych (minor). Naprawione najpierw w briefie v1.2 i w `docs/` (commit `2c0f151`), potem na slajdzie 3 w karcie C.
+4. Slajd 2 pomija założenia z dodatku A przy SPD (minor). Naprawione w karcie C.
+5. Slajd 5 łączy oszczędność pamięci i szybszą zbieżność w jedno zdanie przyczynowe (minor). Naprawione w karcie C, dwa osobne fakty bez związku przyczynowego, jak w briefie 1.8.
+6. Symbole SOR i ω bez wyjaśnienia (minor). Naprawione w karcie C, czwarta linia legendy.
+7. Grupa recenzji ma dwa slajdy zamiast około czterech i nie ma slajdu z główną obserwacją (minor). Częściowo naprawione. Slajd 10 dostaje kryteria z pliku roli i przez to dzieli się na slajd definicji i slajd promptu, co brief 1.7 dopuszcza. Prośba o około cztery slajdy i osobny slajd obserwacji odrzucona z powodu „brief 1.7, decyzja użytkownika” (reguła 4(a) briefu 6.2). Zasady s. 4, p. 6.1 mówią o skupieniu wypowiedzi, więc główna obserwacja z recenzji trafi do `plan_wystapienia.md`.
+8. Legendy w `\footnotesize` niezgodne ze stylem 3.3 (minor). Naprawione w briefie v1.2 (styl 3.3 dopuszcza `\footnotesize` dla legend, co usuwa sprzeczność z plikiem roli `latex-assistant`). Karta C dodaje odstęp nad legendami. `\small` odpada, bo plik roli dopuszcza tylko `\normalsize` i `\footnotesize`.
+9. Cytat i model recenzenta ze slajdu 10 nie były w dzienniku (minor). Naprawione tym wpisem. Karta C usuwa początkowy znacznik [...], bo plik promptu zaczyna się od „Review”.
+10. Tytuł slajdu 6 pomija agentów z fazy briefu (minor). Naprawione w karcie C, tytuł zaczyna się od „W tej sesji”.
+11. Pola slajdów 8 i 9 i punkty slajdu 6 są akapitami (minor). Naprawione w karcie C, jedno zdanie do dwóch linii na pole.
+12. Linia przebiegu iteracji na slajdzie 11 wisi w połowie strony (minor). Naprawione w karcie C, ramka `[c]`.
+13. Slajd 3, Ly = b obok PA = LU i nierówne wzory (nit). Naprawione w karcie C, wzory opisane jako przypadek bez wyboru elementu głównego i wyrównane do znaku równości.
+14. Slajd 5 bez „dla każdego x⁽⁰⁾” i „i = 1, …, N” (nit). Naprawione w karcie C.
+15. Ciasny dolny margines slajdu 10 (nit). Naprawione podziałem slajdu.
+16. Wynik i ocena na slajdzie 7 w trzech liniach (nit). Naprawione w karcie C.
+17. Slajd 9 podaje SHA-256, a wpis błędu nie (nit). Naprawione w karcie C, „suma kontrolna”.
+18. Tytuł slajdu 2 ma dwie tezy (nit). Naprawione w karcie C, tytuł mówi tylko o residuum.
+
+**Błędy AI**
+
+Każde znalezisko powyżej to defekt AI w rozumieniu briefu 5.4. Pełny zapis jest w odpowiedzi recenzenta. Poniżej błędy merytoryczne z drogą wykrycia.
+
+- Finding: The orchestrator wrote on slide 7 that every checklist item was checked by a command or a comparison and nothing by eye, while titles and writing rules were checked only by viewing the PNG pages.
+  Severity: major
+  Requirement: docs/presentation-style.md 3.7 (Overclaiming)
+  Detected by: the AI reviewer compared the slide 7 sentence with the card A entry in this log and found no command for those items.
+  Fix: card C rewrites the slide 7 title and evaluation line.
+- Finding: Brief 1.8 stated that LU without pivoting exists if and only if all leading principal minors are nonzero, without restricting it to nonsingular matrices. Card A carried the claim onto slide 3.
+  Severity: minor
+  Requirement: correctness of the intro mathematics (`Projekt_2.pdf` s. 3, p. 4)
+  Detected by: the AI reviewer gave the singular counterexample [[0,1],[0,1]] = [[1,0],[1,1]]·[[0,1],[0,0]].
+  Fix: brief v1.2, `docs/requirements-presentation.md` 5.3 (commit `2c0f151`) and slide 3 in card C.
+- Finding: Card A dropped the qualifier „przy założeniach z dodatku A” that brief 1.8 attaches to the SPD claim on slide 2.
+  Severity: minor
+  Requirement: `Projekt_2.pdf` s. 3, p. 5.1 and s. 8, A.2
+  Detected by: the AI reviewer compared slide 2 with the instruction and with docs/requirements-presentation.md.
+  Fix: card C adds the qualifier.
+- Finding: Card A merged two separate facts of brief 1.8 into one causal sentence on slide 5 („nadpisują stare w miejscu, więc ... zwykle zbiega szybciej”).
+  Severity: minor
+  Requirement: correctness of the method slides (`Projekt_2.pdf` s. 3, p. 4)
+  Detected by: the AI reviewer read slide 5, bullet 1.
+  Fix: card C states the two facts separately.
+- Finding: The presentation-reviewer ran a Bash command (`ls -R slides docs materials | head -80; wc -l ...`) although its role file says not to run anything.
+  Severity: minor
+  Requirement: `.claude/agents/presentation-reviewer.md` (read-only, do not run anything)
+  Detected by: the reviewer disclosed it at the end of its report. The orchestrator found the command text in the agent transcript, and `git status` showed no change.
+  Fix: no deck change was needed. Slide 11 now says that the instruction forbids changes and commands but the tool does not enforce it, and that the reviewer ran one read command in iteration 1.
+
+**Kandydat na slajd**
+
+- Błąd ze slajdu 7 (major, nowa droga wykrycia, recenzent AI porównujący slajd z dziennikiem) dostaje trzeci slajd błędu.
+- Główna obserwacja z recenzji do planu wystąpienia.
+
+### 2026-11-16 · latex-assistant · Fixes after review iteration 1
+
+- Goal: talia ma 13 slajdów z poprawkami po iteracji 1, trzeci slajd błędu AI i grupę recenzji podzieloną na definicję, prompt i ocenę.
+- Launch: `general-purpose` czytający plik roli `.claude/agents/latex-assistant.md`, sonnet / high.
+- Prompt / brief: polecenie uruchomienia i pełna karta zadania poniżej, dosłownie.
+
+<details>
+<summary>Polecenie uruchomienia agenta</summary>
+
+```text
+Read /home/bob/Metody-numeryczne/Projekt/Projekt2/.claude/agents/latex-assistant.md and follow it as your role definition. Your working directory is /home/bob/Metody-numeryczne/Projekt/Projekt2 and all paths in the card are relative to it. Your task card is the file /home/bob/.claude/jobs/458e5e91/tmp/cards/card-c.md. Read it in full and carry it out. Do not run any git command that changes anything. Finish with the report in the card's format.
+```
+
+</details>
+
+<details>
+<summary>Pełna karta zadania</summary>
+
+```markdown
+## Task card: Fixes after review iteration 1
+Role: latex-assistant (read .claude/agents/latex-assistant.md first)
+Launch: sonnet / high
+Goal: the deck has 13 slides with the fixes below, a third AI-error slide and the review group split into definition, prompt and grade, and it compiles cleanly.
+Requirements slice (with refs):
+  - Symbol legends on equation slides stay \footnotesize, now allowed by docs/presentation-style.md 3.3 (brief v1.2). Add a small vertical gap of about 1 mm above every legend on slides 2 to 5
+  - LU without pivoting. The "if and only if" holds for nonsingular matrices only (docs/requirements-presentation.md 5.3, brief v1.2)
+  - AI-error slides have the fields „Co się stało", „Jak to wykryto", „Jak naprawiono". Each field is one sentence of at most two rendered lines (docs/presentation-style.md 3.1, no paragraphs)
+  - Prompt slide. Result and evaluation take exactly two rendered lines (docs/presentation-style.md 3.5)
+  - Slide text below is the content. Keep its meaning. You may shorten it to meet the line limits. Do not add any claim or number that is not below
+  - Verbatim blocks use fancyvrb exactly as in your role file. Copy the Verbatim lines below character for character
+  - Do not edit review.tex. Grade values appear only through its macros
+  - If slide 5 cannot fit without \scriptsize, move its three bullets to a new slide right after it titled "Dla macierzy SPD metoda Gaussa-Seidla zbiega w arytmetyce dokładnej", and report it
+
+Slide 2 (intro.tex)
+  New title: Rozwiązanie układu $\mathbf{A}\mathbf{x} = \mathbf{b}$ z modelu ciepła oceniamy względnym residuum
+  New bullet: Przy założeniach z dodatku A macierz $\mathbf{A}$ jest rzadka, symetryczna i dodatnio określona (SPD) po eliminacji zadanych temperatur.
+  Everything else unchanged.
+
+Slide 3 (intro.tex)
+  Align the three equations of the left column on the equals sign.
+  Legend, replace the third line with: $\mathbf{P}$ - macierz permutacji wierszy, z wyborem elementu głównego $\mathbf{P}\mathbf{A} = \mathbf{L}\mathbf{U}$
+  Bullet 1, replacing the old first bullet:
+    Wzory obok pomijają wybór elementu głównego. Dla macierzy nieosobliwej rozkład bez wyboru istnieje wtedy i tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe, a z wyborem zawsze.
+  Bullets 2 and 3 and the source line unchanged.
+
+Slide 4 (intro.tex)
+  Only the legend gap.
+
+Slide 5 (intro.tex)
+  First equation, append ", \qquad i = 1, \dots, N" inside the display, as on slide 4.
+  Legend, add a fourth line: SOR - metoda kolejnych nadrelaksacji, $\omega$ - parametr relaksacji
+  Bullets, replacing the old three:
+    Nowe składowe nadpisują stare w miejscu, co oszczędza pamięć. Metoda zwykle zbiega szybciej niż metoda Jacobiego.
+    Iteracja zbiega dla każdego $\mathbf{x}^{(0)}$ i $\mathbf{b}$ wtedy i tylko wtedy, gdy $\rho(\mathbf{G}_{GS}) < 1$. Wystarcza ścisła dominacja przekątniowa, jak u Jacobiego.
+    Dla $\mathbf{A}$ SPD metoda zbiega w arytmetyce dokładnej, bo jest metodą SOR z $\omega = 1$, a SOR zbiega dla $0 < \omega < 2$.
+
+Slide 6 (ai-work.tex)
+  Title: W tej sesji prezentację przygotował orkiestrator z dwoma agentami, a autor zatwierdza ją w jednym punkcie
+  Bullets, each at most two rendered lines:
+    Narzędzie to Claude Code. Sesja główna jest orkiestratorem, deleguje pracę kartami zadań i sama uruchamia polecenia sprawdzające.
+    Z czterech zdefiniowanych ról pracowały dwie, latex-assistant (slajdy) i presentation-reviewer (recenzja).
+    Pliki ról powstały w trakcie sesji, więc każda rola działała jako agent ogólnego przeznaczenia czytający swój plik.
+    Źródła prawdy to kolejno PDF-y prowadzącego, brief, docs/ i instrukcje agentów. Autor zatwierdza całość przed wysłaniem.
+
+Slide 7 (ai-errors.tex, first frame)
+  Title: Lista kontrolna w karcie zadania pozwala odebrać pracę agenta punkt po punkcie
+  Verbatim block unchanged.
+  Two lines under the block, one rendered line each:
+    Wynik: pięć slajdów bez ostrzeżeń kompilacji, wzory zgodne z kartą.
+    Ocena: kompilację sprawdziły polecenia, a tytuły tylko przegląd stron.
+
+Slide 8 (ai-errors.tex)
+  Title unchanged.
+  Co się stało: Plan briefu przypisał zasadom podział punktów na pięć części po 0,4 pkt, który jest tylko w instrukcji projektu 1.
+  Jak to wykryto: Agent piszący brief sprawdził wskazaną stronę poleceniem pdftotext i nie znalazł tej tabeli.
+  Jak naprawiono: Brief opisuje podział jako założenie przeniesione z projektu 1.
+
+Slide 9 (ai-errors.tex)
+  Title unchanged.
+  Co się stało: Brief v1.0 kazał pobrać wysłany ZIP do wybranego katalogu, ale narzędzie download_file nie ma takiego parametru.
+  Jak to wykryto: Niezależny agent sprawdzający brief (opus, effort high) porównał go ze schematem narzędzia.
+  Jak naprawiono: Brief v1.1 każe liczyć sumę kontrolną pliku tam, gdzie zapisało go narzędzie.
+
+Slide 10 (ai-errors.tex, new frame after slide 9)
+  Title: Orkiestrator AI napisał na slajdzie, że sprawdził poleceniami więcej, niż zapisał w dzienniku
+  Co się stało: Ocena na slajdzie 7 mówiła, że nic nie sprawdzano na oko, choć tytuły sprawdził tylko przegląd stron.
+  Jak to wykryto: Recenzent AI porównał to zdanie z dziennikiem pracy i nie znalazł polecenia dla tytułów.
+  Jak naprawiono: Ocena na slajdzie 7 mówi teraz, co sprawdziły polecenia, a co przegląd stron.
+
+Slide 11 (ai-review.tex, first frame)
+  Title: Recenzent AI ocenia talię według trzech źródeł kryteriów tym samym promptem w każdej iteracji
+  Bullets, no Verbatim on this slide:
+    Agent presentation-reviewer (opus, effort high) czyta PDF, źródła .tex, strony PNG i wyniki poleceń sprawdzających.
+    Kryteria pochodzą z zasad zaliczenia, instrukcji projektu 2 i przewodnika stylu prezentacji.
+    Ocenia elementy obowiązkowe, poprawność wzorów, czytelność, zgodność twierdzeń o AI z dziennikiem i objętość względem 8 minut.
+    Instrukcja zabrania mu zmian i uruchamiania poleceń, ale narzędzie tego nie wymusza. W iteracji 1 uruchomił jedno polecenie odczytu.
+
+Slide 12 (ai-review.tex, new second frame, [fragile])
+  Title: Prompt recenzji wskazuje trzy źródła kryteriów i kończy się oceną słowną i liczbową
+  One bullet: Rdzeń promptu jest ten sam w każdej iteracji. Zmienia się tylko akapit ze ścieżkami plików i numerem iteracji.
+  Verbatim lines (the old block without its first line):
+Review slides/preliminary/main.pdf and its .tex sources against three sources
+of criteria. (1) materials/zasady_zaliczenia_projektu_v1.pdf, the mandatory
+conditions and slide groups. (2) materials/Projekt_2.pdf, section 4 on page 3,
+the content of the preliminary deck. (3) docs/presentation-style.md,
+assertion-evidence titles, text budget, palette, banned elements. Report
+findings with severity and a suggested fix. End with a verbal grade and a
+score 1-10.
+[...]
+
+Slide 13 (ai-review.tex, grade frame)
+  Make it a [c] frame so the grade and the history line sit as one block in the vertical centre. Put the history line about 3 mm under the verbal grade, no \vfill. Title and macros unchanged.
+
+Files to touch: slides/preliminary/intro.tex, slides/preliminary/ai-work.tex, slides/preliminary/ai-errors.tex, slides/preliminary/ai-review.tex
+Files NOT to touch: slides/preliminary/review.tex, slides/preliminary/main.tex, slides/preliminary/Makefile, slides/common/mnstyle.sty, docs/, .claude/, materials/, PROJECT_BRIEF.md, CLAUDE.md, anything under ../Projekt1/
+Acceptance checklist:
+  - [ ] make in slides/preliminary/ ends with 0 overfull, 0 underfull and 0 LaTeX warnings in main.log
+  - [ ] The PDF has 13 slides (14 if slide 5 was split), each footline reads n/N
+  - [ ] Every AI-error field and every slide 6 bullet renders in at most two lines, checked on the PNG pages
+  - [ ] Slide 7 shows result and evaluation in exactly two rendered lines
+  - [ ] The slide 12 Verbatim block matches this card line for line
+Report format: what was done · files changed · what was NOT done and why · open questions
+```
+
+</details>
+
+**Rezultat**
+
+- Zmienione `intro.tex`, `ai-work.tex`, `ai-errors.tex` i `ai-review.tex`. Orkiestrator wpisał ocenę iteracji 1 do `review.tex`. Commit `f199941` obejmuje oba kroki.
+- Slajd 5 zmieścił się bez `\scriptsize`, więc talia ma 13 slajdów. Agent zgłosił, że slajd 4 jest ciasny przy linii źródła, a odstęp nad legendą na slajdzie 3 działa tylko w połowie, bo kolumna jest wyśrodkowana pionowo.
+
+**Ocena względem listy kontrolnej**
+
+- Wszystkie punkty spełnione. Orkiestrator przebudował talię (`make -B`) i powtórzył kontrole 3.8. Log ma 0 wpisów Overfull, Underfull i Warning, fonty osadzone, brak obrazów rastrowych, 13 stron, stopki od 1 / 13 do 13 / 13. Grep zakazanej interpunkcji i rozmiarów `\scriptsize` i `\tiny` w źródłach nic nie znalazł.
+- Cytat na slajdzie 7 i cytat na slajdzie 12 sprawdzone skryptem względem karty A i promptu iteracji 1 w tym dzienniku. Oba fragmenty występują w kolejności.
+- Obejrzane wszystkie strony PNG. Każde pole slajdów błędów i każdy punkt slajdu 6 ma najwyżej dwie linie.
 
 **Błędy AI**
 
