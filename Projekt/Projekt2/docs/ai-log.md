@@ -150,6 +150,7 @@ Narzędzie to Claude Code. Repozytorium `~/Metody-numeryczne`, katalog projektu 
 - `get_assignment_status(27573)` zwraca `status: new`, `can_submit: false`, `grading_status: notgraded`. Znaczenie `can_submit: false` nadal nieznane.
 - `save_assignment_submission(course_id=8051, assignment_id=27573, file_paths=[ZIP])` bez `confirm` odrzucił klasyfikator uprawnień Claude Code („Destructive or Unwanted Actions”), zanim wywołanie dotarło do serwera. Opis zmiany z narzędzia nie jest więc znany. Orkiestrator nie obchodził blokady. Zgłoszone na przystanku zgodnie z briefem 6.5.
 - Na przystanku autor wybrał drogę A i podał `/permissions`. Ponowne wywołanie bez `confirm` klasyfikator znów odrzucił. W `~/.claude/settings.json`, `~/.claude/settings.local.json` i plikach `.claude/` repo nie ma reguły dla `mcp__enauczanie__save_assignment_submission`, jest tylko `"defaultMode": "auto"`. Orkiestrator ustawień nie zmieniał.
+- Po kolejnym „sprawdź teraz” autora wywołanie bez `confirm` przeszło (w plikach ustawień nadal brak reguły, więc reguła działa najpewniej tylko w tej sesji). Opis z narzędzia brzmi dosłownie „Nothing saved yet. Show the user this and call again with confirm=true only after their explicit yes. Assignment: P2W. Files: zambrzycki_projekt2_wstepna.zip. This assignment has no draft stage: saving hands it in for grading and the teacher sees it at once”. Zapis od razu oddaje pracę, więc `submit_assignment` nie będzie potrzebne.
 
 **Status**
 
