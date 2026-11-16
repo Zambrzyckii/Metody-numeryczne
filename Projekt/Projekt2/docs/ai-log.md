@@ -1,6 +1,6 @@
 # Dziennik pracy z AI, Projekt 2 (układy równań liniowych)
 
-Status: etap 3 w toku. Ostatni zweryfikowany krok to poprawki po iteracji 2, commit `6126f6b`. Następna jest iteracja 3 recenzji, ostatnia.
+Status: etap 3 (pętla recenzji) zakończony, ocena końcowa 9 / 10, commit `985058b`. Następny jest etap 4, pakowanie, plan wystąpienia i przystanek przed wysłaniem.
 
 Dziennik ma dwie warstwy.
 
@@ -113,6 +113,18 @@ Narzędzie to Claude Code. Repozytorium `~/Metody-numeryczne`, katalog projektu 
   Źródło: brief 2.7, 3.3, 1.7
 - Brief v1.2 (commit `2c0f151`). Twierdzenie o LU w 1.8 zawężone do macierzy nieosobliwych, legendy w 3.3. `docs/presentation-style.md` wygenerowany od nowa skryptem, `docs/requirements-presentation.md` poprawiony w punkcie 5.3. Pliki ról bez zmian (`cmp`).
 - Odrzucona część znaleziska 7 (więcej slajdów recenzji i osobny slajd obserwacji) z powodu „brief 1.7, decyzja użytkownika”, reguła 4(a). Pokazane na przystanku.
+- Decyzja orkiestratora, zatwierdzona przez autora na przystanku przed wysłaniem.
+  Pytanie: czy po iteracji 3 naprawiać jedno znalezisko minor i cztery nity, skoro kolejnej recenzji już nie będzie.
+  Opcje: naprawić wszystkie, naprawić tylko minor, nic nie zmieniać.
+  Wybór i powód: naprawić wszystkie pięć. Minor trzeba naprawić (brief 6.2, etap 3, krok 4), a nity były tanie. Poprawki są sformułowaniami i nie zmieniają slajdów błędów AI. Wymienione w planie wystąpienia i na przystanku.
+  Źródło: brief 6.2 (etap 3, kroki 4 i 5)
+
+**Wynik**
+
+- Trzy iteracje recenzji z ocenami 7, 8 i 9 na 10. Ocena końcowa 9 / 10 jest w `review.tex` i na slajdzie 13.
+- Talia ma 13 slajdów. Trzy slajdy błędów AI (dwa z fazy pisania briefu, jeden z tej sesji) i trzy slajdy recenzji.
+- Commity `f199941`, `6126f6b` (poprawki), `985058b` (ocena końcowa i poprawki po iteracji 3), `2c0f151` (brief v1.2).
+- Status: zaakceptowano, kryteria wyjścia etapu 3 spełnione.
 
 ---
 
@@ -992,6 +1004,209 @@ Report format: what was done · files changed · what was NOT done and why · op
 - `pdftotext -bbox` na slajdzie 1 daje wysokość słów „Metody numeryczne” około 8,6 pt, czyli `\footnotesize`.
 - Obejrzane strony 1 do 5 i 10 do 13. Rendery stron 6 do 9 są bajtowo identyczne (`cmp`) z renderami obejrzanymi po karcie C.
 - Cytaty na slajdach 7 i 12 sprawdzone skryptem względem karty A i promptu iteracji 2 w tym dzienniku.
+
+**Błędy AI**
+
+- Brak.
+
+**Kandydat na slajd**
+
+- -
+
+### 2026-11-16 · presentation-reviewer · Review iteration 3 (final)
+
+- Goal: ostatnia recenzja talii z 13 slajdami po poprawkach z iteracji 2.
+- Launch: `general-purpose` czytający plik roli `.claude/agents/presentation-reviewer.md`, opus / high. Nowy agent, bez kontekstu poprzednich iteracji.
+- Prompt / brief: polecenie uruchomienia i pełny prompt recenzji poniżej, dosłownie. Pierwsze siedem linii sprawdzone poleceniem `cmp` z rdzeniem w briefie.
+
+<details>
+<summary>Polecenie uruchomienia agenta</summary>
+
+```text
+Read /home/bob/Metody-numeryczne/Projekt/Projekt2/.claude/agents/presentation-reviewer.md and follow it as your role definition. Your working directory is /home/bob/Metody-numeryczne/Projekt/Projekt2 and relative paths are relative to it. Your review prompt is the file /home/bob/.claude/jobs/458e5e91/tmp/cards/review-3.md. Read it in full and carry it out. Return the whole review as your final message.
+```
+
+</details>
+
+<details>
+<summary>Pełny prompt recenzji, iteracja 3</summary>
+
+```text
+Review slides/preliminary/main.pdf and its .tex sources against three sources
+of criteria. (1) materials/zasady_zaliczenia_projektu_v1.pdf, the mandatory
+conditions and slide groups. (2) materials/Projekt_2.pdf, section 4 on page 3,
+the content of the preliminary deck. (3) docs/presentation-style.md,
+assertion-evidence titles, text budget, palette, banned elements. Report
+findings with severity and a suggested fix. End with a verbal grade and a
+score 1-10.
+
+This is iteration 3 of the review. The PDF is slides/preliminary/main.pdf with 13 pages. The sources are slides/preliminary/main.tex, intro.tex, ai-work.tex, ai-errors.tex, ai-review.tex, review.tex and Makefile, plus slides/common/mnstyle.sty. The pages rendered at 80 dpi are /home/bob/.claude/jobs/458e5e91/tmp/verify/d1/p-01.png to p-13.png. The compile log of the final pass is /home/bob/.claude/jobs/458e5e91/tmp/verify/d1/main.log. The pdffonts output is /home/bob/.claude/jobs/458e5e91/tmp/verify/d1/pdffonts.txt and the pdfimages -list output is /home/bob/.claude/jobs/458e5e91/tmp/verify/d1/pdfimages.txt. The AI work log is docs/ai-log.md and the verified theory extract is docs/requirements-presentation.md. Slide 13 shows the grade of iteration 2 (score 8, its verbal grade and history). Judge the layout of that slide, not its values.
+```
+
+</details>
+
+<details>
+<summary>Pełna odpowiedź recenzenta, iteracja 3</summary>
+
+```markdown
+- Finding: The deck never says what the brief is or that it was written with AI in an earlier session. Slides 8 and 9 therefore describe errors and agents that fall outside slide 6's story of "this session, orchestrator with two agents". Separately, the slide 6 title makes two claims, and bullet 4 repeats its approval clause.
+  Severity: minor
+  Requirement: presentation-reviewer role file (comprehensibility, AI claims match docs/ai-log.md). zasady s. 4, p. 5.3 (the report describes an example of erroneous AI behaviour). docs/presentation-style.md 3.1 (one message per slide)
+  Detected by: Slide 6, bullet 4, "Źródła prawdy to kolejno PDF-y prowadzącego, brief, docs/ i instrukcje agentów. Autor zatwierdza całość przed wysłaniem." (ai-work.tex:6). Slide 8, "Plan briefu…" and "Agent piszący brief…" (ai-errors.tex:21-22). Slide 9, "Brief v1.0…" and "Niezależny agent sprawdzający brief…" (ai-errors.tex:29-30). docs/ai-log.md:123, 139 and 155 place these errors in the brief-writing phase, not in this session. The title's "a autor zatwierdza ją w jednym punkcie" says the same thing as the last sentence of bullet 4.
+  Suggested fix: In slide 6 bullet 4, replace "Autor zatwierdza całość przed wysłaniem." with a short phrase saying the brief is the project plan written with AI in an earlier session. This keeps the bullet within two lines, and the approval stays in the title only.
+
+- Finding: The slide 12 title says the review prompt "kończy się oceną słowną i liczbową". The prompt does not end with a grade. It asks for the review to end with one, and the full prompt actually ends with the second paragraph.
+  Severity: nit
+  Requirement: presentation-reviewer role file (AI claims match the log). docs/presentation-style.md 3.1 (assertion titles)
+  Detected by: Slide 12 title (ai-review.tex:12) compared with the prompt files. The core's last sentence is "End with a verbal grade and a score 1-10.", followed by the second paragraph.
+  Suggested fix: Write "Prompt recenzji wskazuje trzy źródła kryteriów i wymaga oceny słownej i liczbowej".
+
+- Finding: The slide 11 title uses "talię", a calque of "deck" that sounds odd in Polish for a presentation.
+  Severity: nit
+  Requirement: docs/presentation-style.md 3.1 (writing rules for slide text, Polish)
+  Detected by: Slide 11 title, "Recenzent AI ocenia talię według…" (ai-review.tex:3).
+  Suggested fix: Write "ocenia prezentację".
+
+- Finding: The convergence bullets on slides 4 and 5 use x^(0), but no legend explains it as the initial approximation.
+  Severity: nit
+  Requirement: Projekt_2 s. 3, p. 4 ("Wyjaśnij znaczenie symboli")
+  Detected by: Slide 4 bullet 1 (intro.tex:63) and slide 5 bullet 2 (intro.tex:82). Slide 2's legend explains x^(j) only as "przybliżenie" in passing.
+  Suggested fix: Change slide 2 legend line 4 to "j - numer iteracji (k u Saada), x^(0) - przybliżenie początkowe". The legend stays at four lines.
+
+- Finding: On slide 3, the inline \frac{2}{3}N^3 sets the 2 and the 3 in script size, so they are the smallest numerals in the body text.
+  Severity: nit
+  Requirement: zasady s. 5, p. 6.1 (formulas legible from the seats)
+  Detected by: Slide 3, bullet 2 (intro.tex:45). In the PDF and in p-03.png the fraction is visibly smaller than the surrounding text.
+  Suggested fix: Write $2N^3/3$ or use \tfrac with the same meaning, so the numerals keep text size.
+
+- Verbal grade: Prezentacja spełnia wszystkie warunki obowiązkowe i zawiera poprawki wszystkich znalezisk poprzedniej iteracji. Slajdy o metodach LU, Jacobiego i Gaussa-Seidla są poprawne, wyjaśniają symbole i podają warunki zbieżności z właściwymi założeniami, a twierdzenia o pracy z AI zgadzają się z dziennikiem. Do poprawy zostały drobiazgi, czyli krótkie wyjaśnienie, czym jest brief i skąd pochodzą błędy ze slajdów 8 i 9, oraz kilka sformułowań w tytułach slajdów o recenzji.
+- Score: 9 / 10. Every mandatory element is present, all seven iteration-2 findings are fixed, the mathematics and the AI claims check out, and only one minor finding on context and four wording or legibility nits remain.
+- Top 3 improvements, ordered by impact:
+  1. Introduce the brief in slide 6 bullet 4, as the AI-written project plan from an earlier session, and drop the repeated approval sentence there.
+  2. Fix the wording of the review titles. Use "wymaga oceny słownej i liczbowej" on slide 12 and "ocenia prezentację" on slide 11.
+  3. Explain x^(0) in the slide 2 legend and give the 2/3 on slide 3 text-size numerals.
+
+Verified: Iteration-2 fixes are in place.
+  - `\par\vspace{1mm}` sits at intro.tex:13, 56 and 74. On slides 2, 4 and 5 the gap is above each legend and the first legend line is flush.
+  - `\setbeamerfont{institute}{size=\footnotesize}` is at main.tex:3.
+  - The slide 3 bullet 1 is one sentence, and the fill-in bullet says "może go zmniejszyć".
+  - The slide 10 title names the false claim.
+  - The slide 11 title says "z tym samym rdzeniem promptu", and bullet 4 counts iterations 1 and 2.
+  - The slide 12 bullet describes the second paragraph.
+
+Build, format and mandatory elements:
+  - I read the whole main.log. It reports 13 pages and has no Overfull, Underfull or Warning lines, only Info messages.
+  - pdffonts shows emb yes on every row, and pdfimages lists no images.
+  - The page is 455.24 × 256.07 pt, which is 16:9.
+  - The Makefile runs pdflatex twice with TEXINPUTS ../common.
+  - The footers read 1 / 13 to 13 / 13 in the compiled PDF, which I read in full. It matches the PNGs.
+  - The three groups are slides 2-5, 8-10 and 11-13, and slide 13 shows one verbal and numeric grade.
+
+Mathematics and claims:
+  - The SPD qualifier matches Projekt_2 s. 8, A.2. "Sama SPD nie gwarantuje zbieżności" for Jacobi and "w arytmetyce dokładnej" for Gauss-Seidel match Projekt_2 s. 5, p. 6.1.
+  - The LU iff for nonsingular matrices is correct, as are the splittings, the iteration matrices and the sufficient conditions.
+  - The slide 7 quote matches card A in docs/ai-log.md:188-271 in order, with every cut marked.
+  - The slide 12 quote matches lines 1-7 of the iteration 3 prompt exactly.
+  - Slides 6 and 8-11 agree with docs/ai-log.md.
+
+Layout and volume:
+  - Slide 13 is laid out well. The [c] frame centres the quote, and the history line sits 3 mm below it.
+  - 13 slides fit 8 minutes.
+  - The review group has three slides against the recommended four. That is a recorded user decision (docs/ai-log.md:600), so I do not raise it again.
+
+Disclosure for the log: In iteration 3 I used only the Read tool and ran no Bash command or any other command. I changed and wrote nothing. This session again offered Bash, Write and Edit but neither Glob nor Grep, so the role file's tool list (Read, Glob, Grep) was not applied. That matches slide 11's statement that the reviewer is read-only by instruction only. Slide 11, bullet 4 stays accurate, and the log can record that iteration 3 ran no command.
+```
+
+</details>
+
+**Rezultat**
+
+- Ocena 9 / 10, ocena końcowa. 5 znalezisk, 1 minor, 4 nit, żadnego blocker ani major. Ocena słowna wpisana dosłownie do `review.tex` jako ocena końcowa, bez znaków specjalnych LaTeX-a. Historia iteracji to 7, 8 i 9 na 10.
+- Recenzent zgłosił, że tym razem nie uruchomił żadnego polecenia. Transkrypt agenta nie zawiera żadnego wywołania z poleceniem, tylko odczyty plików. `git status` po recenzji był czysty. Punkt 4 slajdu 11 („W iteracjach 1 i 2 uruchomił po jednym poleceniu odczytu”) pozostaje zgodny z dziennikiem.
+- To trzecia iteracja, więc pętla się kończy (brief 6.2, etap 3, krok 5). Poprawki po niej nie są recenzowane. Orkiestrator sprawdza je względem znalezisk i wymienia w planie wystąpienia.
+
+**Rozstrzygnięcia znalezisk**
+
+1. Talia nie mówi, czym jest brief, więc slajdy 8 i 9 wychodzą poza „tę sesję” ze slajdu 6, a punkt 4 powtarza zatwierdzenie z tytułu (minor). Naprawiane w karcie E zgodnie z sugestią recenzenta. Tytuł slajdu 6 zostaje, bo sugerowana poprawka zostawia w nim zatwierdzenie.
+2. Tytuł slajdu 12 mówi, że prompt „kończy się oceną” (nit). Naprawiane w karcie E, „wymaga oceny słownej i liczbowej”.
+3. „Talię” w tytule slajdu 11 (nit). Naprawiane w karcie E, „prezentację”.
+4. Symbol x⁽⁰⁾ bez wyjaśnienia (nit). Naprawiane w karcie E, linia 4 legendy na slajdzie 2.
+5. Ułamek 2/3 w rozmiarze indeksu na slajdzie 3 (nit). Naprawiane w karcie E, zapis $2N^3/3$.
+
+**Błędy AI**
+
+- Finding: The slide 6 text written by the orchestrator never said what the brief is, so the brief-phase errors on slides 8 and 9 had no context, and bullet 4 repeated the approval clause of the title.
+  Severity: minor
+  Requirement: comprehensibility of the AI slides, docs/presentation-style.md 3.1
+  Detected by: the AI reviewer compared slides 6, 8 and 9 with the log entries of the brief-writing phase.
+  Fix: card E.
+- Pozostałe cztery znaleziska to sformułowania i czytelność (nit). Zapisane w odpowiedzi recenzenta.
+
+**Kandydat na slajd**
+
+- Główna obserwacja do planu wystąpienia. W iteracji 1 recenzent znalazł kontrprzykład do warunku istnienia LU i wykrył zdanie na slajdzie 7 mocniejsze niż dziennik.
+
+### 2026-11-16 · latex-assistant · Fixes after review iteration 3
+
+- Goal: talia z 13 slajdami ma pięć poprawek po iteracji 3, pokazuje ocenę końcową z `review.tex` i kompiluje się czysto.
+- Launch: `general-purpose` czytający plik roli `.claude/agents/latex-assistant.md`, sonnet / high.
+- Prompt / brief: polecenie uruchomienia i pełna karta zadania poniżej, dosłownie.
+
+<details>
+<summary>Polecenie uruchomienia agenta</summary>
+
+```text
+Read /home/bob/Metody-numeryczne/Projekt/Projekt2/.claude/agents/latex-assistant.md and follow it as your role definition. Your working directory is /home/bob/Metody-numeryczne/Projekt/Projekt2 and all paths in the card are relative to it. Your task card is the file /home/bob/.claude/jobs/458e5e91/tmp/cards/card-e.md. Read it in full and carry it out. Do not run any git command that changes anything. Finish with the report in the card's format.
+```
+
+</details>
+
+<details>
+<summary>Pełna karta zadania</summary>
+
+```markdown
+## Task card: Fixes after review iteration 3
+Role: latex-assistant (read .claude/agents/latex-assistant.md first)
+Launch: sonnet / high
+Goal: the 13-slide deck carries the five fixes below, shows the final grade from review.tex and compiles cleanly.
+Requirements slice (with refs):
+  - Symbols are explained (Projekt_2.pdf p. 3, section 4). Claims about the AI work match docs/ai-log.md (docs/presentation-style.md 3.7)
+  - Slide text below is the content. Keep its meaning. You may shorten it. Do not add any claim or number that is not below
+  - Do not edit review.tex or slides/common/mnstyle.sty
+
+Fix 1, ai-work.tex, slide 6, bullet 4 becomes (at most two rendered lines):
+  Źródła prawdy to kolejno PDF-y prowadzącego, brief, docs/ i instrukcje agentów. Brief to plan projektu przygotowany z AI we wcześniejszej sesji.
+Fix 2, ai-review.tex, slide 12 title becomes:
+  Prompt recenzji wskazuje trzy źródła kryteriów i wymaga oceny słownej i liczbowej
+Fix 3, ai-review.tex, slide 11 title becomes:
+  Recenzent AI ocenia prezentację według trzech źródeł kryteriów z tym samym rdzeniem promptu w każdej iteracji
+Fix 4, intro.tex, slide 2, legend line 4 becomes:
+  $j$ - numer iteracji (k u Saada), $\mathbf{x}^{(0)}$ - przybliżenie początkowe
+Fix 5, intro.tex, slide 3, bullet 2. Write the cost as $2N^3/3$ instead of $\frac{2}{3}N^3$, so the numerals keep text size. The rest of the bullet is unchanged.
+
+Files to touch: slides/preliminary/ai-work.tex, slides/preliminary/ai-review.tex, slides/preliminary/intro.tex
+Files NOT to touch: slides/preliminary/review.tex, slides/preliminary/main.tex, slides/preliminary/Makefile, slides/common/mnstyle.sty, docs/, .claude/, materials/, PROJECT_BRIEF.md, CLAUDE.md, anything under ../Projekt1/
+Acceptance checklist:
+  - [ ] make in slides/preliminary/ ends with 0 overfull, 0 underfull and 0 LaTeX warnings in main.log
+  - [ ] The PDF still has 13 slides, each footline reads n/N
+  - [ ] Slide 6 bullet 4 renders in at most two lines and every title in at most two lines, checked on the PNG pages
+  - [ ] Slide 13 shows the grade text from review.tex without overlap, checked on the PNG page
+Report format: what was done · files changed · what was NOT done and why · open questions
+```
+
+</details>
+
+**Rezultat**
+
+- Zmienione `ai-work.tex`, `ai-review.tex` i `intro.tex`. Orkiestrator wpisał ocenę końcową (iteracja 3) do `review.tex`. Commit `985058b` obejmuje oba kroki.
+- Agent zapytał, czy tytuł slajdu 6 („a autor zatwierdza ją w jednym punkcie”) ma oparcie po usunięciu zdania z punktu 4. Tytuł zostaje, bo recenzent w iteracji 3 zaproponował właśnie zostawienie zatwierdzenia tylko w tytule. Zatwierdzenie następuje na przystanku przed wysłaniem.
+
+**Ocena względem listy kontrolnej**
+
+- Wszystkie punkty spełnione. Orkiestrator przebudował talię (`make -B`) i powtórzył kontrole 3.8. Log ma 0 wpisów Overfull, Underfull i Warning, fonty osadzone, brak obrazów rastrowych, 13 stron, stopki od 1 / 13 do 13 / 13, grep zakazanej interpunkcji i rozmiarów pusty.
+- Obejrzane strony 2, 3, 6, 11, 12 i 13. Rendery stron 1, 4, 5, 7, 8, 9 i 10 są bajtowo identyczne z obejrzanymi po karcie D. Ocena słowna na slajdzie 13 mieści się w `\normalsize`.
+- Cytaty na slajdach 7 i 12 sprawdzone skryptem względem karty A i promptu iteracji 3 w tym dzienniku.
+- Poprawki po iteracji 3 nie były recenzowane. Każda odpowiada jednemu znalezisku iteracji 3 i nie dotyka slajdów błędów AI.
 
 **Błędy AI**
 
