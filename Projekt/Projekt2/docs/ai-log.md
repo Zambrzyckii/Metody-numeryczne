@@ -1,6 +1,6 @@
 # Dziennik pracy z AI, Projekt 2 (układy równań liniowych)
 
-Status: etap 4 wstrzymany na przystanku przed wysłaniem. ZIP przetestowany, SHA-256 e84d064e…2621. Następne jest wysłanie po wyraźnym „tak” autora.
+Status: etapy 1 do 4 zakończone. ZIP wysłany do P2W 2026-11-16 21:33, SHA-256 pobranego pliku zgodny z lokalnym. Prezentacja wstępna jest gotowa, a dalsza praca (P5) wymaga osobnego briefu.
 
 Dziennik ma dwie warstwy.
 
@@ -152,9 +152,16 @@ Narzędzie to Claude Code. Repozytorium `~/Metody-numeryczne`, katalog projektu 
 - Na przystanku autor wybrał drogę A i podał `/permissions`. Ponowne wywołanie bez `confirm` klasyfikator znów odrzucił. W `~/.claude/settings.json`, `~/.claude/settings.local.json` i plikach `.claude/` repo nie ma reguły dla `mcp__enauczanie__save_assignment_submission`, jest tylko `"defaultMode": "auto"`. Orkiestrator ustawień nie zmieniał.
 - Po kolejnym „sprawdź teraz” autora wywołanie bez `confirm` przeszło (w plikach ustawień nadal brak reguły, więc reguła działa najpewniej tylko w tej sesji). Opis z narzędzia brzmi dosłownie „Nothing saved yet. Show the user this and call again with confirm=true only after their explicit yes. Assignment: P2W. Files: zambrzycki_projekt2_wstepna.zip. This assignment has no draft stage: saving hands it in for grading and the teacher sees it at once”. Zapis od razu oddaje pracę, więc `submit_assignment` nie będzie potrzebne.
 
+**Wysłanie**
+
+- Autor odpowiedział „tak” po obejrzeniu opisu zmiany z narzędzia.
+- `save_assignment_submission(course_id=8051, assignment_id=27573, file_paths=[ZIP], confirm=true)` zwrócił `saved: true`, `status: submitted`, `submitted: 2026-11-16T21:33+01:00`, `grading_status: notgraded`, jeden plik `zambrzycki_projekt2_wstepna.zip` o rozmiarze 317630 B (tyle samo co lokalny ZIP).
+- `download_file` zapisał plik w `~/enauczanie-mcp/downloads/mninf/381124/zambrzycki_projekt2_wstepna.zip` (317630 B). Plik nie był przenoszony, rozpakowywany ani budowany. Jego SHA-256 `e84d064ea8b66eb1d07e8c7c8e0a39e7ed4033f276a8df3c18fada9ef1892621` jest równy SHA-256 lokalnego ZIP-a.
+- Termin ZIP-a to 2026-11-18 10:15, wysłano 2026-11-16 21:33, czyli w terminie.
+
 **Status**
 
-- Wstrzymano na przystanku przed wysłaniem. Czeka na wyraźne „tak” autora.
+- Zaakceptowano. ZIP wysłany do P2W i sprawdzony przez pobranie. Kryteria wyjścia etapu 4 spełnione.
 
 ---
 
