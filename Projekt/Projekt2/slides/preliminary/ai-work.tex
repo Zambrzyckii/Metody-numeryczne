@@ -1,0 +1,8 @@
+\begin{frame}{Prezentację przygotował orkiestrator z~dwoma agentami, a~autor zatwierdza ją w~jednym punkcie}
+  \begin{itemize}
+    \item Narzędzie to Claude Code. Sesja główna jest orkiestratorem, deleguje pracę kartami zadań i~sama uruchamia polecenia sprawdzające.
+    \item Zdefiniowano cztery role (coder, code-reviewer, latex-assistant, presentation-reviewer). Przy tej prezentacji pracowały dwie, latex-assistant i~presentation-reviewer.
+    \item Pliki ról powstały w~trakcie sesji, więc sesja ich nie wczytała. Każda rola działała jako agent ogólnego przeznaczenia czytający swój plik, a~recenzent był tylko do odczytu na mocy instrukcji.
+    \item Źródła prawdy w~kolejności ważności to PDF-y prowadzącego, brief, docs/ i~instrukcje agentów. Autor zatwierdza całość w~jednym punkcie, przed wysłaniem.
+  \end{itemize}
+\end{frame}

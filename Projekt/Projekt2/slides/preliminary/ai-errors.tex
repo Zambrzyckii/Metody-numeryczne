@@ -1,0 +1,33 @@
+\begin{frame}[fragile]{Karta zadania z~listą kontrolną pozwala sprawdzić pracę agenta poleceniami, a~nie na oko}
+\begin{Verbatim}[commandchars=\\\{\},fontsize=\footnotesize]
+## Task card: Deck skeleton and intro slides 1 to 5 [...]
+Goal: slides/preliminary/ holds main.tex, Makefile and intro.tex that compile
+to a clean five-slide PDF with the title slide and four equation slides.
+[...]
+Acceptance checklist:
+  - [ ] make in slides/preliminary/ ends with 0 overfull, 0 underfull and
+        0 LaTeX warnings in main.log [...]
+  - [ ] Every formula matches this card symbol for symbol, with j as the
+        iteration index [...]
+\end{Verbatim}
+  \medskip
+  Wynik: talia z~pięcioma slajdami skompilowana bez ostrzeżeń, wzory zgodne z~kartą.
+
+  Ocena: orkiestrator sprawdził każdy punkt listy poleceniem albo porównaniem, bez oceny na oko.
+\end{frame}
+
+\begin{frame}{AI przypisało zasadom zaliczenia podział punktów, który istnieje tylko w~instrukcji projektu 1}
+  \begin{description}[Jak naprawiono]
+    \item[Co się stało] Podczas pisania briefu plan orkiestratora twierdził, że zasady zaliczenia dzielą 2~pkt za prezentację wstępną na pięć części po 0,4~pkt. Takiego podziału nie ma w~zasadach ani w~instrukcji projektu 2. Jest tylko w~instrukcji projektu 1.
+    \item[Jak to wykryto] Agent piszący brief sprawdzał każdy odnośnik poleceniem pdftotext na wskazanej stronie PDF-u i~nie znalazł tej tabeli. Orkiestrator potwierdził to wyszukiwaniem w~pełnym tekście obu PDF-ów.
+    \item[Jak naprawiono] Brief opisuje podział jako założenie przeniesione z~projektu 1, z~prawdziwym źródłem.
+  \end{description}
+\end{frame}
+
+\begin{frame}{AI kazało pobrać plik do katalogu, którego narzędzie eNauczania nie pozwala wskazać}
+  \begin{description}[Jak naprawiono]
+    \item[Co się stało] Pierwsza wersja briefu kazała pobrać wysłany ZIP z~eNauczania do nowego, pustego katalogu. Narzędzie download\_file nie ma parametru katalogu docelowego i~zawsze zapisuje plik we własnym katalogu serwera.
+    \item[Jak to wykryto] Niezależny agent sprawdzający brief (opus, effort high) wczytał schemat narzędzia i~zauważył brak tego parametru. Orkiestrator potwierdził katalog w~kodzie serwera.
+    \item[Jak naprawiono] Brief w~wersji 1.1 każe liczyć sumę SHA-256 pliku tam, gdzie zapisało go narzędzie.
+  \end{description}
+\end{frame}

@@ -1,0 +1,26 @@
+\input{review.tex}
+
+\begin{frame}[fragile]{Recenzent AI ocenia talię według trzech źródeł kryteriów tym samym promptem w~każdej iteracji}
+  \begin{itemize}
+    \item Agent presentation-reviewer (opus, effort high) czyta PDF, źródła .tex, strony PNG i~wyniki poleceń sprawdzających. Jest tylko do odczytu na mocy instrukcji.
+    \item Kryteria pochodzą z~zasad zaliczenia, instrukcji projektu 2 i~przewodnika stylu prezentacji.
+    \item Rdzeń promptu poniżej jest ten sam w~każdej iteracji. Zmienia się tylko akapit ze ścieżkami plików i~numerem iteracji.
+  \end{itemize}
+\begin{Verbatim}[commandchars=\\\{\},fontsize=\footnotesize]
+[...]
+Review slides/preliminary/main.pdf and its .tex sources against three sources
+of criteria. (1) materials/zasady_zaliczenia_projektu_v1.pdf, the mandatory
+conditions and slide groups. (2) materials/Projekt_2.pdf, section 4 on page 3,
+the content of the preliminary deck. (3) docs/presentation-style.md,
+assertion-evidence titles, text budget, palette, banned elements. Report
+findings with severity and a suggested fix. End with a verbal grade and a
+score 1-10.
+[...]
+\end{Verbatim}
+\end{frame}
+
+\begin{frame}{Recenzent AI ocenił prezentację wstępną na \resReviewScore{} / 10}
+  „\resReviewVerbal”
+  \vfill
+  {\color{mnMuted}\footnotesize Przebieg iteracji: \resReviewHistory\par}
+\end{frame}
