@@ -1,6 +1,6 @@
 # Dziennik pracy z AI, Projekt 2 (układy równań liniowych)
 
-Status: etap 3 w toku. Ostatni zweryfikowany krok to poprawki po iteracji 1, commit `f199941`. Następna jest iteracja 2 recenzji.
+Status: etap 3 w toku. Ostatni zweryfikowany krok to poprawki po iteracji 2, commit `6126f6b`. Następna jest iteracja 3 recenzji, ostatnia.
 
 Dziennik ma dwie warstwy.
 
@@ -781,6 +781,217 @@ Report format: what was done · files changed · what was NOT done and why · op
 - Wszystkie punkty spełnione. Orkiestrator przebudował talię (`make -B`) i powtórzył kontrole 3.8. Log ma 0 wpisów Overfull, Underfull i Warning, fonty osadzone, brak obrazów rastrowych, 13 stron, stopki od 1 / 13 do 13 / 13. Grep zakazanej interpunkcji i rozmiarów `\scriptsize` i `\tiny` w źródłach nic nie znalazł.
 - Cytat na slajdzie 7 i cytat na slajdzie 12 sprawdzone skryptem względem karty A i promptu iteracji 1 w tym dzienniku. Oba fragmenty występują w kolejności.
 - Obejrzane wszystkie strony PNG. Każde pole slajdów błędów i każdy punkt slajdu 6 ma najwyżej dwie linie.
+
+**Błędy AI**
+
+- Brak.
+
+**Kandydat na slajd**
+
+- -
+
+### 2026-11-16 · presentation-reviewer · Review iteration 2
+
+- Goal: recenzja talii z 13 slajdami po poprawkach z iteracji 1.
+- Launch: `general-purpose` czytający plik roli `.claude/agents/presentation-reviewer.md`, opus / high. Nowy agent, bez kontekstu iteracji 1.
+- Prompt / brief: polecenie uruchomienia i pełny prompt recenzji poniżej, dosłownie. Pierwsze siedem linii sprawdzone poleceniem `cmp` z rdzeniem w briefie.
+
+<details>
+<summary>Polecenie uruchomienia agenta</summary>
+
+```text
+Read /home/bob/Metody-numeryczne/Projekt/Projekt2/.claude/agents/presentation-reviewer.md and follow it as your role definition. Your working directory is /home/bob/Metody-numeryczne/Projekt/Projekt2 and relative paths are relative to it. Your review prompt is the file /home/bob/.claude/jobs/458e5e91/tmp/cards/review-2.md. Read it in full and carry it out. Return the whole review as your final message.
+```
+
+</details>
+
+<details>
+<summary>Pełny prompt recenzji, iteracja 2</summary>
+
+```text
+Review slides/preliminary/main.pdf and its .tex sources against three sources
+of criteria. (1) materials/zasady_zaliczenia_projektu_v1.pdf, the mandatory
+conditions and slide groups. (2) materials/Projekt_2.pdf, section 4 on page 3,
+the content of the preliminary deck. (3) docs/presentation-style.md,
+assertion-evidence titles, text budget, palette, banned elements. Report
+findings with severity and a suggested fix. End with a verbal grade and a
+score 1-10.
+
+This is iteration 2 of the review. The PDF is slides/preliminary/main.pdf with 13 pages. The sources are slides/preliminary/main.tex, intro.tex, ai-work.tex, ai-errors.tex, ai-review.tex, review.tex and Makefile, plus slides/common/mnstyle.sty. The pages rendered at 80 dpi are /home/bob/.claude/jobs/458e5e91/tmp/verify/c1/p-01.png to p-13.png. The compile log of the final pass is /home/bob/.claude/jobs/458e5e91/tmp/verify/c1/main.log. The pdffonts output is /home/bob/.claude/jobs/458e5e91/tmp/verify/c1/pdffonts.txt and the pdfimages -list output is /home/bob/.claude/jobs/458e5e91/tmp/verify/c1/pdfimages.txt. The AI work log is docs/ai-log.md and the verified theory extract is docs/requirements-presentation.md. Slide 13 shows the grade of iteration 1 (score 7, its verbal grade and history). Judge the layout of that slide, not its values.
+```
+
+</details>
+
+<details>
+<summary>Pełna odpowiedź recenzenta, iteracja 2</summary>
+
+```markdown
+- Finding: The 1 mm gap that card C added above the symbol legends on slides 2, 4 and 5 lands below the first legend line, and that first line is indented by one space, so the iteration 1 fix for legend spacing is not in effect.
+  Severity: minor
+  Requirement: zasady s. 5, p. 6.1 (margins, layout checked full screen). docs/presentation-style.md 3.3 and 3.4
+  Detected by: Slides 2, 4 and 5. The renders show the extra gap between legend lines 1 and 2 („A - znana…” and „x - szukany…”, „D - przekątna…” and „−E, −F…”, „l < i…” and „l > i…”), and the first line starts slightly to the right of the others. In intro.tex:13, 56 and 74, `\vspace{1mm}` follows a display while TeX is still in horizontal mode. LaTeX then turns it into a `\vadjust` after the current line, and the line break after it adds a space token. The card C entry in docs/ai-log.md:781 reports all checks as passed.
+  Suggested fix: Write `\par\vspace{1mm}` before each legend on slides 2, 4 and 5, and leave slide 3 as it is, because its legend opens a column in vertical mode.
+
+- Finding: The title slide sets „Metody numeryczne” in `\scriptsize`, a size the style bans.
+  Severity: minor
+  Requirement: docs/presentation-style.md 3.3 (`\scriptsize` and `\tiny` are not allowed) and 3.7 (hard-coded values)
+  Detected by: Slide 1, where the institute line is visibly smaller than the author and date lines. main.tex:7 sets `\institute`, and the Beamer default font theme sets `\setbeamerfont{institute}{size=\scriptsize}` (beamerfontthemedefault.sty:31). mnstyle.sty does not override it.
+  Suggested fix: Add `\setbeamerfont{institute}{size=\footnotesize}` to main.tex and leave mnstyle.sty unchanged, since style 3.2 keeps it as a verbatim copy.
+
+- Finding: Slides 11 and 12 understate how the review prompt changes between iterations.
+  Severity: minor
+  Requirement: presentation-reviewer role file (AI claims must not go beyond docs/ai-log.md). docs/presentation-style.md 3.7 (Overclaiming)
+  Detected by: The slide 11 title says „tym samym promptem w każdej iteracji” (ai-review.tex:3), and the slide 12 bullet says „Zmienia się tylko akapit ze ścieżkami plików i numerem iteracji” (ai-review.tex:14). The logged iteration 1 prompt (docs/ai-log.md:456) and the iteration 2 prompt also differ in the page count, the description of the grade slide and the instruction „Judge the layout of that slide, not its values”. Only the first seven lines are identical.
+  Suggested fix: Write „tym samym rdzeniem promptu” in the slide 11 title, and say on slide 12 that the second paragraph gives paths, the iteration number and how to treat the grade slide.
+
+- Finding: Once iteration 2 is logged, slide 11 will undercount the commands the reviewer ran.
+  Severity: minor
+  Requirement: presentation-reviewer role file (AI claims match docs/ai-log.md, read-only status of reviewers)
+  Detected by: Slide 11, bullet 4 (ai-review.tex:8), says only „W iteracji 1 uruchomił jedno polecenie odczytu”. In this iteration I also ran one read-only listing command (see the disclosure below).
+  Suggested fix: Reword it to cover both iterations, for example „W iteracjach 1 i 2 uruchomił po jednym poleceniu odczytu”, and keep it in step with the log.
+
+- Finding: Slide 3 states as a general rule that reordering rows and columns reduces fill-in, while the cited source only supports that a suitable reordering can reduce it.
+  Severity: nit
+  Requirement: presentation-reviewer role file (method statements correct without overclaiming). docs/requirements-presentation.md 5.3
+  Detected by: Slide 3, bullet 3, „Przestawienie wierszy i kolumn go zmniejsza” (intro.tex:46).
+  Suggested fix: Write „Odpowiednie przestawienie wierszy i kolumn może go zmniejszyć”.
+
+- Finding: The slide 10 title frames the error as a gap between the slide and the log, but the log records that titles really were checked only by viewing the pages, so the claim itself was false.
+  Severity: nit
+  Requirement: docs/ai-log.md:594 and 617 (titles and writing rules checked without a command)
+  Detected by: Slide 10 title, „sprawdził poleceniami więcej, niż zapisał w dzienniku” (ai-errors.tex:35).
+  Suggested fix: Write „…że sprawdził poleceniami więcej, niż naprawdę sprawdził”, or something similar that names the false claim.
+
+- Finding: Slide 3 bullet 1 has two sentences over three rendered lines, which stretches the limit of three short bullets.
+  Severity: nit
+  Requirement: docs/presentation-style.md 3.1 (Text budget, short bullets, no paragraphs)
+  Detected by: Slide 3, bullet 1 (intro.tex:44), „Wzory obok pomijają… a z wyborem zawsze.”
+  Suggested fix: Move „Wzory obok pomijają wybór elementu głównego” into the legend line for P, so the bullet keeps only the existence statement.
+
+- Verbal grade: Prezentacja spełnia wszystkie warunki obowiązkowe, ma trzy slajdy o błędach AI i trzy o recenzji, a slajdy o metodach LU, Jacobiego i Gaussa-Seidla są poprawne i podają warunki zbieżności z właściwymi założeniami. Twierdzenia o pracy z AI zgadzają się z dziennikiem. Do poprawy zostały drobne sprawy układu, czyli odstęp w legendach wzorów i za mała czcionka na slajdzie tytułowym, oraz dokładniejszy opis tego, co zmienia się w prompcie recenzji.
+- Score: 8 / 10. All mandatory elements are present, both major findings of iteration 1 are fixed, and the mathematics is correct with its assumptions. What remains is two minor layout defects, one understated AI claim and a few nits.
+- Top 3 improvements, ordered by impact:
+  1. Put `\par` before `\vspace{1mm}` at intro.tex:13, 56 and 74, so that the gap sits above each legend and the first legend line is not indented.
+  2. Set the institute font to `\footnotesize` in main.tex.
+  3. Make slides 11 and 12 precise. Say that the prompt core is the same while the second paragraph also changes, and count the reviewer's commands across both iterations.
+
+Verified: I read the whole main.log of the final pass. It has no Overfull, Underfull or Warning lines, only Info messages, and it reports 13 pages. The page is 455.24 × 256.07 pt, which is 16:9. The footers read 1 / 13 to 13 / 13. pdffonts shows emb yes on every row, and pdfimages lists no images. The Makefile runs pdflatex twice. The three mandatory groups are slides 2-5, slides 8-10 (three error slides) and slides 11-13 (review), and slide 13 has a single verbal and numeric grade. The slide 7 quote matches card A in docs/ai-log.md:188-271 in order, with every cut marked. The slide 12 quote matches lines 1-7 of the iteration 2 prompt exactly. The SPD qualifier (Projekt_2 s. 8, A.2), „Sama SPD nie gwarantuje zbieżności” for Jacobi and „w arytmetyce dokładnej” for Gauss-Seidel (Projekt_2 s. 5, p. 6.1) match the instruction. The LU existence statement is now correct for nonsingular matrices. 13 slides fit 8 minutes. The review group has three slides against the recommended four (zasady s. 5, p. 6.3, „wskazane”). That was a recorded user decision (docs/ai-log.md:600), and slide 10 already carries the main observation of the review, so I do not raise it again.
+
+Disclosure for the log: My role file says to run nothing, but early in this iteration I ran one read-only Bash command, an `ls` over slides/preliminary, slides/common, the verify/c1 directory and docs/. It changed and wrote nothing. A Grep call failed because Grep is not available in this session, while Bash was. This again shows that the role file's tool list (Read, Glob, Grep) is not applied, which matches slide 11's wording that the reviewer is read-only by instruction only.
+```
+
+</details>
+
+**Rezultat**
+
+- Ocena 8 / 10. 7 znalezisk, 4 minor, 3 nit, żadnego blocker ani major. Ocena słowna wpisana dosłownie do `review.tex`, bez znaków specjalnych LaTeX-a.
+- Recenzent znów sam zgłosił jedno polecenie `ls`. Orkiestrator znalazł jego tekst w transkrypcie agenta, a `git status` po recenzji był czysty.
+- Orkiestrator potwierdził dwa znaleziska techniczne. `intro.tex` miał `\vspace{1mm}` zaraz po wzorze w liniach 13, 56 i 74, a `beamerfontthemedefault.sty:31` ustawia `\setbeamerfont{institute}{size=\scriptsize}`.
+
+**Rozstrzygnięcia znalezisk**
+
+1. Odstęp nad legendą ląduje pod pierwszą linią legendy na slajdach 2, 4 i 5 (minor). Naprawiane w karcie D, `\par\vspace{1mm}`.
+2. Linia „Metody numeryczne” na slajdzie tytułowym w `\scriptsize` z domyślnego motywu Beamera (minor). Naprawiane w karcie D, `\setbeamerfont{institute}{size=\footnotesize}` w `main.tex`, bez zmiany `mnstyle.sty`.
+3. Slajdy 11 i 12 zaniżają zakres zmian promptu między iteracjami (minor). Naprawiane w karcie D, „z tym samym rdzeniem promptu” i pełny opis drugiego akapitu.
+4. Slajd 11 nie liczy polecenia z iteracji 2 (minor). Naprawiane w karcie D, „W iteracjach 1 i 2 uruchomił po jednym poleceniu odczytu”.
+5. Fill-in na slajdzie 3 jako reguła ogólna (nit). Naprawiane w karcie D, „może go zmniejszyć”.
+6. Tytuł slajdu 10 opisuje błąd jako rozjazd slajdu i dziennika (nit). Naprawiane w karcie D, tytuł nazywa fałszywe twierdzenie.
+7. Punkt 1 slajdu 3 ma dwa zdania w trzech liniach (nit). Naprawiane w karcie D, jedno zdanie.
+
+**Błędy AI**
+
+- Finding: Card C put `\vspace{1mm}` right after a display on slides 2, 4 and 5, so the gap landed below the first legend line and that line was indented. The orchestrator viewed the PNG pages after card C and did not notice it.
+  Severity: minor
+  Requirement: zasady s. 5, p. 6.1 (layout checked full screen)
+  Detected by: the AI reviewer compared the renders with intro.tex and explained the TeX mode behind it. The orchestrator confirmed the lines with `grep -n vspace intro.tex`.
+  Fix: card D.
+- Finding: The title slide built in card A set the institute line in `\scriptsize` through the Beamer default font theme. The orchestrator's grep for `\scriptsize` checks only the deck sources, so it could not see it.
+  Severity: minor
+  Requirement: docs/presentation-style.md 3.3
+  Detected by: the AI reviewer read `beamerfontthemedefault.sty:31`. The orchestrator confirmed it with `grep -n institute` on that file.
+  Fix: card D.
+- Finding: The slide 11 and 12 texts written by the orchestrator in card C said that only the paragraph with paths and the iteration number changes between review prompts, while the page count and the grade-slide description change too.
+  Severity: minor
+  Requirement: docs/presentation-style.md 3.7 (Overclaiming)
+  Detected by: the AI reviewer compared the logged prompts of iterations 1 and 2.
+  Fix: card D.
+- Finding: The presentation-reviewer again ran one read-only `ls` command although its role file says not to run anything.
+  Severity: minor
+  Requirement: `.claude/agents/presentation-reviewer.md`
+  Detected by: the reviewer's own disclosure, confirmed by the orchestrator in the agent transcript. `git status` showed no change.
+  Fix: no deck change beyond slide 11, bullet 4.
+
+**Kandydat na slajd**
+
+- Brak nowych slajdów błędów. Trzy slajdy błędów zostają jak po iteracji 1, a nowe błędy zostają w dzienniku (brief 5.4, do trzech kandydatów).
+
+### 2026-11-16 · latex-assistant · Fixes after review iteration 2
+
+- Goal: talia z 13 slajdami ma siedem poprawek po iteracji 2 i kompiluje się czysto.
+- Launch: `general-purpose` czytający plik roli `.claude/agents/latex-assistant.md`, sonnet / high.
+- Prompt / brief: polecenie uruchomienia i pełna karta zadania poniżej, dosłownie.
+
+<details>
+<summary>Polecenie uruchomienia agenta</summary>
+
+```text
+Read /home/bob/Metody-numeryczne/Projekt/Projekt2/.claude/agents/latex-assistant.md and follow it as your role definition. Your working directory is /home/bob/Metody-numeryczne/Projekt/Projekt2 and all paths in the card are relative to it. Your task card is the file /home/bob/.claude/jobs/458e5e91/tmp/cards/card-d.md. Read it in full and carry it out. Do not run any git command that changes anything. Finish with the report in the card's format.
+```
+
+</details>
+
+<details>
+<summary>Pełna karta zadania</summary>
+
+```markdown
+## Task card: Fixes after review iteration 2
+Role: latex-assistant (read .claude/agents/latex-assistant.md first)
+Launch: sonnet / high
+Goal: the 13-slide deck carries the seven fixes below and compiles cleanly.
+Requirements slice (with refs):
+  - \scriptsize is not allowed anywhere, also not through a Beamer default (docs/presentation-style.md 3.3)
+  - Claims about the AI work match docs/ai-log.md and are not stronger than it (docs/presentation-style.md 3.7)
+  - Slide text below is the content. Keep its meaning. You may shorten it. Do not add any claim or number that is not below
+  - Do not edit review.tex or slides/common/mnstyle.sty
+
+Fix 1, intro.tex, slides 2, 4 and 5. Each legend is preceded by \vspace{1mm} right after a display, so the gap lands after the first legend line and that line is indented. Write \par\vspace{1mm} there instead, so the gap sits above the legend and the first line is not indented. Leave slide 3 as it is.
+Fix 2, main.tex. Add \setbeamerfont{institute}{size=\footnotesize} after \usepackage{mnstyle}, because the Beamer default font theme sets the institute to \scriptsize.
+Fix 3, intro.tex, slide 3, bullet 1 becomes one sentence:
+  Dla macierzy nieosobliwej rozkład bez wyboru elementu głównego (wzory obok) istnieje wtedy i tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe, a z wyborem zawsze.
+Fix 4, intro.tex, slide 3, bullet 3 becomes:
+  W macierzy rzadkiej eliminacja tworzy niezerowe elementy w miejscu zer (fill-in). Odpowiednie przestawienie wierszy i kolumn może go zmniejszyć.
+Fix 5, ai-errors.tex, slide 10 title becomes:
+  Orkiestrator AI napisał na slajdzie, że sprawdził poleceniami więcej, niż naprawdę sprawdził
+Fix 6, ai-review.tex, slide 11 title becomes:
+  Recenzent AI ocenia talię według trzech źródeł kryteriów z tym samym rdzeniem promptu w każdej iteracji
+  and its bullet 4 becomes:
+  Instrukcja zabrania mu zmian i uruchamiania poleceń, ale narzędzie tego nie wymusza. W iteracjach 1 i 2 uruchomił po jednym poleceniu odczytu.
+Fix 7, ai-review.tex, slide 12 bullet becomes:
+  Rdzeń promptu jest ten sam w każdej iteracji. Drugi akapit podaje ścieżki plików, numer iteracji i to, co pokazuje slajd z oceną.
+
+Files to touch: slides/preliminary/intro.tex, slides/preliminary/main.tex, slides/preliminary/ai-errors.tex, slides/preliminary/ai-review.tex
+Files NOT to touch: slides/preliminary/review.tex, slides/preliminary/Makefile, slides/common/mnstyle.sty, docs/, .claude/, materials/, PROJECT_BRIEF.md, CLAUDE.md, anything under ../Projekt1/
+Acceptance checklist:
+  - [ ] make in slides/preliminary/ ends with 0 overfull, 0 underfull and 0 LaTeX warnings in main.log
+  - [ ] The PDF still has 13 slides, each footline reads n/N
+  - [ ] On slides 2, 4 and 5 the gap is above the legend and its first line starts flush with the others, checked on the PNG pages
+  - [ ] On slide 1 the institute line is no smaller than \footnotesize
+  - [ ] Every title is one sentence of at most two lines
+Report format: what was done · files changed · what was NOT done and why · open questions
+```
+
+</details>
+
+**Rezultat**
+
+- Zmienione `intro.tex`, `main.tex`, `ai-errors.tex` i `ai-review.tex`. Orkiestrator wpisał ocenę iteracji 2 do `review.tex`. Commit `6126f6b` obejmuje oba kroki.
+
+**Ocena względem listy kontrolnej**
+
+- Wszystkie punkty spełnione. Orkiestrator przebudował talię (`make -B`) i powtórzył kontrole 3.8. Log ma 0 wpisów Overfull, Underfull i Warning, fonty osadzone, brak obrazów rastrowych, 13 stron, stopki od 1 / 13 do 13 / 13, grep zakazanej interpunkcji i rozmiarów pusty.
+- `pdftotext -bbox` na slajdzie 1 daje wysokość słów „Metody numeryczne” około 8,6 pt, czyli `\footnotesize`.
+- Obejrzane strony 1 do 5 i 10 do 13. Rendery stron 6 do 9 są bajtowo identyczne (`cmp`) z renderami obejrzanymi po karcie C.
+- Cytaty na slajdach 7 i 12 sprawdzone skryptem względem karty A i promptu iteracji 2 w tym dzienniku.
 
 **Błędy AI**
 
