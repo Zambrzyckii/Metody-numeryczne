@@ -1,4 +1,4 @@
-\begin{frame}[fragile]{Karta zadania z~listą kontrolną pozwala sprawdzić pracę agenta poleceniami, a~nie na oko}
+\begin{frame}[fragile]{Lista kontrolna w~karcie zadania pozwala odebrać pracę agenta punkt po punkcie}
 \begin{Verbatim}[commandchars=\\\{\},fontsize=\footnotesize]
 ## Task card: Deck skeleton and intro slides 1 to 5 [...]
 Goal: slides/preliminary/ holds main.tex, Makefile and intro.tex that compile
@@ -11,23 +11,31 @@ Acceptance checklist:
         iteration index [...]
 \end{Verbatim}
   \medskip
-  Wynik: talia z~pięcioma slajdami skompilowana bez ostrzeżeń, wzory zgodne z~kartą.
+  Wynik: pięć slajdów bez ostrzeżeń kompilacji, wzory zgodne z~kartą.
 
-  Ocena: orkiestrator sprawdził każdy punkt listy poleceniem albo porównaniem, bez oceny na oko.
+  Ocena: kompilację sprawdziły polecenia, a~tytuły tylko przegląd stron.
 \end{frame}
 
 \begin{frame}{AI przypisało zasadom zaliczenia podział punktów, który istnieje tylko w~instrukcji projektu 1}
   \begin{description}[Jak naprawiono]
-    \item[Co się stało] Podczas pisania briefu plan orkiestratora twierdził, że zasady zaliczenia dzielą 2~pkt za prezentację wstępną na pięć części po 0,4~pkt. Takiego podziału nie ma w~zasadach ani w~instrukcji projektu 2. Jest tylko w~instrukcji projektu 1.
-    \item[Jak to wykryto] Agent piszący brief sprawdzał każdy odnośnik poleceniem pdftotext na wskazanej stronie PDF-u i~nie znalazł tej tabeli. Orkiestrator potwierdził to wyszukiwaniem w~pełnym tekście obu PDF-ów.
-    \item[Jak naprawiono] Brief opisuje podział jako założenie przeniesione z~projektu 1, z~prawdziwym źródłem.
+    \item[Co się stało] Plan briefu przypisał zasadom podział punktów na pięć części po 0,4~pkt, który jest tylko w~instrukcji projektu 1.
+    \item[Jak to wykryto] Agent piszący brief sprawdził wskazaną stronę poleceniem pdftotext i~nie znalazł tej tabeli.
+    \item[Jak naprawiono] Brief opisuje podział jako założenie przeniesione z~projektu 1.
   \end{description}
 \end{frame}
 
 \begin{frame}{AI kazało pobrać plik do katalogu, którego narzędzie eNauczania nie pozwala wskazać}
   \begin{description}[Jak naprawiono]
-    \item[Co się stało] Pierwsza wersja briefu kazała pobrać wysłany ZIP z~eNauczania do nowego, pustego katalogu. Narzędzie download\_file nie ma parametru katalogu docelowego i~zawsze zapisuje plik we własnym katalogu serwera.
-    \item[Jak to wykryto] Niezależny agent sprawdzający brief (opus, effort high) wczytał schemat narzędzia i~zauważył brak tego parametru. Orkiestrator potwierdził katalog w~kodzie serwera.
-    \item[Jak naprawiono] Brief w~wersji 1.1 każe liczyć sumę SHA-256 pliku tam, gdzie zapisało go narzędzie.
+    \item[Co się stało] Brief v1.0 kazał pobrać wysłany ZIP do wybranego katalogu, ale narzędzie download\_file nie ma takiego parametru.
+    \item[Jak to wykryto] Niezależny agent sprawdzający brief (opus, effort high) porównał go ze schematem narzędzia.
+    \item[Jak naprawiono] Brief v1.1 każe liczyć sumę kontrolną pliku tam, gdzie zapisało go narzędzie.
+  \end{description}
+\end{frame}
+
+\begin{frame}{Orkiestrator AI napisał na slajdzie, że sprawdził poleceniami więcej, niż zapisał w~dzienniku}
+  \begin{description}[Jak naprawiono]
+    \item[Co się stało] Ocena na slajdzie 7 mówiła, że nic nie sprawdzano na oko, choć tytuły sprawdził tylko przegląd stron.
+    \item[Jak to wykryto] Recenzent AI porównał to zdanie z~dziennikiem pracy i~nie znalazł polecenia dla tytułów.
+    \item[Jak naprawiono] Ocena na slajdzie 7 mówi teraz, co sprawdziły polecenia, a~co przegląd stron.
   \end{description}
 \end{frame}

@@ -1,13 +1,19 @@
 \input{review.tex}
 
-\begin{frame}[fragile]{Recenzent AI ocenia talię według trzech źródeł kryteriów tym samym promptem w~każdej iteracji}
+\begin{frame}{Recenzent AI ocenia talię według trzech źródeł kryteriów tym samym promptem w~każdej iteracji}
   \begin{itemize}
-    \item Agent presentation-reviewer (opus, effort high) czyta PDF, źródła .tex, strony PNG i~wyniki poleceń sprawdzających. Jest tylko do odczytu na mocy instrukcji.
+    \item Agent presentation-reviewer (opus, effort high) czyta PDF, źródła .tex, strony PNG i~wyniki poleceń sprawdzających.
     \item Kryteria pochodzą z~zasad zaliczenia, instrukcji projektu 2 i~przewodnika stylu prezentacji.
-    \item Rdzeń promptu poniżej jest ten sam w~każdej iteracji. Zmienia się tylko akapit ze ścieżkami plików i~numerem iteracji.
+    \item Ocenia elementy obowiązkowe, poprawność wzorów, czytelność, zgodność twierdzeń o~AI z~dziennikiem i~objętość względem 8~minut.
+    \item Instrukcja zabrania mu zmian i~uruchamiania poleceń, ale narzędzie tego nie wymusza. W~iteracji 1 uruchomił jedno polecenie odczytu.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Prompt recenzji wskazuje trzy źródła kryteriów i~kończy się oceną słowną i~liczbową}
+  \begin{itemize}
+    \item Rdzeń promptu jest ten sam w~każdej iteracji. Zmienia się tylko akapit ze ścieżkami plików i~numerem iteracji.
   \end{itemize}
 \begin{Verbatim}[commandchars=\\\{\},fontsize=\footnotesize]
-[...]
 Review slides/preliminary/main.pdf and its .tex sources against three sources
 of criteria. (1) materials/zasady_zaliczenia_projektu_v1.pdf, the mandatory
 conditions and slide groups. (2) materials/Projekt_2.pdf, section 4 on page 3,
@@ -19,8 +25,9 @@ score 1-10.
 \end{Verbatim}
 \end{frame}
 
-\begin{frame}{Recenzent AI ocenił prezentację wstępną na \resReviewScore{} / 10}
+\begin{frame}[c]{Recenzent AI ocenił prezentację wstępną na \resReviewScore{} / 10}
   „\resReviewVerbal”
-  \vfill
+
+  \vspace{3mm}
   {\color{mnMuted}\footnotesize Przebieg iteracji: \resReviewHistory\par}
 \end{frame}

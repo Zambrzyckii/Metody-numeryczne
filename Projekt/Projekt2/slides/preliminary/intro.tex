@@ -2,7 +2,7 @@
 \newcommand{\eqtop}{\vspace{-\baselineskip}}
 \newcommand{\src}[1]{\par\vfill{\color{mnMuted}\footnotesize #1\par}}
 
-\begin{frame}{Układ $\mathbf{A}\mathbf{x} = \mathbf{b}$ z modelu ciepła ma rzadką macierz SPD, a jego rozwiązanie oceniamy względnym residuum}
+\begin{frame}{Rozwiązanie układu $\mathbf{A}\mathbf{x} = \mathbf{b}$ z~modelu ciepła oceniamy względnym residuum}
   \tightdisplays\eqtop
   \begin{equation}
     \mathbf{A}\mathbf{x} = \mathbf{b}, \qquad \mathbf{A} \in \mathbb{R}^{N \times N}, \quad \mathbf{x}, \mathbf{b} \in \mathbb{R}^{N}
@@ -10,13 +10,14 @@
   \begin{equation}
     \mathbf{r}^{(j)} = \mathbf{b} - \mathbf{A}\mathbf{x}^{(j)}, \qquad \eta_j = \frac{\|\mathbf{r}^{(j)}\|_2}{\|\mathbf{b}\|_2}, \qquad \eta_j \le \varepsilon, \quad \varepsilon = 10^{-8} \ \text{(wartość zalecana)}
   \end{equation}
+  \vspace{1mm}
   {\footnotesize
   $\mathbf{A}$ - znana rzadka macierz układu, $\mathbf{b}$ - znany wektor prawej strony\\
   $\mathbf{x}$ - szukany wektor, $N$ - liczba niewiadomych, nie liczba trójkątów siatki\\
   $\mathbf{r}^{(j)}$, $\eta_j$ - residuum i jego względna norma dla przybliżenia $\mathbf{x}^{(j)}$\\
   $j$ - numer iteracji (k u Saada to j u nas)\par}
   \begin{itemize}
-    \item Dla modelu przewodzenia ciepła $\mathbf{A}$ jest rzadka, symetryczna i~dodatnio określona (SPD) po eliminacji zadanych temperatur.
+    \item Przy założeniach z~dodatku A macierz $\mathbf{A}$ jest rzadka, symetryczna i~dodatnio określona (SPD) po eliminacji zadanych temperatur.
   \end{itemize}
   \src{Źródło: Projekt\_2.pdf, wzory (1) i~(2), s.~1 i~3, dodatek A.2.}
 \end{frame}
@@ -25,19 +26,22 @@
   \tightdisplays
   \begin{columns}[c]
     \begin{column}{0.43\textwidth}
-      \[ \mathbf{A} = \mathbf{L}\mathbf{U} \]
-      \[ \mathbf{L}\mathbf{y} = \mathbf{b} \quad \text{(podstawienie w przód)} \]
-      \[ \mathbf{U}\mathbf{x} = \mathbf{y} \quad \text{(podstawienie wstecz)} \]
+      \begin{align*}
+        \mathbf{A} &= \mathbf{L}\mathbf{U} \\
+        \mathbf{L}\mathbf{y} &= \mathbf{b} \quad \text{(podstawienie w przód)} \\
+        \mathbf{U}\mathbf{x} &= \mathbf{y} \quad \text{(podstawienie wstecz)}
+      \end{align*}
     \end{column}
     \begin{column}{0.57\textwidth}
+      \vspace{1mm}
       {\footnotesize
       $\mathbf{L}$ - macierz dolna trójkątna z~jedynkami na przekątnej\\
       $\mathbf{U}$ - macierz górna trójkątna, $\mathbf{y}$ - wektor pomocniczy\\
-      $\mathbf{P}$ - macierz permutacji wierszy\par}
+      $\mathbf{P}$ - macierz permutacji wierszy, z~wyborem elementu głównego $\mathbf{P}\mathbf{A} = \mathbf{L}\mathbf{U}$\par}
     \end{column}
   \end{columns}
   \begin{itemize}
-    \item Z~wyborem elementu głównego rozkład $\mathbf{P}\mathbf{A} = \mathbf{L}\mathbf{U}$ istnieje dla każdej macierzy nieosobliwej. Bez wyboru istnieje wtedy i~tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe.
+    \item Wzory obok pomijają wybór elementu głównego. Dla macierzy nieosobliwej rozkład bez wyboru istnieje wtedy i~tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe, a~z~wyborem zawsze.
     \item Dla macierzy gęstej faktoryzacja kosztuje około $\frac{2}{3}N^3$ operacji, a~para podstawień $O(N^2)$. Jedna faktoryzacja obsługuje więc wiele prawych stron.
     \item W~macierzy rzadkiej eliminacja tworzy niezerowe elementy w~miejscu zer (fill-in). Przestawienie wierszy i~kolumn go zmniejsza.
   \end{itemize}
@@ -49,6 +53,7 @@
   \[ \mathbf{A} = \mathbf{D} - \mathbf{E} - \mathbf{F} \]
   \[ x_i^{(j+1)} = \frac{1}{a_{ii}} \Bigl( b_i - \sum_{l \ne i} a_{il} \, x_l^{(j)} \Bigr), \qquad i = 1, \dots, N \]
   \[ \mathbf{x}^{(j+1)} = \mathbf{D}^{-1} (\mathbf{E} + \mathbf{F}) \, \mathbf{x}^{(j)} + \mathbf{D}^{-1} \mathbf{b}, \qquad \mathbf{G}_{JA} = \mathbf{I} - \mathbf{D}^{-1} \mathbf{A} \]
+  \vspace{1mm}
   {\footnotesize
   $\mathbf{D}$ - przekątna $\mathbf{A}$, zakładamy $a_{ii} \ne 0$\\
   $-\mathbf{E}$, $-\mathbf{F}$ - ściśle dolna i~ściśle górna część $\mathbf{A}$\\
@@ -64,15 +69,17 @@
 
 \begin{frame}{Metoda Gaussa-Seidla od razu używa świeżo obliczonych składowych}
   \tightdisplays\eqtop
-  \[ x_i^{(j+1)} = \frac{1}{a_{ii}} \Bigl( b_i - \sum_{l < i} a_{il} \, x_l^{(j+1)} - \sum_{l > i} a_{il} \, x_l^{(j)} \Bigr) \]
+  \[ x_i^{(j+1)} = \frac{1}{a_{ii}} \Bigl( b_i - \sum_{l < i} a_{il} \, x_l^{(j+1)} - \sum_{l > i} a_{il} \, x_l^{(j)} \Bigr), \qquad i = 1, \dots, N \]
   \[ (\mathbf{D} - \mathbf{E}) \, \mathbf{x}^{(j+1)} = \mathbf{F} \, \mathbf{x}^{(j)} + \mathbf{b}, \qquad \mathbf{G}_{GS} = \mathbf{I} - (\mathbf{D} - \mathbf{E})^{-1} \mathbf{A} \]
+  \vspace{1mm}
   {\footnotesize
   $l < i$ - składowe już obliczone w~iteracji $j+1$\\
   $l > i$ - składowe z~poprzedniej iteracji $j$\\
-  $\mathbf{D}$, $\mathbf{E}$, $\mathbf{F}$ - jak w~metodzie Jacobiego, $\mathbf{G}_{GS}$ - macierz iteracji\par}
+  $\mathbf{D}$, $\mathbf{E}$, $\mathbf{F}$ - jak w~metodzie Jacobiego, $\mathbf{G}_{GS}$ - macierz iteracji\\
+  SOR - metoda kolejnych nadrelaksacji, $\omega$ - parametr relaksacji\par}
   \begin{itemize}
-    \item Nowe składowe nadpisują stare w~miejscu, więc metoda potrzebuje mniej pamięci i~zwykle zbiega szybciej niż metoda Jacobiego.
-    \item Warunek konieczny i~wystarczający to $\rho(\mathbf{G}_{GS}) < 1$, warunek wystarczający to ścisła dominacja przekątniowa, jak u~Jacobiego.
+    \item Nowe składowe nadpisują stare w~miejscu, co oszczędza pamięć. Metoda zwykle zbiega szybciej niż metoda Jacobiego.
+    \item Iteracja zbiega dla każdego $\mathbf{x}^{(0)}$ i~$\mathbf{b}$ wtedy i~tylko wtedy, gdy $\rho(\mathbf{G}_{GS}) < 1$. Wystarcza ścisła dominacja przekątniowa, jak u~Jacobiego.
     \item Dla $\mathbf{A}$ SPD metoda zbiega w~arytmetyce dokładnej, bo jest metodą SOR z~$\omega = 1$, a~SOR zbiega dla $0 < \omega < 2$.
   \end{itemize}
   \src{Źródło: Saad, rozdz.~4, wzory (4.7), (4.8), (4.20), tw.~4.1, 4.9 i~4.10. Fawzi, Cor.~4.13. Projekt\_2.pdf, s.~5.}
