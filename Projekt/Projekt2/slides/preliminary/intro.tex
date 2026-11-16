@@ -1,0 +1,79 @@
+\newcommand{\tightdisplays}{\setlength{\abovedisplayskip}{2pt}\setlength{\belowdisplayskip}{2pt}\setlength{\abovedisplayshortskip}{0pt}\setlength{\belowdisplayshortskip}{2pt}}
+\newcommand{\eqtop}{\vspace{-\baselineskip}}
+\newcommand{\src}[1]{\par\vfill{\color{mnMuted}\footnotesize #1\par}}
+
+\begin{frame}{Układ $\mathbf{A}\mathbf{x} = \mathbf{b}$ z modelu ciepła ma rzadką macierz SPD, a jego rozwiązanie oceniamy względnym residuum}
+  \tightdisplays\eqtop
+  \begin{equation}
+    \mathbf{A}\mathbf{x} = \mathbf{b}, \qquad \mathbf{A} \in \mathbb{R}^{N \times N}, \quad \mathbf{x}, \mathbf{b} \in \mathbb{R}^{N}
+  \end{equation}
+  \begin{equation}
+    \mathbf{r}^{(j)} = \mathbf{b} - \mathbf{A}\mathbf{x}^{(j)}, \qquad \eta_j = \frac{\|\mathbf{r}^{(j)}\|_2}{\|\mathbf{b}\|_2}, \qquad \eta_j \le \varepsilon, \quad \varepsilon = 10^{-8} \ \text{(wartość zalecana)}
+  \end{equation}
+  {\footnotesize
+  $\mathbf{A}$ - znana rzadka macierz układu, $\mathbf{b}$ - znany wektor prawej strony\\
+  $\mathbf{x}$ - szukany wektor, $N$ - liczba niewiadomych, nie liczba trójkątów siatki\\
+  $\mathbf{r}^{(j)}$, $\eta_j$ - residuum i jego względna norma dla przybliżenia $\mathbf{x}^{(j)}$\\
+  $j$ - numer iteracji (k u Saada to j u nas)\par}
+  \begin{itemize}
+    \item Dla modelu przewodzenia ciepła $\mathbf{A}$ jest rzadka, symetryczna i~dodatnio określona (SPD) po eliminacji zadanych temperatur.
+  \end{itemize}
+  \src{Źródło: Projekt\_2.pdf, wzory (1) i~(2), s.~1 i~3, dodatek A.2.}
+\end{frame}
+
+\begin{frame}{Rozkład LU rozwiązuje układ dwoma szybkimi podstawieniami po jednej faktoryzacji}
+  \tightdisplays
+  \begin{columns}[c]
+    \begin{column}{0.43\textwidth}
+      \[ \mathbf{A} = \mathbf{L}\mathbf{U} \]
+      \[ \mathbf{L}\mathbf{y} = \mathbf{b} \quad \text{(podstawienie w przód)} \]
+      \[ \mathbf{U}\mathbf{x} = \mathbf{y} \quad \text{(podstawienie wstecz)} \]
+    \end{column}
+    \begin{column}{0.57\textwidth}
+      {\footnotesize
+      $\mathbf{L}$ - macierz dolna trójkątna z~jedynkami na przekątnej\\
+      $\mathbf{U}$ - macierz górna trójkątna, $\mathbf{y}$ - wektor pomocniczy\\
+      $\mathbf{P}$ - macierz permutacji wierszy\par}
+    \end{column}
+  \end{columns}
+  \begin{itemize}
+    \item Z~wyborem elementu głównego rozkład $\mathbf{P}\mathbf{A} = \mathbf{L}\mathbf{U}$ istnieje dla każdej macierzy nieosobliwej. Bez wyboru istnieje wtedy i~tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe.
+    \item Dla macierzy gęstej faktoryzacja kosztuje około $\frac{2}{3}N^3$ operacji, a~para podstawień $O(N^2)$. Jedna faktoryzacja obsługuje więc wiele prawych stron.
+    \item W~macierzy rzadkiej eliminacja tworzy niezerowe elementy w~miejscu zer (fill-in). Przestawienie wierszy i~kolumn go zmniejsza.
+  \end{itemize}
+  \src{Źródło: Vandenberghe, EE133A, wykład 7. Saad, p.~3.6 i~przykład 3.3.}
+\end{frame}
+
+\begin{frame}{Metoda Jacobiego liczy nowe przybliżenie wyłącznie z~wartości poprzedniej iteracji}
+  \tightdisplays\eqtop
+  \[ \mathbf{A} = \mathbf{D} - \mathbf{E} - \mathbf{F} \]
+  \[ x_i^{(j+1)} = \frac{1}{a_{ii}} \Bigl( b_i - \sum_{l \ne i} a_{il} \, x_l^{(j)} \Bigr), \qquad i = 1, \dots, N \]
+  \[ \mathbf{x}^{(j+1)} = \mathbf{D}^{-1} (\mathbf{E} + \mathbf{F}) \, \mathbf{x}^{(j)} + \mathbf{D}^{-1} \mathbf{b}, \qquad \mathbf{G}_{JA} = \mathbf{I} - \mathbf{D}^{-1} \mathbf{A} \]
+  {\footnotesize
+  $\mathbf{D}$ - przekątna $\mathbf{A}$, zakładamy $a_{ii} \ne 0$\\
+  $-\mathbf{E}$, $-\mathbf{F}$ - ściśle dolna i~ściśle górna część $\mathbf{A}$\\
+  $x_i$, $b_i$, $a_{il}$ - składowe $\mathbf{x}$ i~$\mathbf{b}$, elementy $\mathbf{A}$, $l$ - wskaźnik sumowania\\
+  $\mathbf{G}_{JA}$ - macierz iteracji, $\mathbf{I}$ - macierz jednostkowa\par}
+  \begin{itemize}
+    \item Iteracja zbiega dla każdego $\mathbf{x}^{(0)}$ i~$\mathbf{b}$ wtedy i~tylko wtedy, gdy promień spektralny $\rho(\mathbf{G}_{JA}) < 1$.
+    \item Wystarcza ścisła dominacja przekątniowa wierszowa $|a_{ii}| > \sum_{l \ne i} |a_{il}|$.
+    \item Sama SPD nie gwarantuje zbieżności. Wystarcza, by $\mathbf{A}$ i~$2\mathbf{D} - \mathbf{A}$ były SPD.
+  \end{itemize}
+  \src{Źródło: Saad, rozdz.~4, wzory (4.2), (4.4), (4.5), (4.19), tw.~4.1 i~4.9. Fawzi, Cor.~4.13. Projekt\_2.pdf, s.~5.}
+\end{frame}
+
+\begin{frame}{Metoda Gaussa-Seidla od razu używa świeżo obliczonych składowych}
+  \tightdisplays\eqtop
+  \[ x_i^{(j+1)} = \frac{1}{a_{ii}} \Bigl( b_i - \sum_{l < i} a_{il} \, x_l^{(j+1)} - \sum_{l > i} a_{il} \, x_l^{(j)} \Bigr) \]
+  \[ (\mathbf{D} - \mathbf{E}) \, \mathbf{x}^{(j+1)} = \mathbf{F} \, \mathbf{x}^{(j)} + \mathbf{b}, \qquad \mathbf{G}_{GS} = \mathbf{I} - (\mathbf{D} - \mathbf{E})^{-1} \mathbf{A} \]
+  {\footnotesize
+  $l < i$ - składowe już obliczone w~iteracji $j+1$\\
+  $l > i$ - składowe z~poprzedniej iteracji $j$\\
+  $\mathbf{D}$, $\mathbf{E}$, $\mathbf{F}$ - jak w~metodzie Jacobiego, $\mathbf{G}_{GS}$ - macierz iteracji\par}
+  \begin{itemize}
+    \item Nowe składowe nadpisują stare w~miejscu, więc metoda potrzebuje mniej pamięci i~zwykle zbiega szybciej niż metoda Jacobiego.
+    \item Warunek konieczny i~wystarczający to $\rho(\mathbf{G}_{GS}) < 1$, warunek wystarczający to ścisła dominacja przekątniowa, jak u~Jacobiego.
+    \item Dla $\mathbf{A}$ SPD metoda zbiega w~arytmetyce dokładnej, bo jest metodą SOR z~$\omega = 1$, a~SOR zbiega dla $0 < \omega < 2$.
+  \end{itemize}
+  \src{Źródło: Saad, rozdz.~4, wzory (4.7), (4.8), (4.20), tw.~4.1, 4.9 i~4.10. Fawzi, Cor.~4.13. Projekt\_2.pdf, s.~5.}
+\end{frame}
