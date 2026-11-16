@@ -1,6 +1,6 @@
 # PROJECT_BRIEF · Projekt 2 (Rozwiązywanie układów równań liniowych), Metody Numeryczne
 
-Version 1.1 · 2026-11-16 · status: complete.
+Version 1.2 · 2026-11-16 · status: complete.
 
 ---
 
@@ -235,7 +235,7 @@ Sekcja jest źródłem treści slajdów 2-5. Źródła zweryfikował orkiestrato
 **Slajd 3, LU**
 
 - A = LU, L dolna trójkątna z jedynkami na przekątnej, U górna trójkątna. Układ Ax = b rozwiązujemy w dwóch krokach. Ly = b podstawieniem w przód, potem Ux = y podstawieniem wstecz.
-- Z wyborem elementu głównego (wierszy) istnieje rozkład PA = LU dla każdej macierzy nieosobliwej. Bez wyboru istnieje wtedy i tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe (fakt podręcznikowy).
+- Z wyborem elementu głównego (wierszy) istnieje rozkład PA = LU dla każdej macierzy nieosobliwej. Dla macierzy nieosobliwej bez wyboru istnieje wtedy i tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe (fakt podręcznikowy). Dla macierzy osobliwej ten warunek nie jest konieczny (kontrprzykład recenzenta AI, iteracja 1, `docs/ai-log.md`).
 - Dla macierzy gęstej faktoryzacja kosztuje około (2/3) N³ operacji, a każde rozwiązanie dwóch układów trójkątnych O(N²). Jedna faktoryzacja obsługuje więc wiele prawych stron (Vandenberghe, wykład 7).
 - Dla macierzy rzadkiej eliminacja tworzy niezerowe elementy w miejscach zer (fill-in), a przestawienie wierszy i kolumn go zmniejsza (Saad, p. 3.6, s. 96, Example 3.3, s. 82-83).
 - **Nie umieszczać** na slajdach nieweryfikowanych rzędów fill-inu ani liczby operacji dla macierzy MES 2D.
@@ -538,7 +538,7 @@ This section is the visual contract for `latex-assistant` and `presentation-revi
 
 - Engine `pdflatex` with `[T1]{fontenc}`, `[polish]{babel}`, `lmodern` and `tgheros` as the sans family (all in `mnstyle.sty`). Mathematics in Latin Modern serif.
 - Class options `\documentclass[t,aspectratio=169,11pt]{beamer}`, as in the Projekt 1 preliminary deck.
-- Frame title `\large`, bold, `mnPrimary`. Body `\normalsize`. Footer, source lines and verbatim blocks `\footnotesize` (the smallest allowed). `\scriptsize` and `\tiny` are not allowed.
+- Frame title `\large`, bold, `mnPrimary`. Body `\normalsize`. Footer, source lines, symbol legends on equation slides and verbatim blocks `\footnotesize` (the smallest allowed). `\scriptsize` and `\tiny` are not allowed.
 - Polish typography with a decimal comma in running text. Equations use `\mathbf` for matrices and vectors (1.8).
 
 ### 3.4 Slide layout
@@ -898,6 +898,7 @@ Do not start any of these. Each one needs its own brief and the user's decisions
 |---|---|---|---|
 | 1.0 | 2026-11-16 | Full brief for the preliminary deck of Projekt 2 (P2W), adapted section by section from the Projekt 1 brief v1.11 | Projekt 2 starts. The Projekt 1 workflow is reused with one autonomous session and one stop |
 | 1.1 | 2026-11-16 | Rejection rule for findings that contradict 1.7 or ask for invented errors (stage 3, steps 4 and 5). Errors of the brief-writing phase in Appendix D count for the error slides (1.7, 5.4). Real `download_file` destination (0.6, 6.5). Brief and kickoff committed before the session starts (stage 1). `get_recent_changes` filtered by course (1.4) | Builder check of v1.0 by a fresh reviewer agent (opus, effort high) |
+| 1.2 | 2026-11-16 | LU without pivoting. The "if and only if" on leading principal minors is limited to nonsingular matrices (1.8, slide 3). Symbol legends on equation slides may use `\footnotesize` (3.3) | Review iteration 1 of the preliminary deck. The reviewer gave a singular counterexample to the old LU claim. The legend size removes a contradiction between 3.3 and the `latex-assistant` role (2.7), which already allows `\normalsize` and `\footnotesize` |
 
 ## Appendix C. Lessons from Projekt 1
 

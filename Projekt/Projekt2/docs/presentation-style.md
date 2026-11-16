@@ -1,4 +1,4 @@
-> Literal extract of `PROJECT_BRIEF.md` v1.1, section 3. Edit the brief first, then regenerate this file (brief 5.2).
+> Literal extract of `PROJECT_BRIEF.md` v1.2, section 3. Edit the brief first, then regenerate this file (brief 5.2).
 
 ## 3. Presentation visual style
 
@@ -38,7 +38,7 @@ This section is the visual contract for `latex-assistant` and `presentation-revi
 
 - Engine `pdflatex` with `[T1]{fontenc}`, `[polish]{babel}`, `lmodern` and `tgheros` as the sans family (all in `mnstyle.sty`). Mathematics in Latin Modern serif.
 - Class options `\documentclass[t,aspectratio=169,11pt]{beamer}`, as in the Projekt 1 preliminary deck.
-- Frame title `\large`, bold, `mnPrimary`. Body `\normalsize`. Footer, source lines and verbatim blocks `\footnotesize` (the smallest allowed). `\scriptsize` and `\tiny` are not allowed.
+- Frame title `\large`, bold, `mnPrimary`. Body `\normalsize`. Footer, source lines, symbol legends on equation slides and verbatim blocks `\footnotesize` (the smallest allowed). `\scriptsize` and `\tiny` are not allowed.
 - Polish typography with a decimal comma in running text. Equations use `\mathbf` for matrices and vectors (1.8).
 
 ### 3.4 Slide layout

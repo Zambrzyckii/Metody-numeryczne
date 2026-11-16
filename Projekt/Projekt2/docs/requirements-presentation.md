@@ -1,6 +1,6 @@
 # Requirements: preliminary presentation (P2W)
 
-> Extract of `PROJECT_BRIEF.md` v1.1, sections 1.2 to 1.5 and 1.8, translated to English. Sources are `materials/Projekt_2.pdf` (`Projekt_2`), `materials/zasady_zaliczenia_projektu_v1.pdf` (`zasady`) and `materials/harmonogram_2026_v3.pdf` (`harmonogram`). The PDFs win on conflict. Edit the brief first, then regenerate this file (brief 5.2). Every page reference below was re-checked against the PDFs on 2026-11-16.
+> Extract of `PROJECT_BRIEF.md` v1.2, sections 1.2 to 1.5 and 1.8, translated to English. Sources are `materials/Projekt_2.pdf` (`Projekt_2`), `materials/zasady_zaliczenia_projektu_v1.pdf` (`zasady`) and `materials/harmonogram_2026_v3.pdf` (`harmonogram`). The PDFs win on conflict. Edit the brief first, then regenerate this file (brief 5.2). Every page reference below was re-checked against the PDFs on 2026-11-16.
 
 ## 1. Scored content, 2 points
 
@@ -86,7 +86,7 @@ Literature. Y. Saad, *Iterative Methods for Sparse Linear Systems*, 2nd ed., SIA
 ### 5.3 Slide 3, LU
 
 - A = LU, L lower triangular with ones on the diagonal, U upper triangular. Ax = b is solved in two steps. Ly = b by forward substitution, then Ux = y by back substitution.
-- With (row) pivoting, PA = LU exists for every nonsingular matrix. Without pivoting it exists if and only if all leading principal minors are nonzero (textbook fact).
+- With (row) pivoting, PA = LU exists for every nonsingular matrix. For a nonsingular matrix, LU without pivoting exists if and only if all leading principal minors are nonzero (textbook fact). For a singular matrix the condition is not necessary (counterexample by the AI reviewer, iteration 1, `docs/ai-log.md`).
 - For a dense matrix the factorization costs about (2/3) N³ operations and each solve of the two triangular systems O(N²). One factorization therefore serves many right-hand sides (Vandenberghe, lecture 7).
 - For a sparse matrix, elimination creates nonzeros in places of zeros (fill-in), and reordering rows and columns reduces it (Saad, section 3.6, p. 96, Example 3.3, p. 82-83).
 - **Do not put** unverified fill-in orders or operation counts for a 2D FEM matrix on slides.
