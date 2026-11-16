@@ -15,7 +15,7 @@
   $\mathbf{A}$ - znana rzadka macierz układu, $\mathbf{b}$ - znany wektor prawej strony\\
   $\mathbf{x}$ - szukany wektor, $N$ - liczba niewiadomych, nie liczba trójkątów siatki\\
   $\mathbf{r}^{(j)}$, $\eta_j$ - residuum i jego względna norma dla przybliżenia $\mathbf{x}^{(j)}$\\
-  $j$ - numer iteracji (k u Saada to j u nas)\par}
+  $j$ - numer iteracji (k u Saada), $\mathbf{x}^{(0)}$ - przybliżenie początkowe\par}
   \begin{itemize}
     \item Przy założeniach z~dodatku A macierz $\mathbf{A}$ jest rzadka, symetryczna i~dodatnio określona (SPD) po eliminacji zadanych temperatur.
   \end{itemize}
@@ -42,7 +42,7 @@
   \end{columns}
   \begin{itemize}
     \item Dla macierzy nieosobliwej rozkład bez wyboru elementu głównego (wzory obok) istnieje wtedy i~tylko wtedy, gdy wszystkie minory główne wiodące są niezerowe, a~z~wyborem zawsze.
-    \item Dla macierzy gęstej faktoryzacja kosztuje około $\frac{2}{3}N^3$ operacji, a~para podstawień $O(N^2)$. Jedna faktoryzacja obsługuje więc wiele prawych stron.
+    \item Dla macierzy gęstej faktoryzacja kosztuje około $2N^3/3$ operacji, a~para podstawień $O(N^2)$. Jedna faktoryzacja obsługuje więc wiele prawych stron.
     \item W~macierzy rzadkiej eliminacja tworzy niezerowe elementy w~miejscu zer (fill-in). Odpowiednie przestawienie wierszy i~kolumn może go zmniejszyć.
   \end{itemize}
   \src{Źródło: Vandenberghe, EE133A, wykład 7. Saad, p.~3.6 i~przykład 3.3.}
