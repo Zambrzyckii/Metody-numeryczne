@@ -79,7 +79,9 @@ function plot_comparison(result)
 % a brak punktu wyjaśnij własną adnotacją, jeśli taka sytuacja wystąpi.
 figure('WindowStyle','normal');
 subplot(2,1,1);
-% PLOT_GORNY: narysuj kolejne przybliżenia z xvec obu metod w skali liniowej.
+plot(1:result.bisection.iterations, result.bisection.xvec, 'o-');
+hold on;
+plot(1:result.secant.iterations, result.secant.xvec, 's-');
 xlabel('Numer iteracji');
 ylabel('Przybliżenie czasu [s]');
 title('Czas osiągnięcia 850 m/s: przybliżenia');
@@ -87,7 +89,13 @@ if numel(findobj(gca,'Type','line')) >= 2
     legend('Bisekcja','Sieczne');
 end
 subplot(2,1,2);
-% PLOT_DOLNY: oblicz moduły residuów obu metod i narysuj przez semilogy.
+bisection_residuals = abs(arrayfun(@velocity_difference, ...
+    result.bisection.xvec));
+secant_residuals = abs(arrayfun(@velocity_difference, ...
+    result.secant.xvec));
+semilogy(1:result.bisection.iterations, bisection_residuals, 'o-');
+hold on;
+semilogy(1:result.secant.iterations, secant_residuals, 's-');
 hold on;
 yline(1e-8,'--','Tolerancja residuum', ...
     'LabelHorizontalAlignment','left');
@@ -103,31 +111,120 @@ end
 function [xvec, xdif, xsolution, ysolution, iterations, ...
     a_history, b_history, fa_history, fb_history] = ...
     velocity_bisection()
-% Wklej własną funkcję z zadania 5. Usuń jej część rysującą.
 a = 2; % początek przedziału lub pierwszy punkt [s]
 b = 45; % koniec przedziału lub drugi punkt [s]
 ytolerance = 1e-8; % tolerancja modułu residuum [m/s]
 max_iterations = 1000; % limit iteracji
-% Wstaw własny algorytm, zachowaj te dane i usuń poniższą blokadę.
-error('lab4:Incomplete','Uzupełnij bisekcję z zadania 5.');
+
+fa = velocity_difference(a);
+fb = velocity_difference(b);
+
+a_history = [];
+b_history = [];
+fa_history = [];
+fb_history = [];
+xvec = [];
+xdif = [];
+xsolution = Inf;
+ysolution = Inf;
+iterations = max_iterations;
+
+a_history(1,1) = a;
+b_history(1,1) = b;
+fa_history(1,1) = fa;
+fb_history(1,1) = fb;
+
+for ii=1:max_iterations
+    c = (a + b)/2;
+    xvec(ii,1) = c;
+    fc = velocity_difference(c);
+    if abs(fc) < ytolerance
+        xsolution = c;
+        ysolution = fc;
+        iterations = ii;
+        break
+    end
+    if c == a || c == b
+        error('lab4:stagnation', ...
+            'Bisekcja: stagnacja przed spełnieniem tolerancji residuum.');
+    end
+    if fa*fc < 0
+        b = c;
+        fb = fc;
+    else
+        a = c;
+        fa = fc;
+    end
+    a_history(ii+1,1) = a;
+    b_history(ii+1,1) = b;
+    fa_history(ii+1,1) = fa;
+    fb_history(ii+1,1) = fb;
+    if ii == max_iterations
+        error('lab4:iterationLimit', ...
+            'Bisekcja: limit iteracji bez spełnienia tolerancji residuum.');
+    end
+end
+xdif = abs(diff(xvec));
 end
 
 function [xvec,xdif,xsolution,ysolution,iterations] = velocity_secant()
-% Przenieś własną metodę z zadania 3 i dostosuj do modelu rakiety.
-% Wywołuj velocity_difference. Punkty startowe: 2 i 45 sekund.
-% Zachowaj próg modułu residuum 1e-8 m/s i limit 1000 iteracji.
-% Zachowaj obsługę stagnacji, zerowego mianownika i limitu.
-% Usuń osobne rysowanie.
 a = 2; % początek przedziału lub pierwszy punkt [s]
 b = 45; % koniec przedziału lub drugi punkt [s]
 ytolerance = 1e-8; % tolerancja modułu residuum [m/s]
 max_iterations = 1000; % limit iteracji
-% Wstaw własny algorytm, zachowaj te dane i usuń poniższą blokadę.
-error('lab4:Incomplete','Uzupełnij metodę siecznych.');
+
+x0 = a;
+x1 = b;
+f0 = velocity_difference(x0);
+f1 = velocity_difference(x1);
+
+xvec = [];
+xdif = [];
+xsolution = Inf;
+ysolution = Inf;
+iterations = max_iterations;
+
+for ii=1:max_iterations
+    denominator = f1 - f0;
+    if denominator == 0
+        error('lab4:zeroDenominator', ...
+            'Sieczne: zerowy mianownik wzoru siecznych.');
+    end
+    x2 = x1 - f1*(x1 - x0)/denominator;
+    xvec(ii,1) = x2;
+    f2 = velocity_difference(x2);
+    if abs(f2) < ytolerance
+        xsolution = x2;
+        ysolution = f2;
+        iterations = ii;
+        break
+    end
+    if x2 == x1
+        error('lab4:stagnation', ...
+            'Sieczne: stagnacja przed spełnieniem tolerancji residuum.');
+    end
+    x0 = x1;
+    f0 = f1;
+    x1 = x2;
+    f1 = f2;
+    if ii == max_iterations
+        error('lab4:iterationLimit', ...
+            'Sieczne: limit iteracji bez spełnienia tolerancji residuum.');
+    end
+end
+xdif = abs(diff(xvec));
 end
 
 function velocity_delta = velocity_difference(t)
-% Skopiuj całą funkcję velocity_difference z zadania 4,
-% razem z jej parametrami i obsługą niedodatniego argumentu.
-error('lab4:Incomplete','Uzupełnij model prędkości.');
+u = 2200; % prędkość wylotowa gazów [m/s]
+m0 = 180000; % masa początkowa [kg]
+q = 3000; % szybkość zużywania paliwa [kg/s]
+g = 1.622; % przyspieszenie grawitacyjne [m/s^2]
+velocity_goal = 850; % prędkość docelowa [m/s]
+if t <= 0
+    error('lab4:nonpositiveTime', ...
+        'Czas musi być dodatni.');
+end
+velocity = u*log(m0/(m0 - q*t)) - g*t;
+velocity_delta = velocity - velocity_goal;
 end
