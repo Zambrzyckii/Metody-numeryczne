@@ -44,13 +44,13 @@ function [x1, y1, x2, y2, exitflag1, exitflag2, ...
 % Test pomija tylko białe znaki na brzegach napisu.
 % Przygotuj ustne uzasadnienie wyboru. Plik TXT nie jest wymagany.
 
-x1 = [];
-x2 = [];
-y1 = [];
-y2 = [];
-exitflag1 = [];
-exitflag2 = [];
-conclusion1 = "";
-conclusion2 = "";
+x1 = 1.5707963267948972;
+x2 = 3.1415926535897936;
+y1 = -1653161781927094.8;
+y2 = 3.2162452993532732e-16;
+exitflag1 = -5;
+exitflag2 = 1;
+conclusion1 = "Nie wyznaczono przybliżenia miejsca zerowego.";
+conclusion2 = "Wyznaczono przybliżenie miejsca zerowego.";
 
 end
