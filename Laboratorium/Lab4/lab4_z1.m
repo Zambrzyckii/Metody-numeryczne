@@ -31,12 +31,15 @@ end
 end
 
 function impedance_delta = impedance_difference(f)
-% Parametry obwodu są dostarczone. Zaimplementuj model z zadania 1.
 R = 680; % rezystancja [Ohm]
 L = 2.5; % indukcyjność [H]
 C = 4.7e-5; % pojemność [F]
 M = 100; % docelowy moduł impedancji [Ohm]
-% Zaimplementuj wzór i błąd dla f<=0. Usuń poniższą blokadę.
-error('lab4:Incomplete', ...
-    'Uzupełnij obliczenia w impedance_difference.');
+if f <= 0
+    error('lab4:nonpositiveFrequency', ...
+        'Częstotliwość musi być dodatnia.');
+end
+omega = 2*pi*f;
+impedance_module = 1/sqrt(1/R^2 + (omega*C - 1/(omega*L))^2);
+impedance_delta = impedance_module - M;
 end
