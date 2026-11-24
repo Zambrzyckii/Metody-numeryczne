@@ -67,26 +67,46 @@ iterations = max_iterations;
 % Stagnacja: nowe przybliżenie jest równe poprzedniemu.
 % Przed krokiem sprawdź, czy mianownik wzoru siecznych jest zerowy.
 for ii=1:max_iterations
-    % x2 = ...
-    % xvec(ii,1) = x2;
-    % f2 = ...
-    % if ...
-    % else
-    %     Zaktualizuj oba punkty i ich wartości funkcji.
-    % end
+    denominator = f1 - f0;
+    if denominator == 0
+        error('lab4:zeroDenominator', ...
+            'Sieczne: zerowy mianownik wzoru siecznych.');
+    end
+    x2 = x1 - f1*(x1 - x0)/denominator;
+    xvec(ii,1) = x2;
+    f2 = impedance_difference(x2);
+    if abs(f2) < ytolerance
+        xsolution = x2;
+        ysolution = f2;
+        iterations = ii;
+        break
+    end
+    if x2 == x1
+        error('lab4:stagnation', ...
+            'Sieczne: stagnacja przed spełnieniem tolerancji residuum.');
+    end
+    x0 = x1;
+    f0 = f1;
+    x1 = x2;
+    f1 = f2;
+    if ii == max_iterations
+        error('lab4:iterationLimit', ...
+            'Sieczne: limit iteracji bez spełnienia tolerancji residuum.');
+    end
 end
+xdif = abs(diff(xvec));
 
 
 % Przygotowanie figury jest dostarczone. Uzupełnij tylko miejsca PLOT.
 % Możesz zmieniać podpisy i dodawać oznaczenia bez zasłaniania danych.
 figure('WindowStyle','normal');
 subplot(2,1,1);
-% PLOT_GORNY: narysuj xvec w skali liniowej, iteracje od 1.
+plot(1:iterations, xvec, 'o-');
 xlabel('Numer iteracji');
 ylabel('Przybliżenie częstotliwości [Hz]');
 title('Sieczne: kolejne przybliżenia');
 subplot(2,1,2);
-% PLOT_DOLNY: narysuj xdif przez semilogy, numery różnic od 1.
+semilogy(1:numel(xdif), xdif, 'o-');
 xlabel('Numer różnicy');
 ylabel('Wielkość kroku [Hz]');
 title('Sieczne: różnice kolejnych przybliżeń');
@@ -97,8 +117,15 @@ title('Sieczne: różnice kolejnych przybliżeń');
 end
 
 function impedance_delta = impedance_difference(f)
-% Skopiuj całą funkcję impedance_difference z zadania 1,
-% razem z jej parametrami i obsługą niedodatniego argumentu.
-error('lab4:Incomplete', ...
-    'Uzupełnij obliczenia w impedance_difference.');
+R = 680; % rezystancja [Ohm]
+L = 2.5; % indukcyjność [H]
+C = 4.7e-5; % pojemność [F]
+M = 100; % docelowy moduł impedancji [Ohm]
+if f <= 0
+    error('lab4:nonpositiveFrequency', ...
+        'Częstotliwość musi być dodatnia.');
+end
+omega = 2*pi*f;
+impedance_module = 1/sqrt(1/R^2 + (omega*C - 1/(omega*L))^2);
+impedance_delta = impedance_module - M;
 end
