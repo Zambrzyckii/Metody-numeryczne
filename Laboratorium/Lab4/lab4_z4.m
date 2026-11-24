@@ -33,12 +33,15 @@ end
 
 % Funkcje lokalne.
 function velocity_delta = velocity_difference(t)
-% Parametry rakiety są dostarczone. Zaimplementuj model z zadania 4.
 u = 2200; % prędkość wylotowa gazów [m/s]
 m0 = 180000; % masa początkowa [kg]
 q = 3000; % szybkość zużywania paliwa [kg/s]
 g = 1.622; % przyspieszenie grawitacyjne [m/s^2]
 velocity_goal = 850; % prędkość docelowa [m/s]
-% Zaimplementuj wzór i błąd dla t<=0. Usuń poniższą blokadę.
-error('lab4:Incomplete','Uzupełnij model prędkości.');
+if t <= 0
+    error('lab4:nonpositiveTime', ...
+        'Czas musi być dodatni.');
+end
+velocity = u*log(m0/(m0 - q*t)) - g*t;
+velocity_delta = velocity - velocity_goal;
 end
