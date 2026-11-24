@@ -1,10 +1,10 @@
 function result = lab4_z2()
 % Uzupełnij obliczenia i wykresy w funkcji impedance_bisection, która wyznacza
-% przybliżenie miejsca zerowego funkcji impedance_difference metodą bisekcji.
-% 
+% przybliżenie miejsca zerowego funkcji impedance_difference metodą bisekcji.
+%
 % Funkcja lab4_z2 zapisuje wyniki funkcji impedance_bisection w strukturze
 % result.
-% 
+%
 % result: struktura z wynikami obliczeń.
 % Wyniki liczbowe: double, wektory wierszowe lub kolumnowe.
 %
@@ -81,36 +81,65 @@ xsolution = Inf;
 ysolution = Inf;
 iterations = max_iterations;
 
+a_history(1,1) = a;
+b_history(1,1) = b;
+fa_history(1,1) = fa;
+fb_history(1,1) = fb;
+
 % Zakończ przy pierwszym przybliżeniu, dla którego moduł bieżącej
 % wartości funkcji jest mniejszy od ytolerance.
 % Zgłoś error po limicie lub stagnacji bez spełnienia tolerancji.
 % Stagnacja: obliczony środek jest równy końcowi przedziału.
 for ii=1:max_iterations
-    % c = ...
-    % xvec(ii,1) = c;
-    % fc = ...
-    % if ...
-    % else
-    %     Wybierz połowę i dopisz aktualne końce oraz wartości funkcji.
-    % end
+    c = (a + b)/2;
+    xvec(ii,1) = c;
+    fc = impedance_difference(c);
+    if abs(fc) < ytolerance
+        xsolution = c;
+        ysolution = fc;
+        iterations = ii;
+        break
+    end
+    if c == a || c == b
+        error('lab4:stagnation', ...
+            'Bisekcja: stagnacja przed spełnieniem tolerancji residuum.');
+    end
+    if fa*fc < 0
+        b = c;
+        fb = fc;
+    else
+        a = c;
+        fa = fc;
+    end
+    a_history(ii+1,1) = a;
+    b_history(ii+1,1) = b;
+    fa_history(ii+1,1) = fa;
+    fb_history(ii+1,1) = fb;
+    if ii == max_iterations
+        error('lab4:iterationLimit', ...
+            'Bisekcja: limit iteracji bez spełnienia tolerancji residuum.');
+    end
 end
+xdif = abs(diff(xvec));
 
 % Oblicz lokalne error_bound i zinterpretuj je w jednostkach
 % argumentu funkcji zgodnie z instrukcją.
+error_bound = (b_history(end) - a_history(end))/2;
 
 % Przygotowanie figury jest dostarczone. Uzupełnij tylko miejsca PLOT.
 % Możesz zmieniać podpisy i dodawać oznaczenia bez zasłaniania danych.
 figure('WindowStyle','normal');
 subplot(2,1,1);
-% PLOT_GORNY: narysuj xvec w skali liniowej, iteracje od 1.
+plot(1:iterations, xvec, 'o-');
 xlabel('Numer iteracji');
 ylabel('Przybliżenie częstotliwości [Hz]');
 title('Bisekcja: kolejne przybliżenia');
 subplot(2,1,2);
-% PLOT_DOLNY: oblicz i narysuj
-%   a) szerokości kolejnych przedziałów (różnica b_history - a_history)
-%   b) teoretyczne zmniejszanie się przedziału poszukiwań miejsca zerowego
-% Użyj semilogy i numerów podziałów od 0. Narysuj obie serie.
+interval_widths = b_history - a_history;
+division_numbers = 0:iterations-1;
+semilogy(division_numbers, interval_widths, 'o-');
+hold on;
+semilogy(division_numbers, interval_widths(1)./2.^division_numbers, 's--');
 xlabel('Liczba podziałów');
 ylabel('Szerokość przedziału [Hz]');
 title('Bisekcja: zmniejszanie szerokości przedziału');
@@ -122,7 +151,15 @@ end
 end
 
 function impedance_delta = impedance_difference (f)
-% Skopiuj kod funkcji impedance_difference z zadania 1.
-error('lab4:Incomplete', ...
-    'Uzupełnij obliczenia w impedance_difference.');
+R = 680; % rezystancja [Ohm]
+L = 2.5; % indukcyjność [H]
+C = 4.7e-5; % pojemność [F]
+M = 100; % docelowy moduł impedancji [Ohm]
+if f <= 0
+    error('lab4:nonpositiveFrequency', ...
+        'Częstotliwość musi być dodatnia.');
+end
+omega = 2*pi*f;
+impedance_module = 1/sqrt(1/R^2 + (omega*C - 1/(omega*L))^2);
+impedance_delta = impedance_module - M;
 end
