@@ -42,8 +42,6 @@ if save_png == 1 && ~isempty(fig)
 end
 end
 
-% Przenieś własną bisekcję i rysowanie z zadania 2 do funkcji poniżej.
-% Dostosuj model, przedział oraz podpisy i jednostki, bez zmiany metody.
 % Funkcje lokalne.
 function [xvec, xdif, xsolution, ysolution, iterations, ...
     a_history, b_history, fa_history, fb_history] = ...
@@ -95,32 +93,61 @@ iterations = max_iterations;
 % Stagnacja: obliczony środek jest równy końcowi przedziału.
 % Zapisz początkowe końce i wartości funkcji w pierwszych
 % elementach czterech wektorów.
+a_history(1,1) = a;
+b_history(1,1) = b;
+fa_history(1,1) = fa;
+fb_history(1,1) = fb;
+
 for ii=1:max_iterations
-    % c = ...
-    % xvec(ii,1) = c;
-    % fc = ...
-    % if ...
-    % else
-    %     Wybierz połowę i dopisz aktualne końce oraz wartości funkcji.
-    % end
+    c = (a + b)/2;
+    xvec(ii,1) = c;
+    fc = velocity_difference(c);
+    if abs(fc) < ytolerance
+        xsolution = c;
+        ysolution = fc;
+        iterations = ii;
+        break
+    end
+    if c == a || c == b
+        error('lab4:stagnation', ...
+            'Bisekcja: stagnacja przed spełnieniem tolerancji residuum.');
+    end
+    if fa*fc < 0
+        b = c;
+        fb = fc;
+    else
+        a = c;
+        fa = fc;
+    end
+    a_history(ii+1,1) = a;
+    b_history(ii+1,1) = b;
+    fa_history(ii+1,1) = fa;
+    fb_history(ii+1,1) = fb;
+    if ii == max_iterations
+        error('lab4:iterationLimit', ...
+            'Bisekcja: limit iteracji bez spełnienia tolerancji residuum.');
+    end
 end
+xdif = abs(diff(xvec));
 
 % Oblicz lokalne error_bound i zinterpretuj je w jednostkach
 % argumentu zgodnie z instrukcją.
+error_bound = (b_history(end) - a_history(end))/2;
 
 % Przygotowanie figury jest dostarczone. Uzupełnij tylko miejsca PLOT.
 % Możesz zmieniać podpisy i dodawać oznaczenia bez zasłaniania danych.
 figure('WindowStyle','normal');
 subplot(2,1,1);
-% PLOT_GORNY: narysuj xvec w skali liniowej, iteracje od 1.
+plot(1:iterations, xvec, 'o-');
 xlabel('Numer iteracji');
 ylabel('Przybliżenie czasu [s]');
 title('Bisekcja: kolejne przybliżenia');
 subplot(2,1,2);
-% PLOT_DOLNY: oblicz i narysuj
-%   a) szerokości kolejnych przedziałów (różnica b_history - a_history),
-%   b) teoretyczne zmniejszanie przedziału poszukiwań miejsca zerowego.
-% Użyj semilogy i numerów podziałów od 0. Narysuj obie serie.
+interval_widths = b_history - a_history;
+division_numbers = 0:iterations-1;
+semilogy(division_numbers, interval_widths, 'o-');
+hold on;
+semilogy(division_numbers, interval_widths(1)./2.^division_numbers, 's--');
 xlabel('Liczba podziałów');
 ylabel('Szerokość przedziału [s]');
 title('Bisekcja: zmniejszanie szerokości przedziału');
@@ -133,7 +160,15 @@ end
 end
 
 function velocity_delta = velocity_difference (t)
-% Skopiuj całą funkcję velocity_difference z zadania 4,
-% razem z jej parametrami i obsługą niedodatniego argumentu.
-error('lab4:Incomplete','Uzupełnij model prędkości.');
+u = 2200; % prędkość wylotowa gazów [m/s]
+m0 = 180000; % masa początkowa [kg]
+q = 3000; % szybkość zużywania paliwa [kg/s]
+g = 1.622; % przyspieszenie grawitacyjne [m/s^2]
+velocity_goal = 850; % prędkość docelowa [m/s]
+if t <= 0
+    error('lab4:nonpositiveTime', ...
+        'Czas musi być dodatni.');
+end
+velocity = u*log(m0/(m0 - q*t)) - g*t;
+velocity_delta = velocity - velocity_goal;
 end
